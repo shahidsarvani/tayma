@@ -8,6 +8,7 @@ use App\Models\Screen;
 use App\Models\VideowallContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class VideoWallContentController extends Controller
 {
@@ -173,5 +174,18 @@ class VideoWallContentController extends Controller
     public function destroy($id)
     {
         //
+        try {
+            $content = VideowallContent::find($id);
+            $media = Media::where('lang', $content->lang)->where('menu_id', $content->menu_id)->get();
+            foreach ($media as  $item) {
+                Storage::delete('/public/media/' . $item->name);
+                $item->delete();
+            }
+            $content->delete();
+            return redirect()->route('videowall.content.index')->with('success', 'Content Item is deleted!');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return redirect()->back()->with('error', 'Error: Something went wrong!');
+        }
     }
 }
