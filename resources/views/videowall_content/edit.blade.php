@@ -62,12 +62,19 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="col-md-3">
+                        @if ($content)
+                            
+                        @else
+                            
+                        @endif
+                    </div>
                     <ul id="file-upload-list2" class="list-unstyled">
                     </ul>
                 </div>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Add <i class="icon-add ml-2"></i></button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
             </form>
             <form action="{{ route('videowall.media.upload') }}" class="dropzone mt-3" id="dropzone_multiple">

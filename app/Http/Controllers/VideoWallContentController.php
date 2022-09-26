@@ -93,7 +93,8 @@ class VideoWallContentController extends Controller
     public function edit($id)
     {
         //
-        $content = VideowallContent::find($id);
+        $content = VideowallContent::with('media')->find($id);
+        return $content;
         $all_menus = Menu::where('screen_type', 'videowall')->where('screen_id', $content->screen_id)->where('type', 'side')->get();
         $menus = array();
         foreach ($all_menus as $value) {
