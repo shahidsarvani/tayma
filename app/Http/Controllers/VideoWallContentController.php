@@ -95,6 +95,7 @@ class VideoWallContentController extends Controller
         //
         $content = VideowallContent::find($id);
         $menus = Menu::where('screen_type', 'videowall')->where('id', $content->menu_id)->get();
+        return $menus;
         $screens = Screen::where('is_touch', 1)->where('screen_type', 'videowall')->get();
         return view('videowall_content.edit', compact('screens', 'content', 'menus'));
     }
