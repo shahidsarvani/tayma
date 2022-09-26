@@ -68,7 +68,7 @@
                     @foreach ($media as $item)
                     <div class="col-md-3">
                         @if ($item->type == 'image')
-                            <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content">
+                            <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content" class="w-100">
                         @else
                             <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls muted></video>
                         @endif
