@@ -33,16 +33,16 @@
                                 <td>{{ $item->menu->name_en }}</td>
                                 <td>
                                     <div class="list-icons">
-                                        @can('edit-touchtable-screen-content')
-                                            <a href="{{ route('touchtable.content.edit', $item->id) }}" class="list-icons-item text-primary"><i
+                                        @can('edit-videowall-screen-content')
+                                            <a href="{{ route('videowall.content.edit', $item->id) }}" class="list-icons-item text-primary"><i
                                                     class="icon-pencil7"></i></a>
                                         @endcan
-                                        @can('delete-touchtable-screen-content')
-                                            <a href="{{ route('touchtable.content.destroy', $item->id) }}"
+                                        @can('delete-videowall-screen-content')
+                                            <a href="{{ route('videowall.content.destroy', $item->id) }}"
                                                 class="list-icons-item text-danger"
                                                 onclick="event.preventDefault(); document.getElementById('my-form{{ $item->id }}').submit();"><i
                                                     class="icon-trash"></i></a>
-                                            <form action="{{ route('touchtable.content.destroy', $item->id) }}" method="post"
+                                            <form action="{{ route('videowall.content.destroy', $item->id) }}" method="post"
                                                 id="my-form{{ $item->id }}" class="d-none">
                                                 @csrf
                                                 @method('delete')
