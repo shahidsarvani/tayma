@@ -90,7 +90,7 @@ class VideoWallScreenController extends Controller
     {
         // return $screen_id;
 
-        $all_menus = Menu::where('screen_id', $screen_id)->where('type', 'side')->get();
+        $all_menus = Menu::where('screen_id', $screen_id)->/* where('type', 'side')-> */get();
         $menus = array();
         foreach ($all_menus as $value) {
             $name = array();

@@ -97,7 +97,7 @@ class VideoWallContentController extends Controller
         $content = VideowallContent::find($id);
         $media = Media::where('lang', $content->lang)->where('menu_id', $content->menu_id)->get();
         // return $media;
-        $all_menus = Menu::where('screen_type', 'videowall')->where('screen_id', $content->screen_id)->where('type', 'side')->get();
+        $all_menus = Menu::where('screen_type', 'videowall')->where('screen_id', $content->screen_id)->/* where('type', 'side')-> */get();
         $menus = array();
         foreach ($all_menus as $value) {
             $name = array();
