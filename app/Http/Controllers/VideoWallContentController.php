@@ -93,8 +93,9 @@ class VideoWallContentController extends Controller
     public function edit($id)
     {
         //
-        $content = VideowallContent::with('media')->find($id);
-        return $content;
+        $content = VideowallContent::find($id);
+        $media = Media::where('lang', $content->lang)->where('menu_id', $content->menu_id)->get();
+        // return $media;
         $all_menus = Menu::where('screen_type', 'videowall')->where('screen_id', $content->screen_id)->where('type', 'side')->get();
         $menus = array();
         foreach ($all_menus as $value) {
@@ -121,7 +122,7 @@ class VideoWallContentController extends Controller
         }
         // return $menus;
         $screens = Screen::where('is_touch', 1)->where('screen_type', 'videowall')->get();
-        return view('videowall_content.edit', compact('screens', 'content', 'menus'));
+        return view('videowall_content.edit', compact('screens', 'content', 'menus', 'media'));
     }
 
     /**

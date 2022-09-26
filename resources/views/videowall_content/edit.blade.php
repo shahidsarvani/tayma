@@ -26,8 +26,8 @@
                             <label>Language</label>
                             <select id="lang" class="form-control" name="lang" required>
                                 <option value="">Select Language</option>
-                                <option value="ar" @if($content->lang == "ar") selected @endif>Arabic</option>
-                                <option value="en" @if($content->lang == "en") selected @endif>English</option>
+                                <option value="ar" @if ($content->lang == 'ar') selected @endif>Arabic</option>
+                                <option value="en" @if ($content->lang == 'en') selected @endif>English</option>
                             </select>
                         </div>
                     </div>
@@ -37,7 +37,8 @@
                             <select name="screen_id" id="screen_id" class="form-control">
                                 <option value="">Select Screen</option>
                                 @foreach ($screens as $item)
-                                    <option value="{{ $item->id }}" @if($content->screen_id == $item->id) selected @endif>{{ $item->name_en }}</option>
+                                    <option value="{{ $item->id }}" @if ($content->screen_id == $item->id) selected @endif>
+                                        {{ $item->name_en }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -48,7 +49,8 @@
                             <select name="menu_id" id="menu_id" class="form-control" required>
                                 <option value="">Select Menu</option>
                                 @foreach ($menus as $item)
-                                    <option value="{{ $item['id'] }}" @if($content->menu_id == $item['id']) selected @endif>{{ $item['name'] }}</option>
+                                    <option value="{{ $item['id'] }}" @if ($content->menu_id == $item['id']) selected @endif>
+                                        {{ $item['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -63,10 +65,10 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        @if ($content)
-                            
+                        @if ($media->type == 'image')
+                            <img src="{{ asset('storage/media/' . $media->name) }}" alt="Content">
                         @else
-                            
+                            <video src="{{ asset('storage/media/' . $media->name) }}" controls muted></video>
                         @endif
                     </div>
                     <ul id="file-upload-list2" class="list-unstyled">
