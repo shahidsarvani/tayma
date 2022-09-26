@@ -183,6 +183,18 @@ class PermissionSeeder extends Seeder
             [
                 'name' => 'delete-videowall-screen-content'
             ],
+            [
+                'name' => 'add-layout'
+            ],
+            [
+                'name' => 'edit-layout'
+            ],
+            [
+                'name' => 'view-layout'
+            ],
+            [
+                'name' => 'delete-layout'
+            ],
         ];
         Schema::disableForeignKeyConstraints();
         DB::table('permissions')->truncate();

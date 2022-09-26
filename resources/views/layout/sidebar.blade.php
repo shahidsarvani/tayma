@@ -348,6 +348,22 @@
                         </ul>
                     </li>
                 @endcan
+                @can(['add-layout', 'edit-layout', 'delete-layout', 'view-layout'])
+                    <li class="nav-item nav-item-submenu @if (Route::is('layouts.*')) nav-item-open @endif">
+                        <a href="#" class="nav-link"><i class="icon-images3"></i> <span>Layouts</span></a>
+                        <ul class="nav nav-group-sub" data-submenu-title="Cards"
+                            @if (Route::is('layouts.*')) style="display: block" @endif>
+                            @can('add-layout')
+                                <li class="nav-item"><a href="{{ route('layouts.create') }}"
+                                        class="nav-link @if (Route::is('layouts.create')) active @endif">Add Layout</a></li>
+                            @endcan
+                            @can(['edit-layout', 'delete-layout', 'view-layout'])
+                                <li class="nav-item"><a href="{{ route('layouts.index') }}"
+                                        class="nav-link @if (Route::is(['layouts.index', 'layouts.edit'])) active @endif">Layout List</a></li>
+                            @endcan
+                        </ul>
+                    </li>
+                @endcan
                 {{-- @can(['add-media', 'delete-media', 'view-media'])
                     <li class="nav-item nav-item-submenu @if (Route::is('media.*')) nav-item-open @endif">
                         <a href="#" class="nav-link"><i class="icon-film4"></i> <span>Media</span></a>

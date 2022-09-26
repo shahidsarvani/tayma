@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RfidCardController;
@@ -52,6 +53,7 @@ Route::middleware([
     Route::resource('screens', ScreenController::class);
     Route::resource('cards', RfidCardController::class);
     Route::resource('slides', SlideController::class);
+    Route::resource('layouts', LayoutController::class);
     Route::prefix('touchtable-screen')->name('touchtable.')->group(function () {
         Route::resource('menus', TouchScreenMenuController::class);
         Route::resource('content', TouchScreenContentController::class);
