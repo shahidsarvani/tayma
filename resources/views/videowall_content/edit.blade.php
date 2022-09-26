@@ -64,13 +64,17 @@
                             @enderror
                         </div>
                     </div>
+                    @if ($media)
+                    @foreach ($media as $item)
                     <div class="col-md-3">
-                        @if ($media->type == 'image')
-                            <img src="{{ asset('storage/media/' . $media->name) }}" alt="Content">
+                        @if ($item->type == 'image')
+                            <img src="{{ asset('storage/media/' . $item->name) }}" alt="Content">
                         @else
-                            <video src="{{ asset('storage/media/' . $media->name) }}" controls muted></video>
+                            <video src="{{ asset('storage/media/' . $item->name) }}" controls muted></video>
                         @endif
                     </div>
+                    @endforeach
+                    @endif
                     <ul id="file-upload-list2" class="list-unstyled">
                     </ul>
                 </div>
