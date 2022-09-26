@@ -32,6 +32,7 @@ class VideoWallScreenController extends Controller
             $data['is_touch'] = 1;
             $data['is_model'] = 1;
             $data['is_rfid'] = 0;
+            $data['screen_type'] = 'videowall';
             Screen::create($data);
             return redirect()->route('video_wall.screens.index')->with('success', 'Video Wall Screen is added!');
         } catch (\Throwable $th) {
