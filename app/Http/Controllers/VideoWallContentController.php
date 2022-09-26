@@ -94,8 +94,31 @@ class VideoWallContentController extends Controller
     {
         //
         $content = VideowallContent::find($id);
-        $menus = Menu::where('screen_type', 'videowall')->where('id', $content->menu_id)->get();
-        return $menus;
+        $all_menus = Menu::where('screen_type', 'videowall')->where('screen_id', $content->screen_id)->get();
+        $menus = array();
+        foreach ($all_menus as $value) {
+            $name = array();
+            if ($value->parent) {
+                array_unshift($name, $value->parent->name_en);
+                if ($value->parent->parent) {
+                    array_unshift($name, $value->parent->parent->name_en);
+                    if ($value->parent->parent->parent) {
+                        array_unshift($name, $value->parent->parent->parent->name_en);
+                        if ($value->parent->parent->parent->parent) {
+                            array_unshift($name, $value->parent->parent->parent->parent->name_en);
+                        }
+                    }
+                }
+            }
+            array_push($name, $value->name_en);
+            $name = implode(' -> ', $name);
+            $temp = [
+                'id' => $value->id,
+                'name' => $name
+            ];
+            array_push($menus, $temp);
+        }
+        // return $menus;
         $screens = Screen::where('is_touch', 1)->where('screen_type', 'videowall')->get();
         return view('videowall_content.edit', compact('screens', 'content', 'menus'));
     }
