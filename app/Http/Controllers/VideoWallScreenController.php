@@ -34,7 +34,7 @@ class VideoWallScreenController extends Controller
             $data['is_rfid'] = 0;
             $data['screen_type'] = 'videowall';
             Screen::create($data);
-            return redirect()->route('video_wall.screens.index')->with('success', 'Video Wall Screen is added!');
+            return redirect()->route('videowall.screens.index')->with('success', 'Video Wall Screen is added!');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return redirect()->back()->with('error', 'Error: Something went wrong!');
@@ -58,7 +58,7 @@ class VideoWallScreenController extends Controller
             $screen = Screen::find($id);
             $data = $request->except('_token', '_method');
             $screen->update($data);
-            return redirect()->route('video_wall.screens.index')->with('success', 'video_wall Screen is updated!');
+            return redirect()->route('videowall.screens.index')->with('success', 'video_wall Screen is updated!');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return redirect()->back()->with('error', 'Error: Something went wrong!');
@@ -72,7 +72,7 @@ class VideoWallScreenController extends Controller
         try {
             $screen = Screen::find($id);
             $screen->delete();
-            return redirect()->route('video_wall.screens.index')->with('success', 'Video Wall Screen is deleted!');
+            return redirect()->route('videowall.screens.index')->with('success', 'Video Wall Screen is deleted!');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
             return redirect()->back()->with('error', 'Error: Something went wrong!');
