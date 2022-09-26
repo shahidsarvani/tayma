@@ -56,7 +56,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Content:</label>
-                            <textarea name="content" id="editor-full1" rows="4" cols="4" required></textarea>
+                            <textarea name="content" id="editor-full1" rows="4" cols="4" required>{{ $content }}</textarea>
                             @error('content')
                                 <p class="text-danger">{{ $message }}</p>
                             @enderror
