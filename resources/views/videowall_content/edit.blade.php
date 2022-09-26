@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="text-right">
-                    <button type="submit" class="btn btn-primary">Edit</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
             <form action="{{ route('videowall.media.upload') }}" class="dropzone mt-3" id="dropzone_multiple">

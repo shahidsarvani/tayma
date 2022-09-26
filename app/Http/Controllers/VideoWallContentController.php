@@ -135,7 +135,33 @@ class VideoWallContentController extends Controller
     public function update(Request $request, $id)
     {
         //
-        return $request;
+        // return $request;
+
+        try {
+            $data = $request->except('_token', '_method');
+            // return $data;
+            $content = VideowallContent::find($id);
+            $content->update($data);
+
+            $slug = Screen::where('id', $request->screen_id)->first()->slug;
+            if ($request->file_names) {
+                foreach ($request->file_names as $index => $fileName) {
+                    // $media = Media::whereName($fileName)->first();
+                    $media = Media::create([
+                        'lang' => $request->lang,
+                        'name' => $fileName,
+                        'screen_slug' => $slug,
+                        'screen_type' => 'videowall',
+                        'menu_id' => $request->menu_id,
+                        'type' => $request->types[$index],
+                    ]);
+                }
+            }
+            return redirect()->route('videowall.content.index')->with('success', 'Content Item is updated!');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return redirect()->back()->with('error', 'Error: Something went wrong!');
+        }
     }
 
     /**
