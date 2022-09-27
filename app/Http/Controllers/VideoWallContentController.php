@@ -42,7 +42,7 @@ class VideoWallContentController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -53,7 +53,6 @@ class VideoWallContentController extends Controller
             'content' => 'required',
             'menu_order' => 'required|integer'
         ]);
-//        dd($request->all());
 
         if ($request->menu_order >= 3) {
             $request->validate([
@@ -69,9 +68,12 @@ class VideoWallContentController extends Controller
             }
             if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
                 if (count($request->file_names) < 2) {
-                    return redirect()->back()->withErrors(['message' => 'Minimum 2 images required']);
+                    return redirect()->back()->with('error', 'Minimum 2 images required');
                 }
             }
+        }
+        if (count($request->file_names) < 1) {
+            return redirect()->back()->with('error', 'Minimum 2 images required');
         }
 
         try {
@@ -158,12 +160,40 @@ class VideoWallContentController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
         //
-        // return $request;
+        $request->validate([
+            'lang' => 'required',
+            'screen_id' => 'required|integer',
+            'menu_id' => 'required|integer',
+            'content' => 'required',
+            'menu_order' => 'required|integer'
+        ]);
+
+        if ($request->menu_order >= 3) {
+            $request->validate([
+                'layout' => 'required',
+                'background_color' => 'required',
+                'text_color' => 'required',
+
+            ]);
+            if ($request->layout == 'layout_1') {
+                $request->validate([
+                    'title' => 'required'
+                ]);
+            }
+            if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
+                if (count($request->file_names) < 2) {
+                    return redirect()->back()->with('error', 'Minimum 2 images required');
+                }
+            }
+        }
+        if (count($request->file_names) < 1) {
+            return redirect()->back()->with('error', 'Minimum 2 images required');
+        }
 
         try {
             $data = $request->except('_token', '_method');

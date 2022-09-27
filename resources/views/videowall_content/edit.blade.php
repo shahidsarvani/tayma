@@ -142,28 +142,26 @@
                             </div>
                         </div>
                     @endif
-                    @if($content->menu_order >= 3)
-                        <div id="background_color" class="col-md-6 level-3-menu">
-                            <div class="form-group">
-                                <label for="background_color">Background Color:</label>
-                                <input name="background_color" id="background_color" class="form-control"
-                                       type="color" value="{{$content->background_color}}">
-                                @error('background_color')
-                                <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
+                    <div id="background_color" class="col-md-6 level-3-menu">
+                        <div class="form-group">
+                            <label for="background_color">Background Color:</label>
+                            <input name="background_color" id="background_color" class="form-control"
+                                   type="color" value="{{$content->background_color}}">
+                            @error('background_color')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <div id="text_color" class="col-md-6 level-3-menu">
-                            <div class="form-group">
-                                <label for="text_color">Text Color:</label>
-                                <input name="text_color" id="text_color" class="form-control" type="color"
-                                       value="{{$content->text_color}}">
-                                @error('text_color')
-                                <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
+                    </div>
+                    <div id="text_color" class="col-md-6 level-3-menu">
+                        <div class="form-group">
+                            <label for="text_color">Text Color:</label>
+                            <input name="text_color" id="text_color" class="form-control" type="color"
+                                   value="{{$content->text_color}}">
+                            @error('text_color')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
                         </div>
-                    @endif
+                    </div>
 
                     <div class="col-md-12">
                         <div class="form-group">

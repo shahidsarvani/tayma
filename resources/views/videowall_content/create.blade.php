@@ -124,7 +124,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div id="background_color" class="col-md-6 level-3-menu">
+                    <div id="background_color" class="col-md-6">
                         <div class="form-group">
                             <label for="background_color">Background Color:</label>
                             <input name="background_color" id="background_color" class="form-control"
@@ -134,7 +134,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div id="text_color" class="col-md-6 level-3-menu">
+                    <div id="text_color" class="col-md-6">
                         <div class="form-group">
                             <label for="text_color">Text Color:</label>
                             <input name="text_color" id="text_color" class="form-control" type="color"
