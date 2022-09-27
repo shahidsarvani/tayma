@@ -67,13 +67,17 @@ class VideoWallContentController extends Controller
                 ]);
             }
             if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
-                if (count($request->file_names) < 2) {
-                    return redirect()->back()->with('error', 'Minimum 2 images required');
+                if ($request->has('file_names')) {
+                    if (count($request->file_names) < 2) {
+                        return redirect()->back()->with('error', 'Minimum 2 images required');
+                    }
                 }
             }
         }
-        if (count($request->file_names) < 1) {
-            return redirect()->back()->with('error', 'Minimum 2 images required');
+        if ($request->has('file_names')) {
+            if (count($request->file_names) < 1) {
+                return redirect()->back()->with('error', 'Minimum 2 images required');
+            }
         }
 
         try {
@@ -186,8 +190,10 @@ class VideoWallContentController extends Controller
                 ]);
             }
             if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
-                if (count($request->file_names) < 2) {
-                    return redirect()->back()->with('error', 'Minimum 2 images required');
+                if ($request->has('file_names')) {
+                    if (count($request->file_names) < 2) {
+                        return redirect()->back()->with('error', 'Minimum 2 images required');
+                    }
                 }
             }
         }
