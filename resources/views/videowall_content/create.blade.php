@@ -8,6 +8,52 @@
     <script src="{{ asset('assets/global_assets/js/plugins/editors/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/global_assets/js/demo_pages/editor_ckeditor_material.js') }}"></script>
     <script src="{{ asset('assets/global_assets/js/plugins/uploaders/dropzone.min.js') }}"></script>
+    <style>
+        #content-layout {
+            display: none;
+        }
+
+        .col label {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .imgbgchk:checked + label > .tick_container {
+            opacity: 1;
+        }
+
+        /*         aNIMATION */
+        .imgbgchk:checked + label > img {
+            transform: scale(1.25);
+            opacity: 0.3;
+        }
+
+        .tick_container {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .tick {
+            background-color: #292c42;
+            color: white;
+            font-size: 16px;
+            padding: 6px 12px;
+            height: 40px;
+            width: 40px;
+            border-radius: 100%;
+        }
+
+        .level-3-menu {
+            display: none;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -19,6 +65,7 @@
         <div class="card-body">
             <form action="{{ route('videowall.content.store') }}" method="post">
                 @csrf
+                <input type="hidden" name="menu_order" id="menu_order">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
@@ -49,12 +96,60 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-12" id="content-layout">
+                        <label>Choose Layout</label>
+                        <div class="row">
+                            @foreach($layouts as $layout)
+                                <div class="col-md-2 text-center">
+                                    <input onclick="checkSelectedLayout({{$layout}})" type="radio" name="layout"
+                                           id="layout_{{$layout}}" class="d-none imgbgchk" value="layout_{{$layout}}">
+                                    <label for="layout_{{$layout}}">
+                                        <img width="150px"
+                                             src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"
+                                             alt="layout_{{$layout}}">
+                                        <div class="tick_container">
+                                            <div class="tick"><i class="icon-check2"></i></div>
+                                        </div>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    <div id="content-title" class="col-md-12 mt-2" style="display: none">
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input name="title" id="title" class="form-control" type="text">
+                            @error('title')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div id="background_color" class="col-md-6 level-3-menu">
+                        <div class="form-group">
+                            <label for="background_color">Background Color:</label>
+                            <input name="background_color" id="background_color" class="form-control"
+                                   type="color" value="#ffffff">
+                            @error('background_color')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div id="text_color" class="col-md-6 level-3-menu">
+                        <div class="form-group">
+                            <label for="text_color">Text Color:</label>
+                            <input name="text_color" id="text_color" class="form-control" type="color"
+                                   value="#000000">
+                            @error('text_color')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Content:</label>
                             <textarea name="content" id="editor-full1" rows="4" cols="4" required></textarea>
                             @error('content')
-                                <p class="text-danger">{{ $message }}</p>
+                            <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>
                     </div>
@@ -80,6 +175,7 @@
     <script>
         var list = $('#file-upload-list');
         var list2 = $('#file-upload-list2');
+        let listScreenMenu = '';
         console.log(list)
         // Multiple files
         Dropzone.options.dropzoneMultiple = {
@@ -92,18 +188,18 @@
             // If true, the individual chunks of a file are being uploaded simultaneously.
             parallelChunkUploads: true,
             acceptedFiles: 'video/*, image/*',
-            init: function() {
-                this.on('addedfile', function() {
-                        list.append('<li>Uploading</li>')
-                    }),
-                    this.on('sending', function(file, xhr, formData) {
+            init: function () {
+                this.on('addedfile', function () {
+                    list.append('<li>Uploading</li>')
+                }),
+                    this.on('sending', function (file, xhr, formData) {
                         formData.append("_token", "{{ csrf_token() }}");
 
                         // This will track all request so we can get the correct request that returns final response:
                         // We will change the load callback but we need to ensure that we will call original
                         // load callback from dropzone
                         var dropzoneOnLoad = xhr.onload;
-                        xhr.onload = function(e) {
+                        xhr.onload = function (e) {
                             dropzoneOnLoad(e)
                             // Check for final chunk and get the response
                             var uploadResponse = JSON.parse(xhr.responseText)
@@ -120,7 +216,7 @@
             }
         };
 
-        $('#screen_id').change(function() {
+        $('#screen_id').change(function () {
             screen_id = this.value | 0
             var url = "../getscreensidemenu/" + screen_id
             console.log(url)
@@ -128,7 +224,8 @@
                 url: url,
                 method: 'get',
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
+                    listScreenMenu = response
                     var html_text = '<option value="">Select Menu *</option>'
                     if (response.length) {
                         for (var i = 0; i < response.length; i++) {
@@ -139,6 +236,29 @@
                     $('#menu_id').empty().append(html_text);
                 }
             })
-        })
+        });
+        $('#menu_id').change(function () {
+            let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
+            $('#menu_order').val(menu.order)
+            if (menu.order >= 3) {
+                $('#content-layout').show()
+                $('.level-3-menu').show()
+            } else {
+                $('#content-layout').hide()
+                $('#content-title').hide()
+                $('.level-3-menu').hide()
+            }
+        });
+
+        function checkSelectedLayout(layout) {
+            if (1 === parseInt(layout)) {
+                $('#content-title').show()
+            } else {
+                $('#content-title').hide()
+            }
+            if (parseInt(layout) === 3 || parseInt(layout) === 5) {
+
+            }
+        }
     </script>
 @endsection

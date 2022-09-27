@@ -28,13 +28,14 @@ class VideoWallContentController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
         //
+        $layouts = [1, 2, 3, 4, 5];
         $screens = Screen::where('is_touch', 1)->where('screen_type', 'videowall')->get();
-        return view('videowall_content.create', compact('screens'));
+        return view('videowall_content.create', compact('screens', 'layouts'));
     }
 
     /**
@@ -45,8 +46,33 @@ class VideoWallContentController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // return $request;
+        $request->validate([
+            'lang' => 'required',
+            'screen_id' => 'required|integer',
+            'menu_id' => 'required|integer',
+            'content' => 'required',
+            'menu_order' => 'required|integer'
+        ]);
+//        dd($request->all());
+
+        if ($request->menu_order >= 3) {
+            $request->validate([
+                'layout' => 'required',
+                'background_color' => 'required',
+                'text_color' => 'required',
+
+            ]);
+            if ($request->layout == 'layout_1') {
+                $request->validate([
+                    'title' => 'required'
+                ]);
+            }
+            if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
+                if (count($request->file_names) < 2) {
+                    return redirect()->back()->withErrors(['message' => 'Minimum 2 images required']);
+                }
+            }
+        }
 
         try {
             $data = $request->except('_token');
@@ -94,6 +120,7 @@ class VideoWallContentController extends Controller
     public function edit($id)
     {
         //
+        $layouts = [1, 2, 3, 4, 5];
         $content = VideowallContent::find($id);
         $media = Media::where('lang', $content->lang)->where('menu_id', $content->menu_id)->get();
         // return $media;
@@ -123,7 +150,7 @@ class VideoWallContentController extends Controller
         }
         // return $menus;
         $screens = Screen::where('is_touch', 1)->where('screen_type', 'videowall')->get();
-        return view('videowall_content.edit', compact('screens', 'content', 'menus', 'media'));
+        return view('videowall_content.edit', compact('screens', 'content', 'menus', 'media', 'layouts'));
     }
 
     /**
