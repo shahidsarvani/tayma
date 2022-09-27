@@ -41,7 +41,7 @@ class VideoWallContentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
@@ -105,7 +105,7 @@ class VideoWallContentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -116,7 +116,7 @@ class VideoWallContentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -126,7 +126,7 @@ class VideoWallContentController extends Controller
         $content = VideowallContent::find($id);
         $media = Media::where('lang', $content->lang)->where('menu_id', $content->menu_id)->get();
         // return $media;
-        $all_menus = Menu::where('screen_type', 'videowall')->where('screen_id', $content->screen_id)->/* where('type', 'side')-> */get();
+        $all_menus = Menu::where('screen_type', 'videowall')->where('screen_id', $content->screen_id)->/* where('type', 'side')-> */ get();
         $menus = array();
         foreach ($all_menus as $value) {
             $name = array();
@@ -158,8 +158,8 @@ class VideoWallContentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
@@ -191,8 +191,10 @@ class VideoWallContentController extends Controller
                 }
             }
         }
-        if (count($request->file_names) < 1) {
-            return redirect()->back()->with('error', 'Minimum 2 images required');
+        if ($request->has('file_names')) {
+            if (count($request->file_names) < 1) {
+                return redirect()->back()->with('error', 'Minimum 2 images required');
+            }
         }
 
         try {
@@ -225,7 +227,7 @@ class VideoWallContentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -234,7 +236,7 @@ class VideoWallContentController extends Controller
         try {
             $content = VideowallContent::find($id);
             $media = Media::where('lang', $content->lang)->where('menu_id', $content->menu_id)->get();
-            foreach ($media as  $item) {
+            foreach ($media as $item) {
                 Storage::delete('/public/media/' . $item->name);
                 $item->delete();
             }
