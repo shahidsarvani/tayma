@@ -354,6 +354,20 @@ class ApiController extends Controller
             'submenu' => $child,
         ), 200);
     }
+    public function getMenuContentById($id) {
+
+        $menus = Menu::where('id', $id)->with('children', 'media', 'screen', 'videowall_content')->first();
+        $content = $menus->videowall_content->content;
+        $media = $menus->media->map(function($media) {
+            return env('APP_URL') .'/public/storage/media/'. $media->name;
+        });
+        return response()->json(array(
+            'intro' => array(
+                'content' => $content,
+                'media' => $media
+            ),
+        ), 200);
+    }
 
     //-- /API For Video Wall --//
 }

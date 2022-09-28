@@ -76,8 +76,11 @@ class VideoWallContentController extends Controller
         }
         if ($request->has('file_names')) {
             if (count($request->file_names) < 1) {
-                return redirect()->back()->with('error', 'Minimum 2 images required');
+                return redirect()->back()->with('error', 'Minimum 1 images required');
             }
+        }
+        else {
+            return redirect()->back()->with('error', 'Minimum 1 images required');
         }
 
         try {
@@ -199,8 +202,11 @@ class VideoWallContentController extends Controller
         }
         if ($request->has('file_names')) {
             if (count($request->file_names) < 1) {
-                return redirect()->back()->with('error', 'Minimum 2 images required');
+                return redirect()->back()->with('error', 'Minimum 1 images required');
             }
+        }
+        else {
+            return redirect()->back()->with('error', 'Minimum 1 images required');
         }
 
         try {
