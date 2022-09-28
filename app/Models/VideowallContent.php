@@ -30,4 +30,8 @@ class VideowallContent extends Model
     {
         return $this->belongsTo(Screen::class);
     }
+
+    public function media() {
+        return $this->hasMany(Media::class, 'menu_id', 'menu_id');
+    }
 }
