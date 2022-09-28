@@ -199,17 +199,6 @@ class ApiController extends Controller
                 'name_en' => $menu->name_en,
                 'name_ar' => $menu->name_ar,
             ];
-            if ($menu->children) {
-                $menu->children->map(function ($child) {
-                    $sub_menu = [
-                        'id' => $child->id,
-                        'name_en' => $child->name_en,
-                        'name_ar' => $child->name_ar,
-                    ];
-                    $temp['sub_menu'][] = $sub_menu;
-                    return $temp;
-                });
-            }
             return $temp;
         })->toArray();
         $menus = Menu::where('screen_type', 'videowall')->where('id', 2)->with('screen')->get();
