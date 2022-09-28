@@ -163,14 +163,14 @@ class ApiController extends Controller
         $res['en'] = [
             'id' => $menu->id,
             'screen_id' => $menu->screen->id,
-            'name_en' => $menu->name_en,
-            'image_en' => asset('public/storage/media/' . $menu->image_en),
+            'name' => $menu->name_en,
+            'image' => asset('public/storage/media/' . $menu->image_en),
         ];
         $res['ar'] = [
             'id' => $menu->id,
             'screen_id' => $menu->screen->id,
-            'name_ar' => $menu->name_ar,
-            'image_ar' => asset('public/storage/media/' . $menu->image_ar),
+            'name' => $menu->name_ar,
+            'image' => asset('public/storage/media/' . $menu->image_ar),
         ];
         return response()->json($res, 200);
     }
@@ -249,12 +249,17 @@ class ApiController extends Controller
 
     public function getSideMenuContent()
     {
+        $menus = Menu::where('screen_type', 'videowall')->where('id', 2)->with('screen', 'videowall_content')->get();
+        $contents = VideowallContent::where('menu_id', 2)->with('media')->get();
+
+
+
         $side_menu = Menu::where('screen_type', 'videowall')->with(['children' => function ($q) {
             $q->orderBy('order', 'ASC');
         }])->where('type', 'side')->where('level', 1)->orderBy('order', 'ASC')->limit(3)->get();
         $res = [];
         foreach ($side_menu as $menu) {
-            $res['en'] = [
+            $res['en']['sideMenu'][] = [
                 'id' => $menu->id,
                 'name' => $menu->name_en,
                 'screen' => [
@@ -262,7 +267,7 @@ class ApiController extends Controller
                 ],
                 'image' => $menu->image_en,
             ];
-            $res['ar'] = [
+            $res['ar']['sideMenu'][] = [
                 'id' => $menu->id,
                 'name' => $menu->name_ar,
                 'screen' => [
@@ -271,8 +276,33 @@ class ApiController extends Controller
                 'image' => $menu->image_ar,
             ];
         }
+        foreach($contents as $content) {
+            if ($content->lang === 'en') {
+                $res['en']['content'] = [
+                    'id' => $content->id,
+                    'name' => $content->content,
+                    'screen_id' => $content->screen->id,
+                    'media' =>
+                        $content->media->map(function ($media) {
+                            return env('APP_URL') . '/public/storage/media/' . $media->name;
+                        }),
+                    ];
+            }
+            if ($content->lang === 'ar') {
+                $res['ar']['content'] = [
+                    'id' => $content->id,
+                    'name' => $content->content,
+                    'screen_id' => $content->screen->id,
+                    'media' =>
+                        $content->media->map(function ($media) {
+                            return env('APP_URL') . '/public/storage/media/' . $media->name;
+                        }),
+                ];
+            }
+        }
 
-        $response['side_menu'] = $side_menu->map(function ($menu) {
+
+                $response['side_menu'] = $side_menu->map(function ($menu) {
             $temp = [
                 'id' => $menu->id,
                 'name_en' => $menu->name_en,
@@ -280,7 +310,6 @@ class ApiController extends Controller
             ];
             return $temp;
         })->toArray();
-        $menus = Menu::where('screen_type', 'videowall')->where('id', 2)->with('screen')->get();
         $response['content'] = $menus->map(function ($menu) {
             return [
                 'id' => $menu->id,
