@@ -433,7 +433,8 @@ class ApiController extends Controller
     public function getMenuContentById(Request $request, $id): \Illuminate\Http\JsonResponse
     {
         $res = [];
-        $contents = VideowallContent::where('menu_id', $id)->with('media', 'screen')->whereHas('screen', function ($query) {
+        $menu = Menu::where('menu_id', $id)->get()->pluck('id')->toArray();
+        $contents = VideowallContent::whereIn('menu_id', $menu)->with('media', 'screen')->whereHas('screen', function ($query) {
             $query->where('slug', \request()->screen);
         })->get();
         foreach ($contents as $content) {
