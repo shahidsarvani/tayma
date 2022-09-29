@@ -261,10 +261,10 @@ class ApiController extends Controller
             ], 422);
         }
 
-        $side_menu = Menu::where('screen_type', 'videowall')->where('type', 'side')->where('level', '3')->whereHas('screen', function ($query) {
+        $side_menu = Menu::where('screen_type', 'videowall')->where('type', 'side')->where('level', '2')->whereHas('screen', function ($query) {
             $query->where('slug', \request()->screen);
         })->with('screen', 'videowall_content')->orderBy('order', 'ASC')->get();
-        $contents = VideowallContent::where('menu_id', 2)->with('media')->get();
+        $contents = VideowallContent::where('menu_id', 2)->with('media', 'screen')->get();
 
 
 
@@ -285,6 +285,7 @@ class ApiController extends Controller
                 'image' => $menu->image_ar,
             ];
         }
+
         foreach ($contents as $content) {
             if ($content->lang === 'en') {
                 $res['en']['content'] = [
