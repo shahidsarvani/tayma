@@ -291,7 +291,7 @@ class ApiController extends Controller
                     'id' => $content->id,
                     'name' => $content->content,
                     'screen_id' => $content->screen->id,
-                'screen' => $menu->screen->name_en,
+                'screen' => $content->screen->name_en,
                     'media' =>
                         $content->media->map(function ($media) {
                             return env('APP_URL') . '/public/storage/media/' . $media->name;
@@ -303,7 +303,7 @@ class ApiController extends Controller
                     'id' => $content->id,
                     'name' => $content->content,
                     'screen_id' => $content->screen->id,
-                'screen' => $menu->screen->name_ar,
+                'screen' => $content->screen->name_ar,
                     'media' =>
                         $content->media->map(function ($media) {
                             return env('APP_URL') . '/public/storage/media/' . $media->name;
