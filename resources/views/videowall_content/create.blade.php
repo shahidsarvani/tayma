@@ -240,7 +240,7 @@
         $('#menu_id').change(function () {
             let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
             $('#menu_level').val(menu.level)
-            if (menu.level >= 3) {
+            if (menu.level >= 2) {
                 $('#content-layout').show()
                 $('.level-3-menu').show()
             } else {

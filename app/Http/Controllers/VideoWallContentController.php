@@ -54,7 +54,7 @@ class VideoWallContentController extends Controller
             'menu_level' => 'required|integer'
         ]);
 
-        if ($request->menu_level >= 3) {
+        if ($request->menu_level >= 2) {
             $request->validate([
                 'layout' => 'required',
                 'background_color' => 'required',
@@ -180,7 +180,7 @@ class VideoWallContentController extends Controller
             'menu_level' => 'required|integer'
         ]);
 
-        if ($request->menu_level >= 3) {
+        if ($request->menu_level >= 2) {
             $request->validate([
                 'layout' => 'required',
                 'background_color' => 'required',

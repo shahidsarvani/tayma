@@ -106,7 +106,7 @@
                             </select>
                         </div>
                     </div>
-                    @if($content->menu_level >= 3)
+                    @if($content->menu_level >= 2)
                         <div class="col-md-12">
                             <label>Choose Layout</label>
                             <div class="row">
@@ -272,7 +272,7 @@
         $('#menu_id').change(function () {
             let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
             $('#menu_level').val(menu.level)
-            if (menu.level >= 3) {
+            if (menu.level >= 2) {
                 $('#content-layout').show()
                 $('.level-3-menu').show()
             } else {
