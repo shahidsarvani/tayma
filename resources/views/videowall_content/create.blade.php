@@ -65,7 +65,7 @@
         <div class="card-body">
             <form action="{{ route('videowall.content.store') }}" method="post">
                 @csrf
-                <input type="hidden" name="menu_order" id="menu_order">
+                <input type="hidden" name="menu_level" id="menu_level">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="form-group">
@@ -239,8 +239,8 @@
         });
         $('#menu_id').change(function () {
             let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
-            $('#menu_order').val(menu.order)
-            if (menu.order >= 3) {
+            $('#menu_level').val(menu.level)
+            if (menu.level >= 3) {
                 $('#content-layout').show()
                 $('.level-3-menu').show()
             } else {

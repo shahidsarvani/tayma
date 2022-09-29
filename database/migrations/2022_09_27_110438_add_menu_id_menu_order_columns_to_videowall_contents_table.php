@@ -15,7 +15,7 @@ class AddMenuIdMenuOrderColumnsToVideowallContentsTable extends Migration
     {
         Schema::table('videowall_contents', function (Blueprint $table) {
             //
-            $table->integer('menu_order')->default(0);
+            $table->integer('menu_level')->default(0);
             $table->string('layout')->nullable();
             $table->string('background_color')->default('#ffffff');
             $table->string('text_color')->default('#000000');

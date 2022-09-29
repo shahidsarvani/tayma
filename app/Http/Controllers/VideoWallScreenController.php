@@ -110,7 +110,7 @@ class VideoWallScreenController extends Controller
             $name = implode(' -> ', $name);
             $temp = [
                 'id' => $value->id,
-                'order' => $value->order,
+                'level' => $value->level,
                 'name' => $name
             ];
             array_push($menus, $temp);

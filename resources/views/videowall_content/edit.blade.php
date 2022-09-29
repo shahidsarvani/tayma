@@ -67,7 +67,7 @@
             <form action="{{ route('videowall.content.update', $content->id) }}" method="post">
                 @csrf
                 @method('patch')
-                <input type="hidden" value="{{$content->menu_order}}" name="menu_order" id="menu_order">
+                <input type="hidden" value="{{$content->menu_level}}" name="menu_level" id="menu_level">
 
                 <div class="row">
                     <div class="col-md-4">
@@ -106,7 +106,7 @@
                             </select>
                         </div>
                     </div>
-                    @if($content->menu_order >= 3)
+                    @if($content->menu_level >= 3)
                         <div class="col-md-12">
                             <label>Choose Layout</label>
                             <div class="row">
@@ -130,8 +130,8 @@
                             </div>
                         </div>
                     @endif
-                    @if($content->layout >= 'layout_1')
-                        <div id="content-title" class="col-md-12 mt-2">
+
+                        <div id="content-title" class="col-md-12 mt-2" @if($content->layout != 'layout_1') style="display: none" @endif>
                             <div class="form-group">
                                 <label for="title">Title:</label>
                                 <input name="title" id="title" class="form-control" type="text"
@@ -141,7 +141,7 @@
                                 @enderror
                             </div>
                         </div>
-                    @endif
+
                     <div id="background_color" class="col-md-6 level-3-menu">
                         <div class="form-group">
                             <label for="background_color">Background Color:</label>
@@ -269,5 +269,27 @@
                 }
             })
         })
+        $('#menu_id').change(function () {
+            let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
+            $('#menu_level').val(menu.level)
+            if (menu.level >= 3) {
+                $('#content-layout').show()
+                $('.level-3-menu').show()
+            } else {
+                $('#content-layout').hide()
+                $('#content-title').hide()
+                $('.level-3-menu').hide()
+            }
+        });
+        function checkSelectedLayout(layout) {
+            if (1 === parseInt(layout)) {
+                $('#content-title').show()
+            } else {
+                $('#content-title').hide()
+            }
+            if (parseInt(layout) === 3 || parseInt(layout) === 5) {
+
+            }
+        }
     </script>
 @endsection

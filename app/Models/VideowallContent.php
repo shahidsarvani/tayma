@@ -14,7 +14,7 @@ class VideowallContent extends Model
         'lang', //['en', 'ar']
         'menu_id',
         'screen_id',
-        'menu_order',
+        'menu_level',
         'layout',
         'background_color',
         'text_color',
