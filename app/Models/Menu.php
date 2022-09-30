@@ -24,6 +24,7 @@ class Menu extends Model
         'order',
         'screen_type', //['portrait', 'videowall', 'withrfid', 'touchtable']);
         'screen_id',
+        'bg_image',
     ];
 
     public function parent()

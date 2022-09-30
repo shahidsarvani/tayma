@@ -73,6 +73,7 @@ class VideoWallGalleryController extends Controller
         $media = Media::findOrFail($id);
         Storage::delete('/public/media/' . $media->name);
         $media->delete();
-        return redirect()->route('videowall.gallery.index')->with('success', 'Media deleted');
+        return redirect()->back()->with('success', 'Media deleted');
+//        return redirect()->route('videowall.gallery.index')->with('success', 'Media deleted');
     }
 }

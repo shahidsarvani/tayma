@@ -81,6 +81,12 @@
                             <input type="number" name="order" class="form-control" required>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Background Image:</label>
+                            <input type="file" name="bg_image" class="form-control" required>
+                        </div>
+                    </div>
                     <div class="col-md-12">
                         <div class="hidden" id="image_partial">
                             @include('videowallscreen_menus.image_partial')

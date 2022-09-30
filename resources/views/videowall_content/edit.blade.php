@@ -53,6 +53,48 @@
         .level-3-menu {
             display: none;
         }
+
+
+        .image-area {
+            position: absolute;
+        }
+
+        .image-area img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .remove-image:hover {
+            background: #e54e4e;
+            padding: 3px 7px 5px;
+            top: -11px;
+            right: -11px;
+        }
+
+        .remove-image:active {
+            background: #e54e4e;
+            top: -10px;
+            right: -11px;
+        }
+
     </style>
 
 @endsection
@@ -64,7 +106,8 @@
         </div>
 
         <div class="card-body">
-            <form action="{{ route('videowall.content.update', $content->id) }}" method="post">
+            <form action="{{ route('videowall.content.update', $content->id) }}" method="post"
+                  enctype="multipart/form-data">
                 @csrf
                 @method('patch')
                 <input type="hidden" value="{{$content->menu_level}}" name="menu_level" id="menu_level">
@@ -131,18 +174,19 @@
                         </div>
                     @endif
 
-                        <div id="content-title" class="col-md-12 mt-2" @if($content->layout != 'layout_1') style="display: none" @endif>
-                            <div class="form-group">
-                                <label for="title">Title:</label>
-                                <input name="title" id="title" class="form-control" type="text"
-                                       value="{{$content->title}}">
-                                @error('title')
-                                <p class="text-danger">{{ $message }}</p>
-                                @enderror
-                            </div>
+                    <div id="content-title" class="col-md-12 mt-2"
+                         @if($content->layout != 'layout_1') style="display: none" @endif>
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input name="title" id="title" class="form-control" type="text"
+                                   value="{{$content->title}}">
+                            @error('title')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
                         </div>
+                    </div>
 
-                    <div id="background_color" class="col-md-6 level-3-menu">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="background_color">Background Color:</label>
                             <input name="background_color" id="background_color" class="form-control"
@@ -152,7 +196,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div id="text_color" class="col-md-6 level-3-menu">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label for="text_color">Text Color:</label>
                             <input name="text_color" id="text_color" class="form-control" type="color"
@@ -162,7 +206,26 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text_bg_image">Text Background Image:</label>
+                            <input name="text_bg_image" id="text_bg_image" class="form-control" type="file"
+                                   value="{{$content->text_bg_image}}">
+                            @error('text_bg_image')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
 
+                    @if($content->text_bg_image != null)
+                        <div class="col-md-6">
+                            <div class="image-area">
+                                <img src="{{asset('/storage/app/public/' . $content->text_bg_image)}}">
+                                <a class="remove-image" href="{{ '/video-wall-screen/image/remove/' . $content->id }}"
+                                   style="display: inline;">&#215;</a>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Content:</label>
@@ -178,11 +241,21 @@
                         @foreach ($media as $item)
                             <div class="col-md-3">
                                 @if ($item->type == 'image')
-                                    <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"
-                                         class="w-100">
+                                    <div class="">
+                                        <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"
+                                             class="w-100">
+                                        <a class="remove-image" href="{{ '/video-wall-screen/gallery/' . $item->id }}"
+                                           style="display: inline;">&#215;</a>
+                                    </div>
+
                                 @else
-                                    <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls
-                                           muted></video>
+                                    <div class="image-area">
+                                        <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls
+                                               muted></video>
+                                        <a class="remove-image" href="{{ '/video-wall-screen/gallery/' . $item->id }}"
+                                           style="display: inline;">&#215;</a>
+                                    </div>
+
                                 @endif
                             </div>
                         @endforeach
@@ -281,6 +354,7 @@
                 $('.level-3-menu').hide()
             }
         });
+
         function checkSelectedLayout(layout) {
             if (1 === parseInt(layout)) {
                 $('#content-title').show()

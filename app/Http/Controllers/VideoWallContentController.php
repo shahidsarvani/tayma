@@ -86,7 +86,8 @@ class VideoWallContentController extends Controller
         try {
             $data = $request->except('_token');
             // return $data;
-            VideowallContent::create($data);
+
+            $v_content = VideowallContent::create($data);
 
             $slug = Screen::where('id', $request->screen_id)->first()->slug;
             if ($request->file_names) {
@@ -101,6 +102,12 @@ class VideoWallContentController extends Controller
                         'type' => $request->types[$index],
                     ]);
                 }
+            }
+            if ($request->has('text_bg_image') && \request()->text_bg_image !== null) {
+                $imageName = time().'.'.$request->text_bg_image->extension();
+                $request->text_bg_image->storeAs('public/content', $imageName);
+                $v_content->text_bg_image = 'content/' . $imageName;
+                $v_content->save();
             }
             return redirect()->route('videowall.content.index')->with('success', 'Content Item is added!');
         } catch (\Throwable $th) {
@@ -207,8 +214,13 @@ class VideoWallContentController extends Controller
             $data = $request->except('_token', '_method');
             // return $data;
             $content = VideowallContent::find($id);
+            if ($request->has('text_bg_image') && \request()->text_bg_image !== null) {
+                $imageName = time().'.'.$request->text_bg_image->extension();
+                $res = $request->text_bg_image->storeAs('public/content/', $imageName);
+                $content->text_bg_image = 'content/' . $imageName;
+                $content->save();
+            }
             $content->update($data);
-
             $slug = Screen::where('id', $request->screen_id)->first()->slug;
             if ($request->file_names) {
                 foreach ($request->file_names as $index => $fileName) {

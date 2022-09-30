@@ -63,7 +63,7 @@
         </div>
 
         <div class="card-body">
-            <form action="{{ route('videowall.content.store') }}" method="post">
+            <form action="{{ route('videowall.content.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="menu_level" id="menu_level">
                 <div class="row">
@@ -140,6 +140,15 @@
                             <input name="text_color" id="text_color" class="form-control" type="color"
                                    value="#000000">
                             @error('text_color')
+                            <p class="text-danger">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="text_bg_image">Text Background image:</label>
+                            <input name="text_bg_image" id="text_bg_image" class="form-control" type="file">
+                            @error('text_bg_image')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
                         </div>

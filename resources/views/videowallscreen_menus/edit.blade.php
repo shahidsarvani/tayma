@@ -4,6 +4,51 @@
     Edit Video Wall Menu
 @endsection
 
+@section('header_scripts')
+    <style>
+        .image-area {
+            position: absolute;
+            width: 100px;
+        }
+
+        .image-area img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .remove-image {
+            display: none;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            border-radius: 10em;
+            padding: 2px 6px 3px;
+            text-decoration: none;
+            font: 700 21px/20px sans-serif;
+            background: #555;
+            border: 3px solid #fff;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            -webkit-transition: background 0.5s;
+            transition: background 0.5s;
+        }
+
+        .remove-image:hover {
+            background: #e54e4e;
+            padding: 3px 7px 5px;
+            top: -11px;
+            right: -11px;
+        }
+
+        .remove-image:active {
+            background: #e54e4e;
+            top: -10px;
+            right: -11px;
+        }
+    </style>
+@endsection
+
 @section('content')
     <div class="card">
         <div class="card-header">
@@ -82,6 +127,22 @@
                             <input type="number" name="order" class="form-control" value="{{$menu->order}}"required>
                         </div>
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Background Image:</label>
+                            <input type="file" name="bg_image" class="form-control" required>
+                        </div>
+                    </div>
+                    @if($menu->bg_image != null)
+                        <div class="col-md-6">
+                            <div class="image-area">
+                                <img src="{{asset('/storage/app/public/media/' . $menu->bg_image)}}">
+                                <a class="remove-image" href="{{ '/video-wall-screen/menu/bg/remove/' . $menu->id }}"
+                                   style="display: inline;">&#215;</a>
+                            </div>
+                        </div>
+                    @endif
                     <div class="col-md-12">
                         <div class="hidden {{ (($menu->image_en && $menu->image_en != '') || ($menu->image_ar && $menu->image_ar != '')) ? 'show' : '' }}" id="image_partial">
                             @include('videowallscreen_menus.image_partial')
@@ -91,7 +152,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary">Update <i class="icon-add ml-2"></i></button>
                 </div>

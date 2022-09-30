@@ -19,6 +19,7 @@ class VideowallContent extends Model
         'background_color',
         'text_color',
         'title',
+        'text_bg_img',
     ];
 
     public function menu()

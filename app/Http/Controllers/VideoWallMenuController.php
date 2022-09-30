@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Models\Menu;
 use App\Models\Screen;
 use Illuminate\Http\Request;
@@ -102,6 +103,12 @@ class VideoWallMenuController extends Controller
                 $file->storeAs($imagePath, $name);
                 $data['icon_ar'] = $name;
             }
+            if ($file = $request->file('bg_image')) {
+                $ext = $file->getClientOriginalExtension();
+                $name = 'bg_' . md5(uniqId()) . '.' . $ext;
+                $file->storeAs($imagePath, $name);
+                $data['bg_image'] = $name;
+            }
             $data['screen_type'] = 'videowall';
             // return $data;
 
@@ -167,7 +174,7 @@ class VideoWallMenuController extends Controller
             ];
             array_push($menus, $temp);
         }
-        
+
         return view('videowallscreen_menus.edit', compact('menus', 'menu', 'screens'));
     }
 
@@ -209,6 +216,12 @@ class VideoWallMenuController extends Controller
                 $data['icon_ar'] = null;
             }
             $imagePath = 'public/media';
+            if ($file = $request->file('bg_image')) {
+                $ext = $file->getClientOriginalExtension();
+                $name = 'bg_' . md5(uniqId()) . '.' . $ext;
+                $file->storeAs($imagePath, $name);
+                $data['bg_image'] = $name;
+            }
             if ($file = $request->file('image_en')) {
                 $ext = $file->getClientOriginalExtension();
                 $name = 'image_en_' . md5(uniqId()) . '.' . $ext;
@@ -270,5 +283,13 @@ class VideoWallMenuController extends Controller
             Log::error($th->getMessage());
             return redirect()->back()->with('error', 'Error: Something went wrong!');
         }
+    }
+
+    public function removeBgImage($id) {
+        $menu = Menu::where('id', $id)->first();
+        Helper::removePhysicalFile('media/' . $menu->bg_image);
+        $menu->bg_image = null;
+        $menu->save();
+        return redirect()->back()->with('success', 'Image deleted successfully!');
     }
 }

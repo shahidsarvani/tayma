@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Helper;
 use App\Models\Media;
 use App\Models\Screen;
+use App\Models\VideowallContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Pion\Laravel\ChunkUpload\Receiver\FileReceiver;
@@ -65,5 +67,12 @@ class VideoWallMediaController extends Controller
         Storage::delete('/public/media/' . $media->name);
         $media->delete();
         return redirect()->route('videowall.media.index')->with('success', 'Media deleted');
+    }
+    public function remove_image($id) {
+        $content = VideowallContent::whereId($id)->first();
+        Helper::removePhysicalFile($content->text_bg_image);
+        $content->text_bg_image = null;
+        $content->save();
+        return redirect()->back();
     }
 }
