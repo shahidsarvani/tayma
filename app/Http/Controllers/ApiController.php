@@ -165,13 +165,13 @@ class ApiController extends Controller
             'id' => $menu->id,
             'screen_id' => $menu->screen->id,
             'name' => $menu->name_en,
-            'image' => asset('public/storage/media/' . $menu->image_en),
+            'image' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_en,
         ];
         $res['ar'] = [
             'id' => $menu->id,
             'screen_id' => $menu->screen->id,
             'name' => $menu->name_ar,
-            'image' => asset('public/storage/media/' . $menu->image_ar),
+            'image' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar,
         ];
         return response()->json($res, 200);
     }
@@ -186,8 +186,8 @@ class ApiController extends Controller
                 'id' => $menu->id,
                 'name_en' => $menu->name_en,
                 'name_ar' => $menu->name_ar,
-                'icon_en' => asset('public/storage/media/' . $menu->icon_en),
-                'icon_ar' => asset('public/storage/media/' . $menu->icon_ar),
+                'icon_en' =>  env('APP_URL') . '/storage/app/public/media/' . $menu->icon_en,
+                'icon_ar' =>  env('APP_URL') . '/storage/app/public/media/' . $menu->icon_ar,
             ];
             array_push($response, $temp);
         }
@@ -295,7 +295,7 @@ class ApiController extends Controller
                 'screen' => $content->screen->name_en,
                     'media' =>
                         $content->media->map(function ($media) {
-                            return env('APP_URL') . '/storage/app/public//media/' . $media->name;
+                            return env('APP_URL') . '/storage/app/public/media/' . $media->name;
                         }),
                 ];
             }
@@ -307,7 +307,7 @@ class ApiController extends Controller
                 'screen' => $content->screen->name_ar,
                     'media' =>
                         $content->media->map(function ($media) {
-                            return env('APP_URL') . '/storage/app/public//media/' . $media->name;
+                            return env('APP_URL') . '/storage/app/public/media/' . $media->name;
                         }),
                 ];
             }
@@ -418,7 +418,7 @@ class ApiController extends Controller
         $child = array();
         $content = $menus->videowall_content->content;
         $media = $menus->media->map(function ($media) {
-            return env('APP_URL') . '/storage/app/public//media/' . $media->name;
+            return env('APP_URL') . '/storage/app/public/media/' . $media->name;
         });
 
         return response()->json(array(
@@ -488,7 +488,7 @@ class ApiController extends Controller
                             'media' =>
                                 $item->media->map(function ($media) {
                                     if ($media->lang === 'en')
-                                        return env('APP_URL') . '/storage/app/public//media/' . $media->name;
+                                        return env('APP_URL') . '/storage/app/public/media/' . $media->name;
                         })->filter()->values(),
                     );
                 }
@@ -504,7 +504,7 @@ class ApiController extends Controller
                             'media' =>
                                 $item->media->map(function ($media) {
                                     if ($media->lang === 'ar')
-                                        return env('APP_URL') . '/storage/app/public//media/' . $media->name;
+                                        return env('APP_URL') . '/storage/app/public/media/' . $media->name;
                                 })->filter()->values(),
                     );
                 }
