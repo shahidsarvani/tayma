@@ -450,7 +450,7 @@ class ApiController extends Controller
                 'media' => $content->media->map(function ($media) use ($content) {
                     if ($media->lang == $content->lang) {
                         return [
-                            'link' => env('APP_URL') . '/public/storage/media/' . $media->name,
+                            'link' => env('APP_URL') . ' /storage/app/public/media/' . $media->name,
                             'type' => $media->type,
                             'lang' => $media->lang,
                         ];
