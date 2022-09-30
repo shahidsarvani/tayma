@@ -448,8 +448,13 @@ class ApiController extends Controller
                 'screen_id' => $content->screen_id,
                 'screen' => $content->screen['name_'.$content->lang],
                 'media' => $content->media->map(function ($media) use ($content) {
-                    if ($media->lang == $content->lang)
-                        return env('APP_URL') . '/public/storage/media/' . $media->name;
+                    if ($media->lang == $content->lang) {
+                        return [
+                            'link' => env('APP_URL') . '/public/storage/media/' . $media->name,
+                            'type' => $media->type,
+                            'lang' => $media->lang,
+                        ];
+                    }
                 })->filter()->values(),
             ];
         }
