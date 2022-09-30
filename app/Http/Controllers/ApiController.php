@@ -295,7 +295,7 @@ class ApiController extends Controller
                 'screen' => $content->screen->name_en,
                     'media' =>
                         $content->media->map(function ($media) {
-                            return env('APP_URL') . '/public/storage/media/' . $media->name;
+                            return env('APP_URL') . '/storage/app/public//media/' . $media->name;
                         }),
                 ];
             }
@@ -307,7 +307,7 @@ class ApiController extends Controller
                 'screen' => $content->screen->name_ar,
                     'media' =>
                         $content->media->map(function ($media) {
-                            return env('APP_URL') . '/public/storage/media/' . $media->name;
+                            return env('APP_URL') . '/storage/app/public//media/' . $media->name;
                         }),
                 ];
             }
@@ -418,7 +418,7 @@ class ApiController extends Controller
         $child = array();
         $content = $menus->videowall_content->content;
         $media = $menus->media->map(function ($media) {
-            return env('APP_URL') . '/public/storage/media/' . $media->name;
+            return env('APP_URL') . '/storage/app/public//media/' . $media->name;
         });
 
         return response()->json(array(
@@ -488,7 +488,7 @@ class ApiController extends Controller
                             'media' =>
                                 $item->media->map(function ($media) {
                                     if ($media->lang === 'en')
-                                        return env('APP_URL') . '/public/storage/media/' . $media->name;
+                                        return env('APP_URL') . '/storage/app/public//media/' . $media->name;
                         })->filter()->values(),
                     );
                 }
@@ -504,7 +504,7 @@ class ApiController extends Controller
                             'media' =>
                                 $item->media->map(function ($media) {
                                     if ($media->lang === 'ar')
-                                        return env('APP_URL') . '/public/storage/media/' . $media->name;
+                                        return env('APP_URL') . '/storage/app/public//media/' . $media->name;
                                 })->filter()->values(),
                     );
                 }
