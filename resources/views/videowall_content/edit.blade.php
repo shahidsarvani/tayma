@@ -57,6 +57,7 @@
 
         .image-area {
             position: absolute;
+            width: 100px;
         }
 
         .image-area img {
