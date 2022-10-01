@@ -30,7 +30,7 @@ class PortraitScreenMediaController extends Controller
     }
     public function portrait_video_create()
     {
-        $screens = Screen::where('is_touch', 1)->where('is_model', 1)->get();
+        $screens = Screen::where('is_touch', 1)->where('is_model', 1)->where('screen_type', 'portrait')->get();
         return view('portrait_media.create', compact('screens'));
     }
     public function portrait_video_store(Request $request)

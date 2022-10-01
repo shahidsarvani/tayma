@@ -42,17 +42,17 @@
                         <form action="{{ route('portrait.media.upload') }}" class="dropzone" id="dropzone_multiple">
                         </form>
 
-                        <form action="{{ route('portrait.media.store') }}" method="post" id="mediaForm">
+                    </div>
+                    <form action="{{ route('portrait.media.store') }}" method="post" id="mediaForm">
                             @csrf
                             <ul id="file-upload-list" class="list-unstyled">
                             </ul>
-                    </div>
 
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary add_media">Add <i
                                 class="icon-plus-circle2 ml-2"></i></button>
-                        </form>
                     </div>
+                    </form>
                 </div>
             </div>
         </div>
