@@ -61,7 +61,7 @@
         }
 
         .image-area img {
-            max-width: 100%;
+            max-width: 100px;
             height: auto;
         }
 
@@ -69,7 +69,7 @@
             display: none;
             position: absolute;
             top: -10px;
-            right: -10px;
+            /*right: -10px;*/
             border-radius: 10em;
             padding: 2px 6px 3px;
             text-decoration: none;
@@ -87,15 +87,17 @@
             background: #e54e4e;
             padding: 3px 7px 5px;
             top: -11px;
-            right: -11px;
+            /*right: -11px;*/
         }
 
         .remove-image:active {
             background: #e54e4e;
             top: -10px;
-            right: -11px;
+            /*right: -11px;*/
         }
-
+        .image-area- {
+            width: 100px;
+        }
     </style>
 
 @endsection
@@ -221,7 +223,7 @@
                     @if($content->text_bg_image != null)
                         <div class="col-md-6">
                             <div class="image-area">
-                                <img src="{{asset('/storage/app/public/' . $content->text_bg_image)}}">
+                                <img src="{{asset('/storage/app/public/media/' . $content->text_bg_image)}}">
                                 <a class="remove-image" href="{{ '/video-wall-screen/image/remove/' . $content->id }}"
                                    style="display: inline;">&#215;</a>
                             </div>
@@ -240,9 +242,9 @@
 
                     @if ($media)
                         @foreach ($media as $item)
-                            <div class="col-md-3">
+                            <div class="col-md-3 my-2">
                                 @if ($item->type == 'image')
-                                    <div class="">
+                                    <div class="image-area-">
                                         <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"
                                              class="w-100">
                                         <a class="remove-image" href="{{ '/video-wall-screen/gallery/' . $item->id }}"
@@ -250,9 +252,9 @@
                                     </div>
 
                                 @else
-                                    <div class="image-area">
+                                    <div class="image-area-">
                                         <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls
-                                               muted></video>
+                                               autoplay muted></video>
                                         <a class="remove-image" href="{{ '/video-wall-screen/gallery/' . $item->id }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
