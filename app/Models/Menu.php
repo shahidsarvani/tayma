@@ -25,6 +25,7 @@ class Menu extends Model
         'screen_type', //['portrait', 'videowall', 'withrfid', 'touchtable']);
         'screen_id',
         'bg_image',
+        'is_timeline',
     ];
 
     public function parent()

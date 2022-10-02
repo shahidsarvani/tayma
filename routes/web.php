@@ -15,6 +15,7 @@ use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TouchScreenContentController;
 use App\Http\Controllers\TouchScreenMediaController;
 use App\Http\Controllers\TouchScreenMenuController;
+use App\Http\Controllers\TouchScreenTimelineItemController;
 use App\Http\Controllers\VideoWallContentController;
 use App\Http\Controllers\VideoWallGalleryController;
 use App\Http\Controllers\VideoWallMediaController;
@@ -57,12 +58,15 @@ Route::middleware([
     Route::prefix('touchtable-screen')->name('touchtable.')->group(function () {
         Route::resource('menus', TouchScreenMenuController::class);
         Route::resource('content', TouchScreenContentController::class);
-        Route::get('media', [TouchScreenMediaController::class, 'touchtable_media_index'])->name('media.index');
-        Route::get('media/create', [TouchScreenMediaController::class, 'touchtable_media_create'])->name('media.create');
-        Route::post('media', [TouchScreenMediaController::class, 'touchtable_media_store'])->name('media.store');
-        Route::get('media/{id}/edit', [TouchScreenMediaController::class, 'touchtable_media_edit'])->name('media.edit');
-        Route::put('media/{id}', [TouchScreenMediaController::class, 'touchtable_media_update'])->name('media.update');
-        Route::delete('media/{id}', [TouchScreenMediaController::class, 'touchtable_media_delete'])->name('media.delete');
+        Route::resource('timeline', TouchScreenTimelineItemController::class);
+        Route::controller(TouchScreenMediaController::class)->group(function () {
+            Route::get('media', 'touchtable_media_index')->name('media.index');
+            Route::get('media/create', 'touchtable_media_create')->name('media.create');
+            Route::post('media', 'touchtable_media_store')->name('media.store');
+            Route::get('media/{id}/edit', 'touchtable_media_edit')->name('media.edit');
+            Route::put('media/{id}', 'touchtable_media_update')->name('media.update');
+            Route::delete('media/{id}', 'touchtable_media_delete')->name('media.delete');
+        });
         Route::post('/upload_media', [MediaController::class, 'upload_media_dropzone'])->name('media.upload');
     });
     Route::prefix('portrait-screen')->name('portrait.')->group(function () {

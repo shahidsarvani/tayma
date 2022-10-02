@@ -47,6 +47,11 @@ var CKEditor = function() {
                 height: 300
             });
         }
+        if($('textarea[name=description]').length) {
+            CKEDITOR.replace('description', {
+                height: 300
+            });
+        }
 
 
         // Readonly editor
