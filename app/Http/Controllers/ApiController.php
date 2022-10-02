@@ -127,6 +127,9 @@ class ApiController extends Controller
                 $response['menu_content']['media'][] = $temp;
             }
         }
+        if ($menu->is_timeline) {
+            $response['timeline_items'] = $menu->get_timeline_items($menu_id, $lang);
+        }
 
         return response()->json($response, 200);
     }
@@ -299,9 +302,9 @@ class ApiController extends Controller
                     'screen' => $content->screen->name_en,
                     'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
                     'media' =>
-                        $content->media->map(function ($media) {
-                            return env('APP_URL') . '/storage/app/public/media/' . $media->name;
-                        }),
+                    $content->media->map(function ($media) {
+                        return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                    }),
                 ];
             }
             if ($content->lang === 'ar') {
@@ -312,9 +315,9 @@ class ApiController extends Controller
                     'screen' => $content->screen->name_ar,
                     'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
                     'media' =>
-                        $content->media->map(function ($media) {
-                            return env('APP_URL') . '/storage/app/public/media/' . $media->name;
-                        }),
+                    $content->media->map(function ($media) {
+                        return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                    }),
                 ];
             }
         }
@@ -452,7 +455,7 @@ class ApiController extends Controller
                 'text_color' => $content->text_color,
                 'title' => $content->title,
                 'screen_id' => $content->screen_id,
-                'screen' => $content->screen['name_'.$content->lang],
+                'screen' => $content->screen['name_' . $content->lang],
                 'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
                 'media' => $content->media->map(function ($media) use ($content) {
                     if ($media->lang == $content->lang) {
@@ -492,10 +495,10 @@ class ApiController extends Controller
                         'layout' => $item->layout,
                         'background_color' => $item->background_color,
                         'text_color' => $item->text_color,
-                            'media' =>
-                                $item->media->map(function ($media) {
-                                    if ($media->lang === 'en')
-                                        return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                        'media' =>
+                        $item->media->map(function ($media) {
+                            if ($media->lang === 'en')
+                                return env('APP_URL') . '/storage/app/public/media/' . $media->name;
                         })->filter()->values(),
                     );
                 }
@@ -508,11 +511,11 @@ class ApiController extends Controller
                         'layout' => $item->layout,
                         'background_color' => $item->background_color,
                         'text_color' => $item->text_color,
-                            'media' =>
-                                $item->media->map(function ($media) {
-                                    if ($media->lang === 'ar')
-                                        return env('APP_URL') . '/storage/app/public/media/' . $media->name;
-                                })->filter()->values(),
+                        'media' =>
+                        $item->media->map(function ($media) {
+                            if ($media->lang === 'ar')
+                                return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                        })->filter()->values(),
                     );
                 }
             }
