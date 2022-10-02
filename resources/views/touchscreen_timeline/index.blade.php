@@ -15,7 +15,8 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Content</th>
+                        <th>Title</th>
+                        <th>Description</th>
                         <th>Language</th>
                         <th>Menu</th>
                         <th>Actions</th>
@@ -26,21 +27,22 @@
                         @foreach ($content as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{!! $item->content !!}</td>
+                                <td>{{ $item->title }}</td>
+                                <td>{!! $item->description !!}</td>
                                 <td>{{ $item->lang === 'en' ? 'English' : 'Arabic' }}</td>
                                 <td>{{ $item->menu->name_en }}</td>
                                 <td>
                                     <div class="list-icons">
-                                        @can('edit-touchtable-screen-content')
-                                            <a href="{{ route('touchtable.content.edit', $item->id) }}" class="list-icons-item text-primary"><i
+                                        @can('edit-touchtable-timeline-item')
+                                            <a href="{{ route('touchtable.timeline.edit', $item->id) }}" class="list-icons-item text-primary"><i
                                                     class="icon-pencil7"></i></a>
                                         @endcan
-                                        @can('delete-touchtable-screen-content')
-                                            <a href="{{ route('touchtable.content.destroy', $item->id) }}"
+                                        @can('delete-touchtable-timeline-item')
+                                            <a href="{{ route('touchtable.timeline.destroy', $item->id) }}"
                                                 class="list-icons-item text-danger"
                                                 onclick="event.preventDefault(); document.getElementById('my-form{{ $item->id }}').submit();"><i
                                                     class="icon-trash"></i></a>
-                                            <form action="{{ route('touchtable.content.destroy', $item->id) }}" method="post"
+                                            <form action="{{ route('touchtable.timeline.destroy', $item->id) }}" method="post"
                                                 id="my-form{{ $item->id }}" class="d-none">
                                                 @csrf
                                                 @method('delete')

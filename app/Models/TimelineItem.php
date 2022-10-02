@@ -20,4 +20,9 @@ class TimelineItem extends Model
     {
         return $this->hasMany(TimelineMedia::class);
     }
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
 }

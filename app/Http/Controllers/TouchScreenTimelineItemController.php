@@ -15,7 +15,8 @@ class TouchScreenTimelineItemController extends Controller
     //
     public function index()
     {
-        // $items = Time
+        $timeline_items = TimelineItem::all();
+        return view('touchscreen_timeline.index', compact('timeline_items'));
     }
 
     public function create()
