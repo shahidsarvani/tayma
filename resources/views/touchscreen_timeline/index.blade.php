@@ -23,8 +23,8 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (!$content->isEmpty())
-                        @foreach ($content as $item)
+                    @if (!$timeline_items->isEmpty())
+                        @foreach ($timeline_items as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->title }}</td>
