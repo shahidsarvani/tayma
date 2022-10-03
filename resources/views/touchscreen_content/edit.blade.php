@@ -109,8 +109,9 @@
         </div>
 
         <div class="card-body">
-            <form action="{{ route('touchtable.content.store') }}" method="post">
+            <form action="{{ route('touchtable.content.update', $content->id) }}" method="post">
                 @csrf
+                @method('patch')
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">

@@ -151,11 +151,33 @@ class TouchScreenContentController extends Controller
      * @param  \App\Models\TouchScreenContent  $touchScreenContent
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, TouchScreenContent $touchScreenContent)
+    public function update(Request $request, $id)
     {
-        //
-        // return $slide;
-        return $request;
+        try {
+            $data = $request->except('_token', '_method', 'file_names', 'types');
+            // return $data;
+            $touchscreen = TouchScreenContent::whereId($id)->update($data);
+
+            $slug = Screen::where('screen_type', 'touchtable')->first()->slug;
+            if ($request->file_names) {
+                foreach ($request->file_names as $index => $fileName) {
+                    // $media = Media::whereName($fileName)->first();
+                    $media = Media::create([
+                        'lang' => $request->lang,
+                        'name' => $fileName,
+                        'screen_slug' => $slug,
+                        'screen_type' => 'touchtable',
+                        'menu_id' => $request->menu_id,
+                        'type' => $request->types[$index],
+                    ]);
+                }
+            }
+            return redirect()->route('touchtable.content.index')->with('success', 'Content Item is added!');
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return redirect()->back()->with('error', 'Error: Something went wrong!');
+        }
+
     }
 
     /**
