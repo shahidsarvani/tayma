@@ -56,6 +56,7 @@ Route::middleware([
     Route::resource('layouts', LayoutController::class);
     Route::prefix('touchtable-screen')->name('touchtable.')->group(function () {
         Route::resource('menus', TouchScreenMenuController::class);
+        Route::get('content/edit/{id}', [TouchScreenContentController::class, 'edit']);
         Route::resource('content', TouchScreenContentController::class);
         Route::get('media', [TouchScreenMediaController::class, 'touchtable_media_index'])->name('media.index');
         Route::get('media/create', [TouchScreenMediaController::class, 'touchtable_media_create'])->name('media.create');

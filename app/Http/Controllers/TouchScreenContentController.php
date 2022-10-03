@@ -27,7 +27,7 @@ class TouchScreenContentController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
@@ -48,13 +48,13 @@ class TouchScreenContentController extends Controller
                     }
                 }
             }
-            array_push($name, $value->name_en);
+            $name[] = $value->name_en;
             $name = implode(' -> ', $name);
             $temp = [
                 'id' => $value->id,
                 'name' => $name
             ];
-            array_push($menus, $temp);
+            $menus[] = $temp;
         }
         return view('touchscreen_content.create', compact('menus'));
     }
@@ -113,12 +113,35 @@ class TouchScreenContentController extends Controller
      * @param  \App\Models\TouchScreenContent  $touchScreenContent
      * @return \Illuminate\Http\Response
      */
-    public function edit(TouchScreenContent $touchScreenContent)
+    public function edit($id)
     {
-        //
-        return $touchScreenContent;
-        // $cards = RfidCard::where('is_active', 1)->get();
-        return view('slides.edit', compact('cards', 'slide'));
+        $all_menus = Menu::where('screen_type', 'touchtable')->where('type', 'side')->get();
+        $menus = array();
+        foreach ($all_menus as $value) {
+            $name = array();
+            if ($value->parent) {
+                array_unshift($name, $value->parent->name_en);
+                if ($value->parent->parent) {
+                    array_unshift($name, $value->parent->parent->name_en);
+                    if ($value->parent->parent->parent) {
+                        array_unshift($name, $value->parent->parent->parent->name_en);
+                        if ($value->parent->parent->parent->parent) {
+                            array_unshift($name, $value->parent->parent->parent->parent->name_en);
+                        }
+                    }
+                }
+            }
+            $name[] = $value->name_en;
+            $name = implode(' -> ', $name);
+            $temp = [
+                'id' => $value->id,
+                'name' => $name
+            ];
+            $menus[] = $temp;
+        }
+        $content = TouchScreenContent::whereId($id)->first();
+        $media = Media::where('menu_id', $content->menu_id)->get();
+        return view('touchscreen_content.edit', compact('content', 'menus', 'media'));
     }
 
     /**

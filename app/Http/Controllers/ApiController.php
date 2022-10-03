@@ -131,9 +131,22 @@ class ApiController extends Controller
         return response()->json($response, 200);
     }
 
-    public function get_videowall_main_menu()
+    public function get_videowall_main_menu(Request $request)
     {
-        $menu = Menu::where('screen_type', 'videowall')->where('menu_id', 0)->orderBy('order', 'ASC')->with('screen')->first();
+        $validator = Validator::make($request->all(), [
+            'screen' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+                'status' => 422,
+            ], 422);
+        }
+
+        $menu = Menu::where('screen_type', 'videowall')->where('menu_id', 0)->whereHas('screen', function ($query) {
+            $query->where('slug', \request()->screen);
+        })->orderBy('order', 'ASC')->with('screen')->first();
         /*        $content = [
                     'id' => $menu->id,
                     'name_en' => $menu->name_en,
@@ -440,12 +453,15 @@ class ApiController extends Controller
     {
         $res = [];
         $menu = Menu::where('menu_id', $id)->get()->pluck('id')->toArray();
-        $contents = VideowallContent::whereIn('menu_id', $menu)->with('media', 'screen')->whereHas('screen', function ($query) {
+        $contents = VideowallContent::whereIn('menu_id', $menu)->with('media', 'screen', 'menu')->whereHas('screen', function ($query) {
             $query->where('slug', \request()->screen);
-        })->get();
+        })->orderBy(Menu::select('order')->whereColumn('menus.menu_id', 'videowall_contents.menu_id'), 'DESC')
+            ->get();
+
         foreach ($contents as $content) {
-            $res[$content->lang][] = [
+            $res[] = [
                 'id' => $content->id,
+                'lang' => $content->lang,
                 'layout' => $content->layout,
                 'content' => $content->content,
                 'background_color' => $content->background_color,
@@ -455,7 +471,7 @@ class ApiController extends Controller
                 'screen' => $content->screen['name_'.$content->lang],
                 'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
                 'media' => $content->media->map(function ($media) use ($content) {
-                    if ($media->lang == $content->lang) {
+                    if ($media->lang == $content->lang && !!$media->name) {
                         return [
                             'link' => env('APP_URL') . '/storage/app/public/media/' . $media->name,
                             'type' => $media->type,
