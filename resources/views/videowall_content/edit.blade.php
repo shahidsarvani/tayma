@@ -95,7 +95,7 @@
             top: -10px;
             /*right: -11px;*/
         }
-        .image-area- {
+        .image-area- img, .image-area- video, .image-area- {
             width: 100px;
         }
     </style>
