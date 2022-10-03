@@ -69,16 +69,21 @@ class VideoWallMenuController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        // return $request;
+
         try {
-            $data = $request->except('_token', 'image_en', 'image_ar', 'icon_en', 'icon_ar');
+            $data = $request->except('_token', 'intro_video', 'image_en', 'image_ar', 'icon_en', 'icon_ar');
             // return $data;
             if (!$request->menu_id) {
                 // return $data;
                 $data['menu_id'] = 0;
             }
             $imagePath = 'public/media';
+            if ($file = $request->file('intro_video')) {
+                $ext = $file->getClientOriginalExtension();
+                $name = 'intro_video_' . md5(uniqId()) . '.' . $ext;
+                $file->storeAs($imagePath, $name);
+                $data['intro_video'] = $name;
+            }
             if ($file = $request->file('image_en')) {
                 $ext = $file->getClientOriginalExtension();
                 $name = 'image_en_' . md5(uniqId()) . '.' . $ext;
@@ -291,5 +296,14 @@ class VideoWallMenuController extends Controller
         $menu->bg_image = null;
         $menu->save();
         return redirect()->back()->with('success', 'Image deleted successfully!');
+    }
+
+    public function removeIntroVideo($id): \Illuminate\Http\RedirectResponse
+    {
+        $menu = Menu::where('id', $id)->first();
+        Helper::removePhysicalFile('media/' . $menu->bg_image);
+        $menu->intro_video = null;
+        $menu->save();
+        return redirect()->back()->with('success', 'Video deleted successfully!');
     }
 }

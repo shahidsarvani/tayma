@@ -26,6 +26,7 @@ class Menu extends Model
         'screen_id',
         'bg_image',
         'is_timeline',
+        'intro_video',
     ];
 
     public function parent()

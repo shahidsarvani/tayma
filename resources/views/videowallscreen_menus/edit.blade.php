@@ -6,6 +6,10 @@
 
 @section('header_scripts')
     <style>
+        .image-area_ {
+            width: 100px;
+            height: 100px;
+        }
         .image-area {
             position: absolute;
             width: 100px;
@@ -134,12 +138,31 @@
                             <input type="file" name="bg_image" class="form-control" required>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Introductory Video:</label>
+                            <input type="file" name="intro_video" class="form-control" accept="video/mp4,video/x-m4v,video/*">
+                        </div>
+                    </div>
                     @if($menu->bg_image != null)
                         <div class="col-md-6">
+                            <div class="image-area_">
                             <div class="image-area">
                                 <img src="{{asset('/storage/app/public/media/' . $menu->bg_image)}}">
                                 <a class="remove-image" href="{{ '/video-wall-screen/menu/bg/remove/' . $menu->id }}"
                                    style="display: inline;">&#215;</a>
+                            </div>
+                            </div>
+                        </div>
+                    @endif
+                    @if($menu->intro_video != null)
+                        <div class="col-md-6">
+                            <div class="image-area_">
+                            <div class="image-area">
+                                <video style="width: 100px;'" src="{{ URL::asset('public/storage/media/' . $menu->intro_video) }}" muted controls></video>
+                                <a class="remove-image" href="{{ '/video-wall-screen/menu/intro/video/remove/' . $menu->id }}"
+                                   style="display: inline;">&#215;</a>
+                            </div>
                             </div>
                         </div>
                     @endif
