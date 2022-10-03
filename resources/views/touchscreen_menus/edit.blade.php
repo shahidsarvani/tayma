@@ -27,7 +27,7 @@
                             <input type="text" class="form-control" name="name_ar" value="{{$menu->name_ar}}" required>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Parent Menu:</label>
                             <select name="menu_id" class="form-control">
@@ -38,7 +38,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Type:</label>
                             <select name="type" class="form-control" onchange="menuTypeChanged(this)" required>
@@ -62,6 +62,16 @@
                                 <option value="">Select Status</option>
                                 <option value="1" @if($menu->is_active) selected @endif>Active</option>
                                 <option value="0" @if(!$menu->is_active) selected @endif>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Timeline Menu:</label>
+                            <select name="is_timeline" class="form-control" required>
+                                <option value="">Select Option</option>
+                                <option value="1" @if($menu->is_timeline) selected @endif>Yes</option>
+                                <option value="0" @if(!$menu->is_timeline) selected @endif>no</option>
                             </select>
                         </div>
                     </div>

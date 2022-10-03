@@ -26,7 +26,7 @@
                             <input type="text" class="form-control" name="name_ar" required>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Parent Menu:</label>
                             <select name="menu_id" class="form-control">
@@ -37,7 +37,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Type:</label>
                             <select name="type" class="form-control" onchange="menuTypeChanged(this)" required>
@@ -61,6 +61,16 @@
                                 <option value="">Select Status</option>
                                 <option value="1">Active</option>
                                 <option value="0">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Timeline Menu:</label>
+                            <select name="is_timeline" class="form-control" required>
+                                <option value="">Select Option</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
                             </select>
                         </div>
                     </div>
