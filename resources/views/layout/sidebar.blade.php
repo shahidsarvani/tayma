@@ -219,22 +219,22 @@
                             </ul>
                         </li>
                     @endcan
-{{--                    @can(['add-video-wall-screen-video', 'delete-video-wall-screen-video', 'view-video-wall-screen-video'])--}}
-{{--                        <li class="nav-item nav-item-submenu @if (Route::is('videowall.media.*')) nav-item-open @endif">--}}
-{{--                            <a href="#" class="nav-link"><i class="icon-film4"></i> <span>Media</span></a>--}}
-{{--                            <ul class="nav nav-group-sub" data-submenu-title="Media"--}}
-{{--                                @if (Route::is('videowall.media.*')) style="display: block" @endif>--}}
-{{--                                @can('add-video-wall-screen-video')--}}
-{{--                                    <li class="nav-item"><a href="{{ route('videowall.media.create') }}"--}}
-{{--                                            class="nav-link @if (Route::is('videowall.media.create')) active @endif">Add Media</a></li>--}}
-{{--                                @endcan--}}
-{{--                                @can(['delete-video-wall-screen-video', 'view-video-wall-screen-video'])--}}
-{{--                                    <li class="nav-item"><a href="{{ route('videowall.media.index') }}"--}}
-{{--                                            class="nav-link @if (Route::is('videowall.media.index')) active @endif">Media List</a></li>--}}
-{{--                                @endcan--}}
-{{--                            </ul>--}}
-{{--                        </li>--}}
-{{--                    @endcan--}}
+                    @can(['add-video-wall-screen-video', 'delete-video-wall-screen-video', 'view-video-wall-screen-video'])
+                        <li class="nav-item nav-item-submenu @if (Route::is('videowall.media.*')) nav-item-open @endif">
+                            <a href="#" class="nav-link"><i class="icon-film4"></i> <span>Media</span></a>
+                            <ul class="nav nav-group-sub" data-submenu-title="Media"
+                                @if (Route::is('videowall.media.*')) style="display: block" @endif>
+                                @can('add-video-wall-screen-video')
+                                    <li class="nav-item"><a href="{{ route('videowall.media.create') }}"
+                                            class="nav-link @if (Route::is('videowall.media.create')) active @endif">Add Media</a></li>
+                                @endcan
+                                @can(['delete-video-wall-screen-video', 'view-video-wall-screen-video'])
+                                    <li class="nav-item"><a href="{{ route('videowall.media.index') }}"
+                                            class="nav-link @if (Route::is('videowall.media.index')) active @endif">Media List</a></li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
                     @can(['add-videowall-screen-menu', 'edit-videowall-screen-menu', 'delete-videowall-screen-menu',
                         'view-videowall-screen-menu'])
                         <li class="nav-item nav-item-submenu @if (Route::is('videowall.menus.*')) nav-item-open @endif">

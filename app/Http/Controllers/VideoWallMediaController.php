@@ -25,7 +25,7 @@ class VideoWallMediaController extends Controller
 
     public function video_wall_video_index()
     {
-        $media = Media::where('screen_type', 'videowall')->get();
+        $media = Media::where('screen_type', 'videowall')->where('menu_id', null)->get();
         // return $media;
         $media_grouped = $media->groupBy('screen_slug');
         return view('videowall_media.index', compact('media_grouped'));

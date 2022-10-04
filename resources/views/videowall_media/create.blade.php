@@ -24,7 +24,7 @@
                                 </select>
                             </div>
                         </div>
-                        {{-- <div class="col-md-6">
+                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Screen *</label>
                                 <select id="screen_id" class="form-control" required>
@@ -34,7 +34,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div> --}}
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>Upload Media:</label>
