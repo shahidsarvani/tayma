@@ -410,6 +410,7 @@ class ApiController extends Controller
             if (!!$value)
                 $response[] = env('APP_URL') . '/storage/app/public/media/' . $value->name;
         }
+        return $response;
         return response()->json($response, 200);
     }
 
