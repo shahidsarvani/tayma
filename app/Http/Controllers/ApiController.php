@@ -407,11 +407,8 @@ class ApiController extends Controller
         $media = Media::whereIn('screen_slug', $screen)->where('lang', $lang)->get();
         $response = array();
         foreach ($media as $key => $value) {
-            $temp = [
-                'id' => $value->id,
-                'url' => asset('public/storage/media/' . $value->name),
-            ];
-            $response[] = $temp;
+            if (!!$value)
+                $response[] = env('APP_URL') . '/storage/app/public/media/' . $value->name;
         }
         return response()->json($response, 200);
     }
