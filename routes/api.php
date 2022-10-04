@@ -42,4 +42,4 @@ Route::prefix('videowall')->group(function() {
 });
 
 Route::get('portrait_screen_videos/{screen_id}/{lang}', [ApiController::class, 'get_portrait_screen_videos']);
-Route::get('video_wall_screen_videos/{screen_id}/{lang}', [ApiController::class, 'get_video_wall_screen_videos']);
+Route::get('video_wall_screen_videos/{lang}', [ApiController::class, 'get_video_wall_screen_videos']);

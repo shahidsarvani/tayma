@@ -32,6 +32,15 @@
                             <input type="text" class="form-control" id="slug" name="slug" required>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Interactive:</label>
+                            <select id="is_touch" name="is_touch" class="custom-select">
+                                <option value="0">Non Interactive</option>
+                                <option selected value="1">Interactive</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary">Add <i class="icon-add ml-2"></i></button>

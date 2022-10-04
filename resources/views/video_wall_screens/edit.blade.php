@@ -33,6 +33,15 @@
                             <input type="text" class="form-control" id="slug" name="slug" value="{{ $screen->slug }}" required>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Interactive:</label>
+                            <select id="is_touch" name="is_touch" class="custom-select">
+                                <option @if($screen->is_touchable === 0) selected @endif value="0">Non Interactive</option>
+                                <option @if($screen->is_touchable === 1) selected @endif value="1">Interactive</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-right">
                     <button type="submit" class="btn btn-primary">Update <i class="icon-paperplane ml-2"></i></button>

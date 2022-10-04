@@ -29,7 +29,6 @@ class VideoWallScreenController extends Controller
          //return $request;
         try {
             $data = $request->except('_token');
-            $data['is_touch'] = 1;
             $data['is_model'] = 1;
             $data['is_rfid'] = 0;
             $data['screen_type'] = 'videowall';

@@ -401,17 +401,17 @@ class ApiController extends Controller
     }
 
     //-- API For Video Wall --//
-    public function get_video_wall_screen_videos($screen_id, $lang)
+    public function get_video_wall_screen_videos($lang): \Illuminate\Http\JsonResponse
     {
-        $media = Media::where('screen_type', 'videowall')->where('screen_slug', $screen_id)->where('lang', $lang)->get();
-
+        $screen = Screen::where('is_touch', 0)->get()->pluck('slug')->toArray();
+        $media = Media::whereIn('screen_slug', $screen)->where('lang', $lang)->get();
         $response = array();
         foreach ($media as $key => $value) {
             $temp = [
                 'id' => $value->id,
                 'url' => asset('public/storage/media/' . $value->name),
             ];
-            array_push($response, $temp);
+            $response[] = $temp;
         }
         return response()->json($response, 200);
     }
