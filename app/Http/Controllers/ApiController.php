@@ -150,7 +150,7 @@ class ApiController extends Controller
 
         $menu = Menu::where('screen_type', 'videowall')->where('menu_id', 0)->whereHas('screen', function ($query) {
             $query->where('slug', \request()->screen);
-        })->orderBy('order', 'ASC')->with('screen')->get();
+        })->orderBy('order', 'ASC')->with('screen')->first();
 
 
         $res = [];
