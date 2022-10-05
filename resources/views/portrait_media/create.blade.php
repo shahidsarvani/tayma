@@ -78,7 +78,6 @@
             }
         })
         var list = $('#file-upload-list');
-        console.log(list)
         // Multiple files
         Dropzone.options.dropzoneMultiple = {
             paramName: "media", // The name that will be used to transfer the file
@@ -90,6 +89,8 @@
             // If true, the individual chunks of a file are being uploaded simultaneously.
             parallelChunkUploads: true,
             acceptedFiles: 'video/*',
+            retryChunks: true,   // retry chunks on failure
+            retryChunksLimit: 3, // retry maximum of 3 times (default is 3)
             init: function() {
                 this.on('addedfile', function() {
                         list.append('<li>Uploading</li>')
