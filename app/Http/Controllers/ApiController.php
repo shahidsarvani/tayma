@@ -152,7 +152,6 @@ class ApiController extends Controller
             $query->where('slug', \request()->screen);
         })->orderBy('order', 'ASC')->with('screen')->get();
 
-        dd($menu);
 
         $res = [];
         $res['en'] = [
