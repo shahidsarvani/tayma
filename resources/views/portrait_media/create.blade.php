@@ -80,6 +80,7 @@
         var list = $('#file-upload-list');
         // Multiple files
         Dropzone.options.dropzoneMultiple = {
+            parallelUploads: 1,
             paramName: "media", // The name that will be used to transfer the file
             dictDefaultMessage: 'Drop files to upload <span>or CLICK</span>',
             maxFilesize: 1024, // MB

@@ -394,7 +394,7 @@ class ApiController extends Controller
     //-- API For Video Wall --//
     public function getVideoByPortraitScreenSlugLang($slug, $lang)
     {
-        $screen = Screen::where('slug', $slug)->where('is_touch', 0)->where('screen_type', 'portrait')->get()->pluck('slug')->toArray();
+        $screen = Screen::where('slug', $slug)->where('screen_type', 'portrait')->get()->pluck('slug')->toArray();
         $media = Media::whereIn('screen_slug', $screen)->where('lang', $lang)->get();
         $response = array();
         foreach ($media as $key => $value) {
