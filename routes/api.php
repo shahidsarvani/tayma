@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('test',[ApiController::class,'test']);
+Route::get('logo',[ApiController::class,'getSiteLogo']);
 
 Route::prefix('touchtable')->group(function() {
     Route::get('main_menu', [ApiController::class, 'get_touchtable_main_menu']);

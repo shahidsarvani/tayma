@@ -46,6 +46,8 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::delete('media/{id}', [PortraitScreenMediaController::class, 'portrait_video_delete'])->name('media.delete');
+
     Route::get('permissions/crud_create', [PermissionController::class, 'crud_create'])->name('permissions.crud_create');
     Route::post('permissions/crud_store', [PermissionController::class, 'crud_store'])->name('permissions.crud_store');
     Route::resource('permissions', PermissionController::class);
@@ -75,7 +77,6 @@ Route::middleware([
         Route::get('media', [PortraitScreenMediaController::class, 'portrait_video_index'])->name('media.index');
         Route::get('media/create', [PortraitScreenMediaController::class, 'portrait_video_create'])->name('media.create');
         Route::post('media', [PortraitScreenMediaController::class, 'portrait_video_store'])->name('media.store');
-        Route::delete('media/{id}', [PortraitScreenMediaController::class, 'portrait_video_delete'])->name('media.delete');
         Route::post('/upload_media', [MediaController::class, 'upload_media_dropzone'])->name('media.upload');
     });
 

@@ -57,12 +57,12 @@
                                                         muted controls></video>
                                         @endif
                                         <div class="video-content">
-                                            <a href="{{ route('portrait.media.delete', $item->id) }}"
+                                            <a href="{{ route('media.delete', $item->id) }}"
                                                 onclick="event.preventDefault(); $('.delete-form{{ $item->id }}').submit();"
                                                 class="list-icons-item text-danger-600">
                                                 <i class="icon-trash"></i>
                                             </a>
-                                            <form action="{{ route('portrait.media.delete', $item->id) }}" method="post"
+                                            <form action="{{ route('media.delete', $item->id) }}" method="post"
                                                 class="d-none delete-form{{ $item->id }}">
                                                 @csrf
                                                 @method('DELETE')

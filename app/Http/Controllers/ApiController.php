@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Media;
 use App\Models\Menu;
 use App\Models\Screen;
+use App\Models\Setting;
 use App\Models\VideowallContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -149,33 +150,10 @@ class ApiController extends Controller
 
         $menu = Menu::where('screen_type', 'videowall')->where('menu_id', 0)->whereHas('screen', function ($query) {
             $query->where('slug', \request()->screen);
-        })->orderBy('order', 'ASC')->with('screen')->first();
-        /*        $content = [
-                    'id' => $menu->id,
-                    'name_en' => $menu->name_en,
-                    'name_ar' => $menu->name_ar,
-                    'menu_id' => $menu->menu_id,
-                    'level' => $menu->level,
-                    'type' => $menu->type,
-                    'screen' => [
-                        'id' => $menu->screen->id,
-                        'name_en' => $menu->screen->name_en,
-                        'name_ar' => $menu->screen->name_ar,
-                        'slug' => $menu->screen->slug,
-                        'screen_type' => $menu->screen->screen_type,
-                    ]
-                ];
-                $media = [
-                    'image_en' => $menu->image_en,
-                    'image_ar' => $menu->image_ar,
-                ];
+        })->orderBy('order', 'ASC')->with('screen')->get();
 
-                return response()->json(array(
-                    'data' => array(
-                        'content' => $content,
-                        'media' => $media
-                    ),
-                ), 200);*/
+        dd($menu);
+
         $res = [];
         $res['en'] = [
             'id' => $menu->id,
@@ -536,6 +514,11 @@ class ApiController extends Controller
             }
             return response()->json($res, 200);
         }
+    }
+
+    public function getSiteLogo(Request $request) {
+        $logo = Setting::where('key', 'logo')->first();
+        return response()->json(env('APP_URL') . '/storage/app/public/media/' . $logo->value);
     }
     //-- /API For Video Wall --//
 }

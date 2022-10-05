@@ -62,6 +62,6 @@ class PortraitScreenMediaController extends Controller
         $media = Media::findOrFail($id);
         Storage::delete('/public/media/' . $media->name);
         $media->delete();
-        return redirect()->route('portrait.media.index')->with('success', 'Media deleted');
+        return redirect()->back()->with('success', 'Media deleted');
     }
 }
