@@ -392,6 +392,20 @@ class ApiController extends Controller
         return $response;
         return response()->json($response, 200);
     }
+    //-- API For Video Wall --//
+    public function getVideoByPortraitScreenSlugLang($slug, $lang)
+    {
+        $screen = Screen::where('slug', $slug)->where('is_touch', 0)->where('screen_type', 'portrait')->get()->pluck('slug')->toArray();
+        $media = Media::whereIn('screen_slug', $screen)->where('lang', $lang)->get();
+        $response = array();
+        foreach ($media as $key => $value) {
+            if (!!$value)
+                $response[] = env('APP_URL') . '/storage/app/public/media/' . $value->name;
+        }
+        return stripslashes(json_encode($response));
+        return $response;
+        return response()->json($response, 200);
+    }
 
     public function getMenuContent(Request $request)
     {
