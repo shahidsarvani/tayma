@@ -395,7 +395,7 @@ class ApiController extends Controller
     public function getVideoByPortraitScreenSlugLang($slug, $lang)
     {
         $screen = Screen::where('slug', $slug)->where('screen_type', 'portrait')->get()->pluck('slug')->toArray();
-        $media = Media::whereIn('screen_slug', $screen)->where('lang', $lang)->get();
+        $media = Media::whereIn('screen_slug', $screen)->where('lang', $lang)->where('screen_type', 'portrait')->get();
         $response = array();
         foreach ($media as $key => $value) {
             if (!!$value)
