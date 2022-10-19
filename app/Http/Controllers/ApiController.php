@@ -895,7 +895,7 @@ class ApiController extends Controller
         $res['ar']['content'] = [
             'name' => $menu->name_ar,
             'is_timeline' => $menu->is_timeline,
-            'bg_image' => $menu->bg_image,
+            'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
             'screen_type' => $menu->screen_type,
             'content' => $menu->touch_screen_content->content ?? null,
             'media' => $menu->media->map(function ($med) {
