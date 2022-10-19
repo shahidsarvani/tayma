@@ -70,7 +70,7 @@ class TouchScreenContentController extends Controller
         //
         // return $request;
 
-//        try {
+        try {
             $data = $request->except('_token');
             // return $data;
             TouchScreenContent::create($data);
@@ -90,10 +90,10 @@ class TouchScreenContentController extends Controller
                 }
             }
             return redirect()->route('touchtable.content.index')->with('success', 'Content Item is added!');
-//        } catch (\Throwable $th) {
-//            Log::error($th->getMessage());
-//            return redirect()->back()->with('error', 'Error: Something went wrong!');
-//        }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+            return redirect()->back()->with('error', 'Error: Something went wrong!');
+        }
     }
 
     /**
