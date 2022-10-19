@@ -8,6 +8,53 @@
     <script src="{{ asset('assets/global_assets/js/plugins/editors/ckeditor/ckeditor.js') }}"></script>
     <script src="{{ asset('assets/global_assets/js/demo_pages/editor_ckeditor_material.js') }}"></script>
     <script src="{{ asset('assets/global_assets/js/plugins/uploaders/dropzone.min.js') }}"></script>
+    <style>
+        #content-layout {
+            display: none;
+        }
+
+        .col label {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .imgbgchk:checked + label > .tick_container {
+            opacity: 1;
+        }
+
+        /*         aNIMATION */
+        .imgbgchk:checked + label > img {
+            transform: scale(1.25);
+            opacity: 0.3;
+        }
+
+        .tick_container {
+            transition: .5s ease;
+            opacity: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            -ms-transform: translate(-50%, -50%);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .tick {
+            background-color: #292c42;
+            color: white;
+            font-size: 16px;
+            padding: 6px 12px;
+            height: 40px;
+            width: 40px;
+            border-radius: 100%;
+        }
+
+        .level-3-menu {
+            display: none;
+        }
+    </style>
+
 @endsection
 
 @section('content')
@@ -55,6 +102,32 @@
                             </select>
                         </div>
                     </div>
+
+
+                    <div class="col-md-12" id="content-layout">
+                        <label>Choose Layout</label>
+                        <div class="row">
+                            @foreach($layouts as $layout)
+                                <div class="col-md-2 text-center">
+                                    <input onclick="checkSelectedLayout({{$layout}})" type="radio" name="layout"
+                                           id="layout_{{$layout}}" class="d-none imgbgchk" value="layout_{{$layout}}">
+                                    <label for="layout_{{$layout}}">
+                                        <img width="150px"
+                                             src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"
+                                             alt="layout_{{$layout}}">
+                                        <div class="tick_container">
+                                            <div class="tick"><i class="icon-check2"></i></div>
+                                        </div>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+
+
+
+
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Content:</label>
@@ -148,9 +221,30 @@
                 }
             })
         });
+
         $('#menu_id').change(function () {
             let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
             $('#menu_level').val(menu.level)
+            if (menu.level >= 3) {
+                $('#content-layout').show()
+                $('.level-3-menu').show()
+            } else {
+                $('#content-layout').hide()
+                $('#content-title').hide()
+                $('.level-3-menu').hide()
+            }
         });
+
+
+        function checkSelectedLayout(layout) {
+            if (1 === parseInt(layout)) {
+                $('#content-title').show()
+            } else {
+                $('#content-title').hide()
+            }
+            if (parseInt(layout) === 3 || parseInt(layout) === 5) {
+
+            }
+        }
     </script>
 @endsection

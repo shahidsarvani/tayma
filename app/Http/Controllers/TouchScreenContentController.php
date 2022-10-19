@@ -31,6 +31,7 @@ class TouchScreenContentController extends Controller
     public function create()
     {
         //
+        $layouts = [1, 2, 3, 4, 5];
         $all_menus = Menu::where('screen_type', 'touchtable')->where('type', 'side')->get();
         $screens = Screen::where('screen_type', 'touchtable')->whereIsTouch(1)->get();
         $menus = array();
@@ -56,7 +57,7 @@ class TouchScreenContentController extends Controller
             ];
             $menus[] = $temp;
         }
-        return view('touchscreen_content.create', compact('menus', 'screens'));
+        return view('touchscreen_content.create', compact('menus', 'screens', 'layouts'));
     }
 
     /**
