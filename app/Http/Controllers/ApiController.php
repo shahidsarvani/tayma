@@ -762,7 +762,7 @@ class ApiController extends Controller
 
     public function get_touchtablescreen_main_menu()
     {
-        $menu = Menu::where('screen_type', 'touchtable')->where('menu_id', 0)->with('media')->first();
+        $menu = Menu::where('screen_type', 'timeline')->where('menu_id', 0)->with('media')->first();
         $contents = TouchScreenContent::where('menu_id', $menu->id)->with('media')->get();
         $response = [
             'id' => $menu->id,
