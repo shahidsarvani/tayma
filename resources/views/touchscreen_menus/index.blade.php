@@ -21,7 +21,7 @@
                         <th>Parent Menu</th>
                         <th>Menu Level</th>
                         <th>Type</th>
-                        <th>Screen Type</th>
+{{--                        <th>Screen Type</th>--}}
                         <th>Order</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -44,7 +44,7 @@
                                 </td>
                                 <td>{{ $item->level }}</td>
                                 <td>{{ ucfirst($item->type) }}</td>
-                                <td>{{ $item->screen_type }}</td>
+{{--                                <td>{{ $item->screen_type }}</td>--}}
                                 <td>{{ $item->order }}</td>
                                 <td>
                                     @if ($item->is_active)

@@ -163,26 +163,26 @@
                             </ul>
                         </li>
                     @endcan
-                    @can(['add-touchtable-timeline-item', 'edit-touchtable-timeline-item', 'delete-touchtable-timeline-item',
-                        'view-touchtable-timeline-item'])
-                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.timeline.*')) nav-item-open @endif">
-                            <a href="#" class="nav-link"><i class="icon-camera"></i> <span>Timeline Item</span></a>
-                            <ul class="nav nav-group-sub" data-submenu-title="Videos"
-                                @if (Route::is('touchtable.timeline.*')) style="display: block" @endif>
-                                @can('add-touchtable-timeline-item')
-                                    <li class="nav-item"><a href="{{ route('touchtable.timeline.create') }}"
-                                                            class="nav-link @if (Route::is('touchtable.timeline.create')) active @endif">Add
-                                            Timeline Item</a></li>
-                                @endcan
-                                @can(['edit-touchtable-timeline-item', 'delete-touchtable-timeline-item',
-                                    'view-touchtable-timeline-item'])
-                                    <li class="nav-item"><a href="{{ route('touchtable.timeline.index') }}"
-                                                            class="nav-link @if (Route::is(['touchtable.timeline.index', 'touchtable.timeline.edit'])) active @endif">Timeline
-                                            Items</a></li>
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
+{{--                    @can(['add-touchtable-timeline-item', 'edit-touchtable-timeline-item', 'delete-touchtable-timeline-item',--}}
+{{--                        'view-touchtable-timeline-item'])--}}
+{{--                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.timeline.*')) nav-item-open @endif">--}}
+{{--                            <a href="#" class="nav-link"><i class="icon-camera"></i> <span>Timeline Item</span></a>--}}
+{{--                            <ul class="nav nav-group-sub" data-submenu-title="Videos"--}}
+{{--                                @if (Route::is('touchtable.timeline.*')) style="display: block" @endif>--}}
+{{--                                @can('add-touchtable-timeline-item')--}}
+{{--                                    <li class="nav-item"><a href="{{ route('touchtable.timeline.create') }}"--}}
+{{--                                                            class="nav-link @if (Route::is('touchtable.timeline.create')) active @endif">Add--}}
+{{--                                            Timeline Item</a></li>--}}
+{{--                                @endcan--}}
+{{--                                @can(['edit-touchtable-timeline-item', 'delete-touchtable-timeline-item',--}}
+{{--                                    'view-touchtable-timeline-item'])--}}
+{{--                                    <li class="nav-item"><a href="{{ route('touchtable.timeline.index') }}"--}}
+{{--                                                            class="nav-link @if (Route::is(['touchtable.timeline.index', 'touchtable.timeline.edit'])) active @endif">Timeline--}}
+{{--                                            Items</a></li>--}}
+{{--                                @endcan--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
+{{--                    @endcan--}}
                 @endcan
 
                 @can('portrait-screen')
@@ -442,7 +442,7 @@
                 @endcan --}}
 
                 <li class="nav-item-header">
-                    <div class="text-uppercase font-size-xs line-height-xs mt-1">With RFID Screen</div>
+                    <div class="text-uppercase font-size-xs line-height-xs mt-1">General Settings</div>
                     <i
                             class="icon-menu" title="With RFID Screen"></i>
                 </li>
