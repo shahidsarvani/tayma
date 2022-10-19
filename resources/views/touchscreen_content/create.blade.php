@@ -20,24 +20,38 @@
             <form action="{{ route('touchtable.content.store') }}" method="post">
                 @csrf
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Menu:</label>
-                            <select name="menu_id" class="form-control">
-                                <option value="">Select Menu</option>
-                                @foreach ($menus as $item)
-                                    <option value="{{ $item['id'] }}">{{ $item['name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label>Language</label>
                             <select id="lang" class="form-control" name="lang" required>
                                 <option value="">Select Language</option>
                                 <option value="ar">Arabic</option>
                                 <option value="en">English</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Title*</label>
+                            <input type="text" name="title" id="title_en" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Screen:</label>
+                            <select name="screen_id" id="screen_id" class="form-control">
+                                <option value="">Select Screen</option>
+                                @foreach ($screens as $item)
+                                    <option value="{{ $item->id }}">{{ $item->name_en }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>Menu</label>
+                            <select name="menu_id" id="menu_id" class="form-control" required>
+                                <option value="">Select Menu *</option>
                             </select>
                         </div>
                     </div>
@@ -111,5 +125,32 @@
                     })
             }
         };
+
+
+        $('#screen_id').change(function () {
+            screen_id = this.value | 0
+            var url = "../getscreensidemenu/" + screen_id
+            console.log(url)
+            $.ajax({
+                url: url,
+                method: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    listScreenMenu = response
+                    var html_text = '<option value="">Select Menu *</option>'
+                    if (response.length) {
+                        for (var i = 0; i < response.length; i++) {
+                            html_text += '<option value="' + response[i].id + '">' + response[i].name +
+                                '</option>'
+                        }
+                    }
+                    $('#menu_id').empty().append(html_text);
+                }
+            })
+        });
+        $('#menu_id').change(function () {
+            let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
+            $('#menu_level').val(menu.level)
+        });
     </script>
 @endsection

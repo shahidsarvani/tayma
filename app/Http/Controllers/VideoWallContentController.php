@@ -48,32 +48,32 @@ class VideoWallContentController extends Controller
     {
         $request->validate([
             'lang' => 'required',
+            'title' => 'required',
             'screen_id' => 'required|integer',
             'menu_id' => 'required|integer',
             'content' => 'required',
-            'menu_level' => 'required|integer'
         ]);
 
-        if ($request->menu_level >= 2) {
-            $request->validate([
-                'layout' => 'required',
-                'background_color' => 'required',
-                'text_color' => 'required',
-
-            ]);
-            if ($request->layout == 'layout_1') {
-                $request->validate([
-                    'title' => 'required'
-                ]);
-            }
-            if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
-                if ($request->has('file_names')) {
-                    if (count($request->file_names) < 2) {
-                        return redirect()->back()->with('error', 'Minimum 2 images required');
-                    }
-                }
-            }
-        }
+//        if ($request->menu_level >= 2) {
+//            $request->validate([
+//                'layout' => 'required',
+//                'background_color' => 'required',
+//                'text_color' => 'required',
+//
+//            ]);
+//            if ($request->layout == 'layout_1') {
+//                $request->validate([
+//                    'title' => 'required'
+//                ]);
+//            }
+//            if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
+//                if ($request->has('file_names')) {
+//                    if (count($request->file_names) < 2) {
+//                        return redirect()->back()->with('error', 'Minimum 2 images required');
+//                    }
+//                }
+//            }
+//        }
         if ($request->has('file_names')) {
             if (count($request->file_names) < 1) {
                 return redirect()->back()->with('error', 'Minimum 1 images required');
@@ -85,7 +85,6 @@ class VideoWallContentController extends Controller
 
         try {
             $data = $request->except('_token');
-            // return $data;
 
             $v_content = VideowallContent::create($data);
 
@@ -184,30 +183,29 @@ class VideoWallContentController extends Controller
             'screen_id' => 'required|integer',
             'menu_id' => 'required|integer',
             'content' => 'required',
-            'menu_level' => 'required|integer'
         ]);
 
-        if ($request->menu_level >= 2) {
-            $request->validate([
-                'layout' => 'required',
-                'background_color' => 'required',
-                'text_color' => 'required',
-
-            ]);
-            if ($request->layout == 'layout_1') {
-                $request->validate([
-                    'title' => 'required'
-                ]);
-            }
-            if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
-                 $media = Media::where('menu_id', $id)->count();
-                if ($media < 2 && $request->has('file_names')) {
-                    if (count($request->file_names) < 2) {
-                        return redirect()->back()->with('error', 'Minimum 2 images required');
-                    }
-                }
-            }
-        }
+//        if ($request->menu_level >= 2) {
+//            $request->validate([
+//                'layout' => 'required',
+//                'background_color' => 'required',
+//                'text_color' => 'required',
+//
+//            ]);
+//            if ($request->layout == 'layout_1') {
+//                $request->validate([
+//                    'title' => 'required'
+//                ]);
+//            }
+//            if ($request->layout == 'layout_3' || $request->layout == 'layout_5') {
+//                 $media = Media::where('menu_id', $id)->count();
+//                if ($media < 2 && $request->has('file_names')) {
+//                    if (count($request->file_names) < 2) {
+//                        return redirect()->back()->with('error', 'Minimum 2 images required');
+//                    }
+//                }
+//            }
+//        }
 
 
         try {

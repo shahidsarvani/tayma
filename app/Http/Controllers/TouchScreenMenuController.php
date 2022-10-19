@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Media;
 use App\Models\Menu;
 use App\Models\Screen;
 use Illuminate\Http\Request;
@@ -32,6 +33,7 @@ class TouchScreenMenuController extends Controller
     {
         //
         $all_menus = Menu::with('parent')->where('screen_type', 'touchtable')->where('is_active', 1)->get();
+        $screens = Screen::where('screen_type', 'touchtable')->whereIsTouch(1)->get();
         $menus = array();
         foreach ($all_menus as $menu) {
             $name = array();
@@ -56,7 +58,7 @@ class TouchScreenMenuController extends Controller
             array_push($menus, $temp);
         }
         // return $menus;
-        return view('touchscreen_menus.create', compact('menus'));
+        return view('touchscreen_menus.create', compact('menus', 'screens'));
     }
 
     /**
@@ -70,7 +72,7 @@ class TouchScreenMenuController extends Controller
         //
         // return $request;
         try {
-            $data = $request->except('_token', 'image_en', 'image_ar', 'icon_en', 'icon_ar');
+            $data = $request->except('_token', 'image_en', 'image_ar', 'icon_en', 'icon_ar', 'bg_image');
             // return $data;
             if (!$request->menu_id) {
                 // return $data;
@@ -82,6 +84,12 @@ class TouchScreenMenuController extends Controller
                 $name = 'image_en_' . md5(time()) . '.' . $ext;
                 $file->storeAs($imagePath, $name);
                 $data['image_en'] = $name;
+            }
+            if ($file = $request->file('bg_image')) {
+                $ext = $file->getClientOriginalExtension();
+                $name = 'media_' . md5(time()) . '.' . $ext;
+                $file->storeAs($imagePath, $name);
+                $data['bg_image'] = $name;
             }
             if ($file = $request->file('image_ar')) {
                 $ext = $file->getClientOriginalExtension();
@@ -101,11 +109,24 @@ class TouchScreenMenuController extends Controller
                 $file->storeAs($imagePath, $name);
                 $data['icon_ar'] = $name;
             }
-            $data['screen_id'] = Screen::where('screen_type', 'touchtable')->first()->id;
+//            $data['screen_id'] = Screen::where('screen_type', 'touchtable')->first()->id;
             $data['screen_type'] = 'touchtable';
             // return $data;
 
-            Menu::create($data);
+            $menu = Menu::create($data);
+            $slug = Screen::where('id', $request->screen_id)->first()->slug;
+            if ($request->file_names) {
+                foreach ($request->file_names as $index => $fileName) {
+                    $media[$index] = Media::create([
+                        'lang' => 'en',
+                        'name' => $fileName,
+                        'screen_slug' => $slug,
+                        'screen_type' => 'touchtable',
+                        'menu_id' => $menu->id,
+                        'type' => $request->types[$index],
+                    ]);
+                }
+            }
             return redirect()->route('touchtable.menus.index')->with('success', 'Menu is added!');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
@@ -133,6 +154,7 @@ class TouchScreenMenuController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
+     *
      * @param  \App\Models\Menu  $menu
      * @return \Illuminate\Http\Response
      */
@@ -140,8 +162,9 @@ class TouchScreenMenuController extends Controller
     {
         //
         $menu = Menu::with('parent')->find($id);
-
+        $media = Media::where('screen_type', 'touchtable')->where('menu_id', $id)->get();
         $all_menus = Menu::with('parent')->where('screen_type', 'touchtable')->where('is_active', 1)->get();
+        $screens = Screen::where('screen_type', 'touchtable')->whereIsTouch(1)->get();
         $menus = array();
         foreach ($all_menus as $value) {
             $name = array();
@@ -166,7 +189,7 @@ class TouchScreenMenuController extends Controller
             array_push($menus, $temp);
         }
         // return $menu;
-        return view('touchscreen_menus.edit', compact('menus', 'menu'));
+        return view('touchscreen_menus.edit', compact('menus', 'menu', 'screens', 'media'));
     }
 
     /**
@@ -181,8 +204,8 @@ class TouchScreenMenuController extends Controller
         //
         // return $menu;
         // return $request;
-        try {
-            $data = $request->except('_token', 'image_en', 'image_ar', 'icon_en', 'icon_ar');
+//        try {
+            $data = $request->except('_token', 'image_en', 'image_ar', 'icon_en', 'icon_ar', 'bg_image');
             // return $data;
             if (!$request->menu_id) {
                 // return $data;
@@ -205,6 +228,12 @@ class TouchScreenMenuController extends Controller
                 $data['icon_ar'] = null;
             }
             $imagePath = 'public/media';
+        if ($file = $request->file('bg_image')) {
+            $ext = $file->getClientOriginalExtension();
+            $name = 'media_' . md5(time()) . '.' . $ext;
+            $file->storeAs($imagePath, $name);
+            $data['bg_image'] = $name;
+        }
             if ($file = $request->file('image_en')) {
                 $ext = $file->getClientOriginalExtension();
                 $name = 'image_en_' . md5(time()) . '.' . $ext;
@@ -229,19 +258,34 @@ class TouchScreenMenuController extends Controller
                 $file->storeAs($imagePath, $name);
                 $data['icon_ar'] = $name;
             }
+            $screen = Screen::where('id', $request->screen_id)->first();
+
+            if ($request->file_names) {
+                foreach ($request->file_names as $index => $fileName) {
+                    // $media = Media::whereName($fileName)->first();
+                    $media = Media::create([
+                        'lang' => 'en',
+                        'name' => $fileName,
+                        'screen_slug' => $screen->slug,
+                        'screen_type' => 'touchtable',
+                        'menu_id' => $menu->id,
+                        'type' => $request->types[$index],
+                    ]);
+                }
+            }
             // return $data;
             $menu->update($data);
             return redirect()->route('touchtable.menus.index')->with('success', 'Menu is updated!');
-        } catch (\Throwable $th) {
-            Log::error($th->getMessage());
-            if ((Arr::exists($data, 'image_en') && $data['image_en'] !== '') || (Arr::exists($data, 'image_ar') && $data['image_ar'] !== '')) {
-                Storage::delete(['/public/media/' . $data['image_en'], '/public/media/' . $data['image_ar']]);
-            }
-            if ((Arr::exists($data, 'icon_en') && $data['icon_en'] !== '') || (Arr::exists($data, 'icon_ar') && $data['icon_ar'] !== '')) {
-                Storage::delete(['/public/media/' . $data['icon_en'], '/public/media/' . $data['icon_ar']]);
-            }
-            return redirect()->back()->with('error', 'Error: Something went wrong!');
-        }
+//        } catch (\Throwable $th) {
+//            Log::error($th->getMessage());
+//            if ((Arr::exists($data, 'image_en') && $data['image_en'] !== '') || (Arr::exists($data, 'image_ar') && $data['image_ar'] !== '')) {
+//                Storage::delete(['/public/media/' . $data['image_en'], '/public/media/' . $data['image_ar']]);
+//            }
+//            if ((Arr::exists($data, 'icon_en') && $data['icon_en'] !== '') || (Arr::exists($data, 'icon_ar') && $data['icon_ar'] !== '')) {
+//                Storage::delete(['/public/media/' . $data['icon_en'], '/public/media/' . $data['icon_ar']]);
+//            }
+//            return redirect()->back()->with('error', 'Error: Something went wrong!');
+//        }
     }
 
     /**

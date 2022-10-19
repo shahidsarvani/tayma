@@ -96,26 +96,26 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-12" id="content-layout">
-                        <label>Choose Layout</label>
-                        <div class="row">
-                            @foreach($layouts as $layout)
-                                <div class="col-md-2 text-center">
-                                    <input onclick="checkSelectedLayout({{$layout}})" type="radio" name="layout"
-                                           id="layout_{{$layout}}" class="d-none imgbgchk" value="layout_{{$layout}}">
-                                    <label for="layout_{{$layout}}">
-                                        <img width="150px"
-                                             src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"
-                                             alt="layout_{{$layout}}">
-                                        <div class="tick_container">
-                                            <div class="tick"><i class="icon-check2"></i></div>
-                                        </div>
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    <div id="content-title" class="col-md-12 mt-2" style="display: none">
+{{--                    <div class="col-md-12" id="content-layout">--}}
+{{--                        <label>Choose Layout</label>--}}
+{{--                        <div class="row">--}}
+{{--                            @foreach($layouts as $layout)--}}
+{{--                                <div class="col-md-2 text-center">--}}
+{{--                                    <input onclick="checkSelectedLayout({{$layout}})" type="radio" name="layout"--}}
+{{--                                           id="layout_{{$layout}}" class="d-none imgbgchk" value="layout_{{$layout}}">--}}
+{{--                                    <label for="layout_{{$layout}}">--}}
+{{--                                        <img width="150px"--}}
+{{--                                             src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"--}}
+{{--                                             alt="layout_{{$layout}}">--}}
+{{--                                        <div class="tick_container">--}}
+{{--                                            <div class="tick"><i class="icon-check2"></i></div>--}}
+{{--                                        </div>--}}
+{{--                                    </label>--}}
+{{--                                </div>--}}
+{{--                            @endforeach--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+                    <div id="content-title" class="col-md-12 mt-2">
                         <div class="form-group">
                             <label for="title">Title:</label>
                             <input name="title" id="title" class="form-control" type="text">
@@ -249,14 +249,6 @@
         $('#menu_id').change(function () {
             let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
             $('#menu_level').val(menu.level)
-            if (menu.level >= 2) {
-                $('#content-layout').show()
-                $('.level-3-menu').show()
-            } else {
-                $('#content-layout').hide()
-                $('#content-title').hide()
-                $('.level-3-menu').hide()
-            }
         });
 
         function checkSelectedLayout(layout) {

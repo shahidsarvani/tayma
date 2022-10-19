@@ -57,7 +57,9 @@ Route::middleware([
     Route::resource('cards', RfidCardController::class);
     Route::resource('slides', SlideController::class);
     Route::resource('layouts', LayoutController::class);
+
     Route::prefix('touchtable-screen')->name('touchtable.')->group(function () {
+        Route::resource('screens', \App\Http\Controllers\TouchTableScreenController::class);
         Route::resource('menus', TouchScreenMenuController::class);
         Route::get('content/edit/{id}', [TouchScreenContentController::class, 'edit']);
         Route::resource('content', TouchScreenContentController::class);
@@ -71,6 +73,7 @@ Route::middleware([
             Route::delete('media/{id}', 'touchtable_media_delete')->name('media.delete');
         });
         Route::post('/upload_media', [MediaController::class, 'upload_media_dropzone'])->name('media.upload');
+        Route::get('getscreensidemenu/{screen_id}', [VideoWallScreenController::class, 'getscreensidemenu'])->name('getscreensidemenu');
     });
     Route::prefix('portrait-screen')->name('portrait.')->group(function () {
         Route::resource('screens', PortraitScreenController::class);
@@ -88,12 +91,12 @@ Route::middleware([
         Route::resource('content', VideoWallContentController::class);
         Route::resource('menus', VideoWallMenuController::class);
         Route::get('menu/bg/remove/{id}', [VideoWallMenuController::class, 'removeBgImage']);
-        Route::get('menu/intro/video/remove/{id}', [VideoWallMenuController::class, 'removeIntroVideo']);
+        Route::get('menu/intro/video/remove/{id}/{key}', [VideoWallMenuController::class, 'removeIntroVideo']);
         Route::get('media', [VideoWallMediaController::class, 'video_wall_video_index'])->name('media.index');
         Route::get('media/create', [VideoWallMediaController::class, 'video_wall_video_create'])->name('media.create');
         Route::post('media', [VideoWallMediaController::class, 'video_wall_video_store'])->name('media.store');
         Route::delete('media/{id}', [VideoWallMediaController::class, 'video_wall_video_delete'])->name('media.delete');
-        Route::get('image/remove/{id}', [VideoWallMediaController::class, 'remove_image']);
+        Route::get('image/remove/{id}', [VideoWallMediaController::class, 'remove_image'])->name('image.remove.gallery');
 
         Route::get('gallery', [VideoWallGalleryController::class, 'index'])->name('gallery.index');
         Route::get('gallery/create', [VideoWallGalleryController::class, 'create'])->name('gallery.create');

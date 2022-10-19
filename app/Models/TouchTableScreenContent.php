@@ -5,24 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class TouchScreenContent extends Model
+class TouchTableScreenContent extends Model
 {
     use HasFactory;
-
     protected $fillable = [
         'content',
         'lang', //['en', 'ar']
         'menu_id',
+        'screen_id',
+        'menu_level',
+        'background_color',
+        'text_color',
+        'title',
     ];
-
-    public function menu()
-    {
-        return $this->belongsTo(Menu::class);
-    }
-
-
-    public function media()
-    {
-        return $this->hasMany(Media::class, 'menu_id', 'menu_id');
-    }
 }

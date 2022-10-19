@@ -7,7 +7,7 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h5 class="card-title">Menu List</h5>
+            <h5 class="card-title">Touchtable Menu List</h5>
         </div>
 
         <div class="table-responsive">
@@ -17,9 +17,11 @@
                         <th>#</th>
                         <th>Name (English)</th>
                         <th>Name (Arabic)</th>
+                        <th>Timeline</th>
                         <th>Parent Menu</th>
                         <th>Menu Level</th>
                         <th>Type</th>
+                        <th>Screen Type</th>
                         <th>Order</th>
                         <th>Status</th>
                         <th>Actions</th>
@@ -32,6 +34,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->name_en }}</td>
                                 <td>{{ $item->name_ar }}</td>
+                                <td>{{ $item->is_timeline }}</td>
                                 <td>
                                     @if ($item->parent)
                                         <span class="badge badge-info">{{ $item->parent->name_en }}</span>
@@ -41,6 +44,7 @@
                                 </td>
                                 <td>{{ $item->level }}</td>
                                 <td>{{ ucfirst($item->type) }}</td>
+                                <td>{{ $item->screen_type }}</td>
                                 <td>{{ $item->order }}</td>
                                 <td>
                                     @if ($item->is_active)

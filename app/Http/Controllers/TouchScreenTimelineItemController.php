@@ -82,6 +82,7 @@ class TouchScreenTimelineItemController extends Controller
     public function edit($id)
     {
         $timeline_item = TimelineItem::with('timeline_media')->find($id);
+        $media = TimelineMedia::where('timeline_item_id', $id)->get();
         // return $timeline_item;
 
         $all_menus = Menu::where('screen_type', 'touchtable')->where('type', 'side')->where('is_timeline', 1)->get();
@@ -108,7 +109,7 @@ class TouchScreenTimelineItemController extends Controller
             ];
             array_push($menus, $temp);
         }
-        return view('touchscreen_timeline.edit', compact('menus', 'timeline_item'));
+        return view('touchscreen_timeline.edit', compact('menus', 'timeline_item', 'media'));
     }
 
     public function update(Request $request, $id)

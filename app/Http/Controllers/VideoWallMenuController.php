@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Helper;
+use App\Models\Media;
 use App\Models\Menu;
 use App\Models\Screen;
 use Illuminate\Http\Request;
@@ -27,11 +28,10 @@ class VideoWallMenuController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function create()
     {
-        //
         $screens = Screen::where('screen_type', 'videowall')->whereIsTouch(1)->get();
         $all_menus = Menu::with('parent')->where('screen_type', 'videowall')->where('is_active', 1)->get();
         $menus = array();
@@ -69,9 +69,8 @@ class VideoWallMenuController extends Controller
      */
     public function store(Request $request)
     {
-
         try {
-            $data = $request->except('_token', 'intro_video', 'image_en', 'image_ar', 'icon_en', 'icon_ar');
+            $data = $request->except('_token', 'intro_video_ar', 'intro_video', 'image_en', 'image_ar', 'icon_en', 'icon_ar');
             // return $data;
             if (!$request->menu_id) {
                 // return $data;
@@ -83,6 +82,12 @@ class VideoWallMenuController extends Controller
                 $name = 'intro_video_' . md5(uniqId()) . '.' . $ext;
                 $file->storeAs($imagePath, $name);
                 $data['intro_video'] = $name;
+            }
+            if ($file = $request->file('intro_video_ar')) {
+                $ext = $file->getClientOriginalExtension();
+                $name = 'intro_video_ar_' . md5(uniqId()) . '.' . $ext;
+                $file->storeAs($imagePath, $name);
+                $data['intro_video_ar'] = $name;
             }
             if ($file = $request->file('image_en')) {
                 $ext = $file->getClientOriginalExtension();
@@ -116,8 +121,39 @@ class VideoWallMenuController extends Controller
             }
             $data['screen_type'] = 'videowall';
             // return $data;
+            if ($request->bg_video) {
+                $data['bg_video'] = $request->bg_video[0];
+            }
+            $menu = Menu::create($data);
 
-            Menu::create($data);
+            $slug = Screen::where('id', $request->screen_id)->first()->slug;
+            if ($request->intro_video) {
+                foreach ($request->intro_video as $index => $fileName) {
+                    // $media = Media::whereName($fileName)->first();
+                    $media = Media::create([
+                        'lang' => 'en',
+                        'name' => $fileName,
+                        'screen_slug' => $slug,
+                        'screen_type' => 'videowall',
+                        'menu_id' => $menu->id,
+                        'type' => $request->types[$index],
+                    ]);
+                }
+            }
+            if ($request->intro_video_ar) {
+                foreach ($request->intro_video_ar as $index => $fileName) {
+                    // $media = Media::whereName($fileName)->first();
+                    $media = Media::create([
+                        'lang' => 'ar',
+                        'name' => $fileName,
+                        'screen_slug' => $slug,
+                        'screen_type' => 'videowall',
+                        'menu_id' => $menu->id,
+                        'type' => $request->types[$index],
+                    ]);
+                }
+            }
+
             return redirect()->route('videowall.menus.index')->with('success', 'Menu is added!');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
@@ -156,6 +192,9 @@ class VideoWallMenuController extends Controller
         $screens = Screen::where('screen_type', 'videowall')->whereIsTouch(1)->get();
         $all_menus = Menu::with('parent')->where('screen_type', 'videowall')->where('is_active', 1)->get();
 
+        $media = Media::where('lang', 'en')->where('menu_id', $id)->get();
+        $media_ar = Media::where('lang', 'ar')->where('menu_id', $id)->get();
+
         $menus = array();
         foreach ($all_menus as $value) {
             $name = array();
@@ -180,7 +219,7 @@ class VideoWallMenuController extends Controller
             array_push($menus, $temp);
         }
 
-        return view('videowallscreen_menus.edit', compact('menus', 'menu', 'screens'));
+        return view('videowallscreen_menus.edit', compact('menus', 'menu', 'screens', 'media', 'media_ar'));
     }
 
     /**
@@ -220,7 +259,22 @@ class VideoWallMenuController extends Controller
                 $data['icon_en'] = null;
                 $data['icon_ar'] = null;
             }
+            if ($request->bg_video) {
+                $data['bg_video'] = $request->bg_video[0];
+            }
             $imagePath = 'public/media';
+            if ($file = $request->file('intro_video')) {
+                $ext = $file->getClientOriginalExtension();
+                $name = 'intro_video_' . md5(uniqId()) . '.' . $ext;
+                $file->storeAs($imagePath, $name);
+                $data['intro_video'] = $name;
+            }
+            if ($file = $request->file('intro_video_ar')) {
+                $ext = $file->getClientOriginalExtension();
+                $name = 'intro_video_ar_' . md5(uniqId()) . '.' . $ext;
+                $file->storeAs($imagePath, $name);
+                $data['intro_video_ar'] = $name;
+            }
             if ($file = $request->file('bg_image')) {
                 $ext = $file->getClientOriginalExtension();
                 $name = 'bg_' . md5(uniqId()) . '.' . $ext;
@@ -253,6 +307,33 @@ class VideoWallMenuController extends Controller
             }
             // return $data;
             $menu->update($data);
+            $slug = Screen::where('id', $request->screen_id)->first()->slug;
+            if ($request->intro_video) {
+                foreach ($request->intro_video as $index => $fileName) {
+                    // $media = Media::whereName($fileName)->first();
+                    $media = Media::create([
+                        'lang' => 'en',
+                        'name' => $fileName,
+                        'screen_slug' => $slug,
+                        'screen_type' => 'videowall',
+                        'menu_id' => $menu->id,
+                        'type' => $request->types[$index],
+                    ]);
+                }
+            }
+            if ($request->intro_video_ar) {
+                foreach ($request->intro_video_ar as $index => $fileName) {
+                    // $media = Media::whereName($fileName)->first();
+                    $media = Media::create([
+                        'lang' => 'ar',
+                        'name' => $fileName,
+                        'screen_slug' => $slug,
+                        'screen_type' => 'videowall',
+                        'menu_id' => $menu->id,
+                        'type' => $request->types[$index],
+                    ]);
+                }
+            }
             return redirect()->route('videowall.menus.index')->with('success', 'Menu is updated!');
         } catch (\Throwable $th) {
             Log::error($th->getMessage());
@@ -298,11 +379,11 @@ class VideoWallMenuController extends Controller
         return redirect()->back()->with('success', 'Image deleted successfully!');
     }
 
-    public function removeIntroVideo($id): \Illuminate\Http\RedirectResponse
+    public function removeIntroVideo($id, $key): \Illuminate\Http\RedirectResponse
     {
         $menu = Menu::where('id', $id)->first();
         Helper::removePhysicalFile('media/' . $menu->bg_image);
-        $menu->intro_video = null;
+        $menu[$key] = null;
         $menu->save();
         return redirect()->back()->with('success', 'Video deleted successfully!');
     }

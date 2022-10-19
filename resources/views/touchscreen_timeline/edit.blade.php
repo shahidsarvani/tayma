@@ -85,6 +85,11 @@
                 <ul id="file-upload-list" class="list-unstyled">
                 </ul>
             </form>
+            <form action="{{ route('touchtable.media.upload') }}" class="dropzone mt-3" id="dropzone_multiple">
+            </form>
+
+            <ul id="file-upload-list" class="list-unstyled">
+            </ul>
         </div>
     </div>
 @endsection

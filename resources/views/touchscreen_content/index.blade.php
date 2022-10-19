@@ -28,7 +28,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{!! $item->content !!}</td>
                                 <td>{{ $item->lang === 'en' ? 'English' : 'Arabic' }}</td>
-                                <td>{{ $item->menu->name_en }}</td>
+                                <td>{{ $item->menu->name_en ?? '' }}</td>
                                 <td>
                                     <div class="list-icons">
                                         @can('edit-touchtable-screen-content')

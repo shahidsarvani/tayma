@@ -6,6 +6,9 @@ use App\Models\Media;
 use App\Models\Menu;
 use App\Models\Screen;
 use App\Models\Setting;
+use App\Models\TimelineItem;
+use App\Models\TouchScreenContent;
+use App\Models\TouchTableScreenContent;
 use App\Models\VideowallContent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -24,17 +27,47 @@ class ApiController extends Controller
     //
     public function get_touchtable_main_menu()
     {
-        $menus = Menu::where('screen_type', 'touchtable')->where('menu_id', 0)->orderBy('order', 'ASC')->get();
+        $menus = Menu::where('screen_type', 'touchtable')->where('menu_id', 0)->with('media')->orderBy('order', 'ASC')->get();
+        $contents = TouchScreenContent::whereIn('menu_id', $menus->pluck('id')->toArray())->with('media')->get();
+
         $response = array();
         foreach ($menus as $menu) {
-            $temp = [
+            $response[] = [
                 'id' => $menu->id,
                 'name_en' => $menu->name_en,
                 'name_ar' => $menu->name_ar,
-                'image_en' => asset('public/storage/media/' . $menu->image_en),
-                'image_ar' => asset('public/storage/media/' . $menu->image_ar),
+                'content' => [
+                    'ar' => $contents->map(function ($c) use ($menu) {
+                        if ($c->lang == 'ar' && $c->menu_id == $menu->id) {
+                            return [
+                                'name' => $menu->name_ar,
+                                'content' => $c->content,
+                                'media' => $c->media->map(function ($med) {
+                                    if ($med->lang == 'en')
+                                        return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                                })->filter()->values(),
+                            ];
+                        }
+                    })->filter()->values(),
+                    'en' => $contents->map(function ($c) use ($menu) {
+                        if ($c->lang == 'en' && $c->menu_id == $menu->id) {
+                            return [
+                                'name' => $menu->name_en,
+                                'content' => $c->content,
+                                'media' => $c->media->map(function ($med) {
+                                    if ($med->lang == 'ar')
+                                        return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                                })->filter()->values(),
+                            ];
+                        }
+                    })->filter()->values(),
+                ],
+                'image_en' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_en,
+                'image_ar' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar,
+                'media' => $menu->media->map(function ($med) {
+                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                }),
             ];
-            array_push($response, $temp);
         }
         return response()->json($response, 200);
     }
@@ -60,10 +93,49 @@ class ApiController extends Controller
     public function get_touchtable_side_menu($menu_id)
     {
         $menus = Menu::where('screen_type', 'touchtable')->with(['children' => function ($q) {
-            $q->orderBy('order', 'ASC');
-        }])->where('menu_id', $menu_id)->where('type', 'side')->where('level', 1)->orderBy('order', 'ASC')->get();
+            $q->orderBy('order', 'ASC')->with('touch_screen_content');
+        }])->where('menu_id', $menu_id)->where('type', 'side')->where('level', 1)->orderBy('order', 'ASC')
+            ->with('touch_screen_content', 'media')
+            ->get();
+
         $response = array();
         foreach ($menus as $menu) {
+            $response['en'][] = [
+                'id' => $menu->id,
+                'name' => $menu->name_en,
+                'content' => $menu->touch_screen_content ? $menu->touch_screen_content->content : null,
+                'media' => $menu->media->map(function ($med) {
+                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                }),
+                'child' => $menu->children->map(function ($m) {
+                    return [
+                        'id' => $m->id,
+                        'name' => $m->name_en,
+                        'content' => !!$m->touch_screen_content ? $m->touch_screen_content->content : null,
+                        'media' => $m->media->map(function ($med) {
+                            return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                        }),
+                    ];
+                })
+            ];
+            $response['ar'][] = [
+                'id' => $menu->id,
+                'name' => $menu->name_ar,
+                'content' => $menu->touch_screen_content->content,
+                'media' => $menu->media->map(function ($med) {
+                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                }),
+                'child' => $menu->children->map(function ($m) {
+                    return [
+                        'id' => $m->id,
+                        'name' => $m->name_en,
+                        'content' => !!$m->touch_screen_content ? $m->touch_screen_content->content : null,
+                        'media' => $m->media->map(function ($med) {
+                            return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                        }),
+                    ];
+                })
+            ];
             $temp = array();
             $temp = [
                 'id' => $menu->id,
@@ -81,6 +153,24 @@ class ApiController extends Controller
                     $temp['sub_menu'][] = $sub_menu;
                 }
             }
+//            array_push($response, $temp);
+        }
+        return response()->json($response, 200);
+    }
+
+    public function get_all_media($menu_id, $lang)
+    {
+        $menus = Menu::where('menu_id', $menu_id)->get()->pluck('id')->toArray();
+        $mediaItems = Media::whereIn('menu_id', $menus)->where('screen_type', 'touchtable')->where('lang', $lang)->orderBy('order', 'ASC')->get();
+        // return $mediaItems;
+        $response = array();
+        foreach ($mediaItems as $key => $value) {
+            $temp = [
+                'id' => $value->id,
+                'path' => env('APP_URL') . '/storage/app/public/media/' . $value->name,
+                'type' => $value->type,
+                'description' => $value->description
+            ];
             array_push($response, $temp);
         }
         return response()->json($response, 200);
@@ -103,33 +193,25 @@ class ApiController extends Controller
         return response()->json($response, 200);
     }
 
-    public function get_touchtable_content($menu_id, $lang)
+    public function get_touchtable_content($menu_id)
     {
 
-        $menu = Menu::with(['touch_screen_content' => function ($q) use ($lang) {
-            $q->whereLang($lang);
-        }, 'media' => function ($q) use ($lang) {
-            $q->whereLang($lang);
-        }])->find($menu_id);
+        $menu = Menu::where('id', $menu_id)->first();
+        $contents = TouchScreenContent::where('menu_id', $menu_id)->with('media')->get();
         $response = array();
-        if ($menu->touch_screen_content) {
-            $response['menu_content'] = [
-                'id' => $menu->touch_screen_content->id,
-                'content' => $menu->touch_screen_content->content
+        foreach ($contents as $content) {
+            $response[$content->lang] = [
+                'id' => $menu->id,
+                'content' => $content->content,
+                'name' => $content->lang == 'ar' ? $menu->name_ar : $menu->name_en,
+                'media' => $content->media->map(function ($media) {
+                    return [
+                        'id' => $media->id,
+                        'type' => $media->type,
+                        'path' => env('APP_URL') . '/storage/app/public/media/' . $media->name,
+                    ];
+                })
             ];
-        }
-        if ($menu->media->isNotEmpty()) {
-            foreach ($menu->media as $media) {
-                $temp = [
-                    'id' => $media->id,
-                    'url' => asset('public/storage/media/' . $media->name),
-                    'type' => $media->type
-                ];
-                $response['menu_content']['media'][] = $temp;
-            }
-        }
-        if ($menu->is_timeline) {
-            $response['timeline_items'] = $menu->get_timeline_items($menu_id, $lang);
         }
 
         return response()->json($response, 200);
@@ -148,26 +230,29 @@ class ApiController extends Controller
             ], 422);
         }
 
-        $menu = Menu::where('screen_type', 'videowall')->where('menu_id', 0)->whereHas('screen', function ($query) {
+        $menus = Menu::where('screen_type', 'videowall')->where('menu_id', 0)->whereHas('screen', function ($query) {
             $query->where('slug', \request()->screen);
-        })->orderBy('order', 'ASC')->with('screen')->first();
-
-
+        })->orderBy('order', 'ASC')->with('screen')->get();
         $res = [];
-        $res['en'] = [
-            'id' => $menu->id,
-            'screen_id' => $menu->screen->id,
-            'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
-            'name' => $menu->name_en,
-            'image' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_en,
-        ];
-        $res['ar'] = [
-            'id' => $menu->id,
-            'screen_id' => $menu->screen->id,
-            'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
-            'name' => $menu->name_ar,
-            'image' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar,
-        ];
+        foreach ($menus as $menu) {
+            $res['en'][] = [
+                'id' => $menu->id,
+                'screen_id' => $menu->screen->id,
+                'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
+                'bg_video' => !!$menu->bg_video ? env('APP_URL') . '/storage/app/public/media/' . $menu->bg_video : null,
+                'name' => $menu->name_en,
+                'image' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_en,
+            ];
+            $res['ar'][] = [
+                'id' => $menu->id,
+                'screen_id' => $menu->screen->id,
+                'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
+                'bg_video' => !!$menu->bg_video ? env('APP_URL') . '/storage/app/public/media/' . $menu->bg_video : null,
+                'name' => $menu->name_ar,
+                'image' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar,
+            ];
+        }
+
         return response()->json($res, 200);
     }
 
@@ -181,8 +266,8 @@ class ApiController extends Controller
                 'id' => $menu->id,
                 'name_en' => $menu->name_en,
                 'name_ar' => $menu->name_ar,
-                'icon_en' =>  env('APP_URL') . '/storage/app/public/media/' . $menu->icon_en,
-                'icon_ar' =>  env('APP_URL') . '/storage/app/public/media/' . $menu->icon_ar,
+                'icon_en' => env('APP_URL') . '/storage/app/public/media/' . $menu->icon_en,
+                'icon_ar' => env('APP_URL') . '/storage/app/public/media/' . $menu->icon_ar,
             ];
             array_push($response, $temp);
         }
@@ -262,7 +347,6 @@ class ApiController extends Controller
         $contents = VideowallContent::where('menu_id', 1)->with('media', 'screen')->get();
 
 
-
         $res = [];
         foreach ($side_menu as $menu) {
             $res['en']['sideMenu'][] = [
@@ -292,9 +376,9 @@ class ApiController extends Controller
                     'screen' => $content->screen->name_en,
                     'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
                     'media' =>
-                    $content->media->map(function ($media) {
-                        return env('APP_URL') . '/storage/app/public/media/' . $media->name;
-                    }),
+                        $content->media->map(function ($media) {
+                            return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                        }),
                 ];
             }
             if ($content->lang === 'ar') {
@@ -305,9 +389,129 @@ class ApiController extends Controller
                     'screen' => $content->screen->name_ar,
                     'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
                     'media' =>
-                    $content->media->map(function ($media) {
-                        return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                        $content->media->map(function ($media) {
+                            return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                        }),
+                ];
+            }
+        }
+
+        return response()->json($res, 200);
+    }
+
+    public function getSideMenuContentById($id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'screen' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors(),
+                'status' => 422,
+            ], 422);
+        }
+        $contents = VideowallContent::where('menu_id', $id)->with('menu', 'screen', 'media')->get();
+        $menuu = Menu::where('id', $id)->first();
+        $child_menus = Menu::where('menu_id', $id)->where('level', 1)->whereHas('screen', function ($query) {
+            $query->where('slug', \request()->screen);
+        })->with('screen', 'videowall_content')->with('children')->orderBy('order', 'ASC')->get();
+
+        $res = [];
+        foreach ($child_menus as $menu) {
+            $children = [];
+            if (count($menu->children) > 0) {
+                foreach ($menu->children as $child)
+                    $children[] = [
+                        'id' => $child->id,
+                        'name' => $child->name_en,
+                        'screen_id' => $menu->screen->id,
+                        'screen' => $menu->screen->name_en,
+                        'image' => $child->image_en,
+                        'child_menus' => $child->children->toArray(),
+                        'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $child->bg_image,
+                        'intro_video' => [
+                            'type' => 'video',
+                            'path' => env('APP_URL') . '/storage/app/public/media/' . $child->intro_video
+                        ],
+                    ];
+            }
+            $res['en']['menus'][] = [
+                'id' => $menu->id,
+                'name' => $menu->name_en,
+                'screen_id' => $menu->screen->id,
+                'screen' => $menu->screen->name_en,
+                'image' => $menu->image_en,
+                'child' => $children,
+                'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
+                'intro_video' => [
+                    'type' => 'video',
+                    'path' => env('APP_URL') . '/storage/app/public/media/' . $menu->intro_video
+                ],
+            ];
+            $res['ar']['menus'][] = [
+                'id' => $menu->id,
+                'name' => $menu->name_ar,
+                'screen_id' => $menu->screen->id,
+                'screen' => $menu->screen->name_ar,
+                'image' => $menu->image_ar,
+                'child' => $children,
+                'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
+                'intro_video' => [
+                    'type' => 'video',
+                    'path' => env('APP_URL') . '/storage/app/public/media/' . $menu->intro_video
+                ],
+            ];
+        }
+
+        foreach ($contents as $content) {
+            if ($content->lang === 'en') {
+                $res['en']['content'] = [
+                    'id' => $content->id,
+                    'title' => $content->title,
+                    'menu_name' => $menuu->name_en,
+                    'intro_video' => collect(json_decode($menuu->intro_video))->map(function ($media) {
+                        return [
+                            'type' => 'video',
+                            'path' => env('APP_URL') . '/storage/app/public/media/' . $media
+                        ];
                     }),
+                    'content' => $content->content,
+                    'screen_id' => $content->screen->id,
+                    'screen' => $content->screen->name_en,
+                    'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
+                    'media' =>
+                        $content->media->map(function ($media) {
+                            if ($media->lang == 'en')
+                                return [
+                                    'type' => $media->type,
+                                    'path' => env('APP_URL') . '/storage/app/public/media/' . $media->name
+                                ];
+                        })->filter()->values(),
+                ];
+            }
+            if ($content->lang === 'ar') {
+                $res['ar']['content'] = [
+                    'id' => $content->id,
+                    'title' => $content->title,
+                    'menu_name' => $menuu->name_ar,
+                    'intro_video' => collect(json_decode($menuu->intro_video))->map(function ($media) {
+                        return [
+                            'type' => 'video',
+                            'path' => env('APP_URL') . '/storage/app/public/media/' . $media
+                        ];
+                    }),
+                    'content' => $content->content,
+                    'screen_id' => $content->screen->id,
+                    'screen' => $content->screen->name_ar,
+                    'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
+                    'media' =>
+                        $content->media->map(function ($media) {
+                            if ($media->lang == 'ar')
+                                return [
+                                    'type' => $media->type,
+                                    'path' => env('APP_URL') . '/storage/app/public/media/' . $media->name
+                                ];
+                        })->filter()->values(),
                 ];
             }
         }
@@ -391,6 +595,7 @@ class ApiController extends Controller
         return $response;
         return response()->json($response, 200);
     }
+
     //-- API For Video Wall --//
     public function getVideoByPortraitScreenSlugLang($slug, $lang)
     {
@@ -502,10 +707,10 @@ class ApiController extends Controller
                         'background_color' => $item->background_color,
                         'text_color' => $item->text_color,
                         'media' =>
-                        $item->media->map(function ($media) {
-                            if ($media->lang === 'en')
-                                return env('APP_URL') . '/storage/app/public/media/' . $media->name;
-                        })->filter()->values(),
+                            $item->media->map(function ($media) {
+                                if ($media->lang === 'en')
+                                    return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                            })->filter()->values(),
                     );
                 }
                 if ($item->lang === 'ar') {
@@ -518,10 +723,10 @@ class ApiController extends Controller
                         'background_color' => $item->background_color,
                         'text_color' => $item->text_color,
                         'media' =>
-                        $item->media->map(function ($media) {
-                            if ($media->lang === 'ar')
-                                return env('APP_URL') . '/storage/app/public/media/' . $media->name;
-                        })->filter()->values(),
+                            $item->media->map(function ($media) {
+                                if ($media->lang === 'ar')
+                                    return env('APP_URL') . '/storage/app/public/media/' . $media->name;
+                            })->filter()->values(),
                     );
                 }
             }
@@ -529,9 +734,183 @@ class ApiController extends Controller
         }
     }
 
-    public function getSiteLogo(Request $request) {
+    public function getSiteLogo(Request $request)
+    {
         $logo = Setting::where('key', 'logo')->first();
-        return response()->json(env('APP_URL') . '/storage/app/public/media/' . $logo->value);
+        $logo = $logo ? env('APP_URL') . '/storage/app/public/media/' . $logo->value : env('APP_URL') . '/assets/global_assets/images/placeholders/placeholder.jpg';
+        return response()->json($logo);
     }
+
+    public function getFirstGalleryById($id)
+    {
+        $menu = Menu::where('menu_id', $id)->get()->pluck('id')->toArray();
+        $media = Media::whereIn('menu_id', $menu)->with('menu')->get();
+        $gallery = [];
+        foreach ($media as $m) {
+            $gallery['en'][$m->menu->name_en][] = [
+                'path' => env('APP_URL') . '/storage/app/public/media/' . $m->name,
+                'type' => $m->type
+            ];
+            $gallery['ar'][$m->menu->name_ar][] = [
+                'path' => env('APP_URL') . '/storage/app/public/media/' . $m->name,
+                'type' => $m->type
+            ];
+        }
+        return \response()->json($gallery);
+    }
+
+
+    public function get_touchtablescreen_main_menu()
+    {
+        $menu = Menu::where('screen_type', 'touchtable')->where('menu_id', 0)->with('media')->first();
+        $contents = TouchScreenContent::where('menu_id', $menu->id)->with('media')->get();
+        $response = [
+            'id' => $menu->id,
+            'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
+            'name_en' => $menu->name_en,
+            'name_ar' => $menu->name_ar,
+            'content' => [
+                'ar' => $contents->map(function ($c) use ($menu) {
+                    if ($c->lang == 'ar' && $c->menu_id == $menu->id) {
+                        return [
+                            'name' => $menu->name_ar,
+                            'content' => $c->content,
+                            'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->text_bg_image,
+                            'media' => $c->media->map(function ($med) {
+                                if ($med->lang == 'en')
+                                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                            })->filter()->values(),
+                        ];
+                    }
+                })->filter()->values(),
+                'en' => $contents->map(function ($c) use ($menu) {
+                    if ($c->lang == 'en' && $c->menu_id == $menu->id) {
+                        return [
+                            'name' => $menu->name_en,
+                            'content' => $c->content,
+                            'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->text_bg_image,
+                            'media' => $c->media->map(function ($med) {
+                                if ($med->lang == 'ar')
+                                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                            })->filter()->values(),
+                        ];
+                    }
+                })->filter()->values(),
+            ],
+            'image_en' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_en,
+            'image_ar' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar,
+            'media' => $menu->media->map(function ($med) {
+                return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+            }),
+        ];
+        return response()->json($response, 200);
+    }
+
+    public function get_touchtablescreen_side_menu($menu_id)
+    {
+        $menus = Menu::where('screen_type', 'touchtable')->where('menu_id', $menu_id)->where('type', 'side')->where('level', 1)->orderBy('order', 'ASC')
+            ->with('touch_screen_content', 'media')
+            ->get();
+
+        $response = array();
+        foreach ($menus as $menu) {
+            $response['en'][] = [
+                'id' => $menu->id,
+                'name' => $menu->name_en,
+                'content' => $menu->touch_screen_content ? $menu->touch_screen_content->content : null,
+                'media' => $menu->media->map(function ($med) {
+                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                }),
+            ];
+            $response['ar'][] = [
+                'id' => $menu->id,
+                'name' => $menu->name_ar,
+                'content' => $menu->touch_screen_content->content ?? null,
+                'media' => $menu->media->map(function ($med) {
+                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                }),
+            ];
+            $temp = array();
+            $temp = [
+                'id' => $menu->id,
+                'name_en' => $menu->name_en,
+                'name_ar' => $menu->name_ar,
+            ];
+        }
+        return response()->json($response, 200);
+    }
+
+    public function get_menu_detail(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        $res = [];
+        $menu = Menu::where('id', $id)->with('touch_screen_content', 'media')->first();
+        $menus = Menu::where('menu_id', $id)
+//            ->where('is_timeline', true)
+            ->get();
+        $contents = TouchScreenContent::whereIn('menu_id', $menus->pluck('id')->toArray())->with('media', 'menu')->get();
+//        dd($contents, $menus, $id);
+        foreach ($contents as $content) {
+            $menu = $menus->first(function($item) use ($content) {
+                return $item->id == $content->menu_id;
+            });
+
+            $res[$content->lang]['timeline'][] = [
+                'id' => $content->id,
+                'is_timeline' => $menu->is_timeline,
+                'lang' => $content->lang,
+                'layout' => $content->layout,
+                'content' => $content->content,
+                'background_color' => $content->background_color,
+                'text_color' => $content->text_color,
+                'title' => $content->lang === 'en' ? $content->menu->name_en : $content->menu->name_ar,
+                'screen_id' => $content->screen_id,
+                'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
+                'media' => $content->media->map(function ($media) use ($content) {
+                    if ($media->lang == $content->lang && !!$media->name) {
+                        return [
+                            'link' => env('APP_URL') . '/storage/app/public/media/' . $media->name,
+                            'type' => $media->type,
+                            'lang' => $media->lang,
+                        ];
+                    }
+                })->filter()->values(),
+            ];
+        }
+        $res['en']['content'] = [
+            'name' => $menu->name_en,
+            'is_timeline' => $menu->is_timeline,
+            'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
+            'screen_type' => $menu->screen_type,
+            'content' => $menu->touch_screen_content->content ?? null,
+            'media' => $menu->media->map(function ($med) {
+                if ($med->lang == 'en') {
+                    return [
+                        'link' => env('APP_URL') . '/storage/app/public/media/' . $med->name,
+                        'type' => $med->type,
+                        'lang' => $med->lang,
+                    ];
+                }
+            })->filter()->values(),
+        ];
+        $res['ar']['content'] = [
+            'name' => $menu->name_ar,
+            'is_timeline' => $menu->is_timeline,
+            'bg_image' => $menu->bg_image,
+            'screen_type' => $menu->screen_type,
+            'content' => $menu->touch_screen_content->content ?? null,
+            'media' => $menu->media->map(function ($med) {
+                if ($med->lang == 'ar') {
+                    return [
+                        'link' => env('APP_URL') . '/storage/app/public/media/' . $med->name,
+                        'type' => $med->type,
+                        'lang' => $med->lang,
+                    ];
+                }
+            })->filter()->values(),
+        ];
+        return response()->json($res, 200);
+    }
+
+
     //-- /API For Video Wall --//
 }

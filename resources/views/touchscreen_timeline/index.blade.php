@@ -28,7 +28,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->title }}</td>
-                                <td>{!! $item->description !!}</td>
+                                <td>{!! Str::limit($item->description, 150) !!}</td>
                                 <td>{{ $item->lang === 'en' ? 'English' : 'Arabic' }}</td>
                                 <td>{{ $item->menu->name_en }}</td>
                                 <td>
