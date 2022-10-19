@@ -15,11 +15,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization, X-Request-With');
-header('Access-Control-Allow-Credentials: true');
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -36,12 +31,11 @@ Route::prefix('touchtable')->group(function() {
     Route::get('content/{menu_id}', [ApiController::class, 'get_touchtable_content']);
 });
 
-Route::prefix('touchtablescreen')->group(function() {
-    Route::get('main_menu', [ApiController::class, 'get_touchtablescreen_main_menu']);
-    Route::get('side_menu/{menu_id}', [ApiController::class, 'get_touchtablescreen_side_menu']);
-    Route::get('timeline/menu/{id}', [ApiController::class, 'get_menu_detail']);
 
-});
+    Route::get('touchtablescreen/main_menu', [ApiController::class, 'get_touchtablescreen_main_menu']);
+    Route::get('touchtablescreen/side_menu/{menu_id}', [ApiController::class, 'get_touchtablescreen_side_menu']);
+    Route::get('touchtablescreen/timeline/menu/{id}', [ApiController::class, 'get_menu_detail']);
+
 
 Route::prefix('videowall')->group(function() {
     Route::get('main_menu', [ApiController::class, 'get_videowall_main_menu']);
