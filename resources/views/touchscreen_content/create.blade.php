@@ -66,8 +66,9 @@
         <div class="card-body">
             <form action="{{ route('touchtable.content.store') }}" method="post">
                 @csrf
+                <input type="hidden" name="menu_level" id="menu_level">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Language</label>
                             <select id="lang" class="form-control" name="lang" required>
@@ -77,13 +78,13 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Title*</label>
                             <input type="text" name="title" id="title_en" class="form-control" required>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
                             <label>Screen:</label>
                             <select name="screen_id" id="screen_id" class="form-control">

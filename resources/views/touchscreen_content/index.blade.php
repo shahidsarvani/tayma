@@ -26,7 +26,7 @@
                         @foreach ($content as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{!! $item->content !!}</td>
+                                <td>{!! Str::limit($item->content, 150) !!}</td>
                                 <td>{{ $item->lang === 'en' ? 'English' : 'Arabic' }}</td>
                                 <td>{{ $item->menu->name_en ?? '' }}</td>
                                 <td>

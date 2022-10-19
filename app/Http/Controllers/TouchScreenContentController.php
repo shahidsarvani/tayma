@@ -116,6 +116,7 @@ class TouchScreenContentController extends Controller
      */
     public function edit($id)
     {
+        $layouts = [1, 2, 3, 4, 5];
         $all_menus = Menu::where('screen_type', 'touchtable')->get();
         $menus = array();
         foreach ($all_menus as $value) {
@@ -142,7 +143,7 @@ class TouchScreenContentController extends Controller
         }
         $content = TouchScreenContent::whereId($id)->first();
         $media = Media::where('menu_id', $content->menu_id)->where('lang', $content->lang)->get();
-        return view('touchscreen_content.edit', compact('content', 'menus', 'media'));
+        return view('touchscreen_content.edit', compact('content', 'menus', 'media', 'layouts'));
     }
 
     /**

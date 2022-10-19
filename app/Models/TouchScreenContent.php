@@ -14,6 +14,11 @@ class TouchScreenContent extends Model
         'lang', //['en', 'ar']
         'menu_id',
         'title',
+        'menu_level',
+        'layout',
+        'background_color',
+        'text_color',
+        'text_bg_image',
     ];
 
     public function menu()

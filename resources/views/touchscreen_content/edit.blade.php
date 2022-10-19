@@ -95,9 +95,6 @@
             top: -10px;
             /*right: -11px;*/
         }
-        .image-area- {
-            width: 100px;
-        }
         .image-area- img, .image-area- video, .image-area- {
             width: 100px;
         }
@@ -115,18 +112,8 @@
             <form action="{{ route('touchtable.content.update', $content->id) }}" method="post">
                 @csrf
                 @method('patch')
+                <input type="hidden" value="{{$content->menu_level}}" name="menu_level" id="menu_level">
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Menu:</label>
-                            <select name="menu_id" class="form-control">
-                                <option value="">Select Menu</option>
-                                @foreach ($menus as $item)
-                                    <option @if($item['id'] === $content->menu_id) selected @endif value="{{ $item['id'] }}">{{ $item['name'] }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Language</label>
@@ -137,10 +124,55 @@
                             </select>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Title*</label>
+                            <input type="text" name="title" value="{{$content->title}}" id="title_en"
+                                   class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Menu:</label>
+                            <select name="menu_id" class="form-control">
+                                <option value="">Select Menu</option>
+                                @foreach ($menus as $item)
+                                    <option @if($item['id'] === $content->menu_id) selected
+                                            @endif value="{{ $item['id'] }}">{{ $item['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    @if($content->menu_level >= 3)
+                        <div class="col-md-12">
+                            <label>Choose Layout</label>
+                            <div class="row">
+                                @foreach($layouts as $layout)
+                                    <div class="col-md-2 text-center">
+                                        <input @if($content->layout == 'layout_'.$layout) checked
+                                               @endif onclick="checkSelectedLayout({{$layout}})" type="radio"
+                                               name="layout"
+                                               id="layout_{{$layout}}" class="d-none imgbgchk"
+                                               value="layout_{{$layout}}">
+                                        <label for="layout_{{$layout}}">
+                                            <img width="150px"
+                                                 src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"
+                                                 alt="layout_{{$layout}}">
+                                            <div class="tick_container">
+                                                <div class="tick"><i class="icon-check2"></i></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="col-md-12">
                         <div class="form-group">
                             <label>Content:</label>
-                            <textarea name="content" id="editor-full1" rows="4" cols="4" required>{{$content->content}}</textarea>
+                            <textarea name="content" id="editor-full1" rows="4" cols="4"
+                                      required>{{$content->content}}</textarea>
                             @error('content')
                             <p class="text-danger">{{ $message }}</p>
                             @enderror
@@ -155,7 +187,8 @@
                                     <div class="image-area-">
                                         <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"
                                              class="w-100">
-                                        <a class="remove-image" href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image"
+                                           href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
@@ -163,7 +196,8 @@
                                     <div class="image-area-">
                                         <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls
                                                autoplay muted></video>
-                                        <a class="remove-image" href="{{  env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image"
+                                           href="{{  env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
@@ -205,18 +239,18 @@
             // If true, the individual chunks of a file are being uploaded simultaneously.
             parallelChunkUploads: true,
             acceptedFiles: 'video/*, image/*',
-            init: function() {
-                this.on('addedfile', function() {
+            init: function () {
+                this.on('addedfile', function () {
                     list.append('<li>Uploading</li>')
                 }),
-                    this.on('sending', function(file, xhr, formData) {
+                    this.on('sending', function (file, xhr, formData) {
                         formData.append("_token", "{{ csrf_token() }}");
 
                         // This will track all request so we can get the correct request that returns final response:
                         // We will change the load callback but we need to ensure that we will call original
                         // load callback from dropzone
                         var dropzoneOnLoad = xhr.onload;
-                        xhr.onload = function(e) {
+                        xhr.onload = function (e) {
                             dropzoneOnLoad(e)
                             // Check for final chunk and get the response
                             var uploadResponse = JSON.parse(xhr.responseText)
@@ -232,5 +266,48 @@
                     })
             }
         };
+        $('#screen_id').change(function () {
+            screen_id = this.value | 0
+            var url = "../getscreensidemenu/" + screen_id
+            console.log(url)
+            $.ajax({
+                url: url,
+                method: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    var html_text = '<option value="">Select Menu *</option>'
+                    if (response.length) {
+                        for (var i = 0; i < response.length; i++) {
+                            html_text += '<option value="' + response[i].id + '">' + response[i].name +
+                                '</option>'
+                        }
+                    }
+                    $('#menu_id').empty().append(html_text);
+                }
+            })
+        })
+        $('#menu_id').change(function () {
+            let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
+            $('#menu_level').val(menu.level)
+            if (menu.level >= 3) {
+                $('#content-layout').show()
+                $('.level-3-menu').show()
+            } else {
+                $('#content-layout').hide()
+                $('#content-title').hide()
+                $('.level-3-menu').hide()
+            }
+        });
+
+        function checkSelectedLayout(layout) {
+            if (1 === parseInt(layout)) {
+                $('#content-title').show()
+            } else {
+                $('#content-title').hide()
+            }
+            if (parseInt(layout) === 3 || parseInt(layout) === 5) {
+
+            }
+        }
     </script>
 @endsection
