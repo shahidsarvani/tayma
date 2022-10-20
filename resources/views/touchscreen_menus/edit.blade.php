@@ -200,7 +200,9 @@
                         </div>
                     </div>
                     <div class="col-md-12">
-                        <div class="hidden {{ (($menu->image_en && $menu->image_en != '') || ($menu->image_ar && $menu->image_ar != '')) ? 'show' : '' }}" id="image_partial">
+                        <div
+{{--                                class="hidden {{ (($menu->image_en && $menu->image_en != '') || ($menu->image_ar && $menu->image_ar != '')) ? 'show' : '' }}" --}}
+                                id="image_partial">
                             @include('touchscreen_menus.image_partial')
                         </div>
                         <div class="hidden {{ (($menu->icon_en && $menu->icon_en != '') || ($menu->icon_ar && $menu->icon_ar != '')) ? 'show' : '' }}" id="icon_partial">

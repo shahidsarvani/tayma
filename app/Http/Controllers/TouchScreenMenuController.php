@@ -64,7 +64,7 @@ class TouchScreenMenuController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -143,7 +143,7 @@ class TouchScreenMenuController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Menu  $menu
+     * @param \App\Models\Menu $menu
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -155,7 +155,7 @@ class TouchScreenMenuController extends Controller
      * Show the form for editing the specified resource.
      *
      *
-     * @param  \App\Models\Menu  $menu
+     * @param \App\Models\Menu $menu
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -195,8 +195,8 @@ class TouchScreenMenuController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Menu  $menu
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Menu $menu
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Menu $menu)
@@ -205,77 +205,77 @@ class TouchScreenMenuController extends Controller
         // return $menu;
         // return $request;
 //        try {
-            $data = $request->except('_token', 'image_en', 'image_ar', 'icon_en', 'icon_ar', 'bg_image');
+        $data = $request->except('_token', 'image_en', 'image_ar', 'icon_en', 'icon_ar', 'bg_image');
+        // return $data;
+        if (!$request->menu_id) {
             // return $data;
-            if (!$request->menu_id) {
-                // return $data;
-                $data['menu_id'] = 0;
-            }
-            if ($request->type === 'footer') {
-                Storage::delete(['/public/media/' . $menu->image_en, '/public/media/' . $menu->image_ar]);
-                $data['image_en'] = null;
-                $data['image_ar'] = null;
-            } elseif ($request->type === 'main') {
-                Storage::delete(['/public/media/' . $menu->icon_en, '/public/media/' . $menu->icon_ar]);
-                $data['icon_en'] = null;
-                $data['icon_ar'] = null;
-            } else {
-                Storage::delete(['/public/media/' . $menu->image_en, '/public/media/' . $menu->image_ar]);
-                Storage::delete(['/public/media/' . $menu->icon_en, '/public/media/' . $menu->icon_ar]);
-                $data['image_en'] = null;
-                $data['image_ar'] = null;
-                $data['icon_en'] = null;
-                $data['icon_ar'] = null;
-            }
-            $imagePath = 'public/media';
+            $data['menu_id'] = 0;
+        }
+        if ($request->type === 'footer') {
+            Storage::delete(['/public/media/' . $menu->image_en, '/public/media/' . $menu->image_ar]);
+            $data['image_en'] = null;
+            $data['image_ar'] = null;
+        } elseif ($request->type === 'main') {
+            Storage::delete(['/public/media/' . $menu->icon_en, '/public/media/' . $menu->icon_ar]);
+            $data['icon_en'] = null;
+            $data['icon_ar'] = null;
+        } else {
+            Storage::delete(['/public/media/' . $menu->image_en, '/public/media/' . $menu->image_ar]);
+            Storage::delete(['/public/media/' . $menu->icon_en, '/public/media/' . $menu->icon_ar]);
+            $data['image_en'] = null;
+            $data['image_ar'] = null;
+            $data['icon_en'] = null;
+            $data['icon_ar'] = null;
+        }
+        $imagePath = 'public/media';
         if ($file = $request->file('bg_image')) {
             $ext = $file->getClientOriginalExtension();
             $name = 'media_' . md5(time()) . '.' . $ext;
             $file->storeAs($imagePath, $name);
             $data['bg_image'] = $name;
         }
-            if ($file = $request->file('image_en')) {
-                $ext = $file->getClientOriginalExtension();
-                $name = 'image_en_' . md5(time()) . '.' . $ext;
-                $file->storeAs($imagePath, $name);
-                $data['image_en'] = $name;
-            }
-            if ($file = $request->file('image_ar')) {
-                $ext = $file->getClientOriginalExtension();
-                $name = 'image_ar_' . md5(time()) . '.' . $ext;
-                $file->storeAs($imagePath, $name);
-                $data['image_ar'] = $name;
-            }
-            if ($file = $request->file('icon_en')) {
-                $ext = $file->getClientOriginalExtension();
-                $name = 'icon_en_' . md5(time()) . '.' . $ext;
-                $file->storeAs($imagePath, $name);
-                $data['icon_en'] = $name;
-            }
-            if ($file = $request->file('icon_ar')) {
-                $ext = $file->getClientOriginalExtension();
-                $name = 'icon_ar_' . md5(time()) . '.' . $ext;
-                $file->storeAs($imagePath, $name);
-                $data['icon_ar'] = $name;
-            }
-            $screen = Screen::where('id', $request->screen_id)->first();
+        if ($file = $request->file('image_en')) {
+            $ext = $file->getClientOriginalExtension();
+            $name = 'image_en_' . md5(time()) . '.' . $ext;
+            $file->storeAs($imagePath, $name);
+            $data['image_en'] = $name;
+        }
+        if ($file = $request->file('image_ar')) {
+            $ext = $file->getClientOriginalExtension();
+            $name = 'image_ar_' . md5(time()) . '.' . $ext;
+            $file->storeAs($imagePath, $name);
+            $data['image_ar'] = $name;
+        }
+        if ($file = $request->file('icon_en')) {
+            $ext = $file->getClientOriginalExtension();
+            $name = 'icon_en_' . md5(time()) . '.' . $ext;
+            $file->storeAs($imagePath, $name);
+            $data['icon_en'] = $name;
+        }
+        if ($file = $request->file('icon_ar')) {
+            $ext = $file->getClientOriginalExtension();
+            $name = 'icon_ar_' . md5(time()) . '.' . $ext;
+            $file->storeAs($imagePath, $name);
+            $data['icon_ar'] = $name;
+        }
+        $screen = Screen::where('id', $request->screen_id)->first();
 
-            if ($request->file_names) {
-                foreach ($request->file_names as $index => $fileName) {
-                    // $media = Media::whereName($fileName)->first();
-                    $media = Media::create([
-                        'lang' => 'en',
-                        'name' => $fileName,
-                        'screen_slug' => $screen->slug,
-                        'screen_type' => 'touchtable',
-                        'menu_id' => $menu->id,
-                        'type' => $request->types[$index],
-                    ]);
-                }
+        if ($request->file_names) {
+            foreach ($request->file_names as $index => $fileName) {
+                // $media = Media::whereName($fileName)->first();
+                $media = Media::create([
+                    'lang' => 'en',
+                    'name' => $fileName,
+                    'screen_slug' => $screen->slug,
+                    'screen_type' => 'touchtable',
+                    'menu_id' => $menu->id,
+                    'type' => $request->types[$index],
+                ]);
             }
-            // return $data;
-            $menu->update($data);
-            return redirect()->route('touchtable.menus.index')->with('success', 'Menu is updated!');
+        }
+        // return $data;
+        $menu->update($data);
+        return redirect()->route('touchtable.menus.index')->with('success', 'Menu is updated!');
 //        } catch (\Throwable $th) {
 //            Log::error($th->getMessage());
 //            if ((Arr::exists($data, 'image_en') && $data['image_en'] !== '') || (Arr::exists($data, 'image_ar') && $data['image_ar'] !== '')) {
@@ -291,7 +291,7 @@ class TouchScreenMenuController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Menu  $menu
+     * @param \App\Models\Menu $menu
      * @return \Illuminate\Http\Response
      */
     public function destroy(Menu $menu)

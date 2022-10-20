@@ -106,7 +106,7 @@
 
 
                     <div class="col-md-12">
-                        <div class="hidden" id="image_partial">
+                        <div id="image_partial">
                             @include('touchscreen_menus.image_partial')
                         </div>
                         <div class="hidden" id="icon_partial">
