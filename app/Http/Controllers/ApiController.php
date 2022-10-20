@@ -844,7 +844,6 @@ class ApiController extends Controller
     {
         $res = [];
         $menu = Menu::where('id', $id)->with('touch_screen_content', 'media')->first();
-        dd($menu);
         $menus = Menu::where('menu_id', $id)
 //            ->where('is_timeline', true)
             ->get();
