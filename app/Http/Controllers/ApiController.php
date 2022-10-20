@@ -856,7 +856,7 @@ class ApiController extends Controller
 
             $res[$content->lang]['timeline'][] = [
                 'id' => $content->id,
-                'image' => env('APP_URL') . '/storage/app/public/media/' . $content->lang === 'ar' ? $menu->image_ar : $menu->image_en,
+                'image' => $content->lang === 'ar' ? env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar : env('APP_URL') . '/storage/app/public/media/' . $menu->image_en,
                 'is_timeline' => $menu->is_timeline,
                 'lang' => $content->lang,
                 'layout' => $content->layout,
