@@ -152,32 +152,33 @@
                             </select>
                         </div>
                     </div>
-{{--                    @if($content->menu_level >= 2)--}}
-{{--                        <div class="col-md-12">--}}
-{{--                            <label>Choose Layout</label>--}}
-{{--                            <div class="row">--}}
-{{--                                @foreach($layouts as $layout)--}}
-{{--                                    <div class="col-md-2 text-center">--}}
-{{--                                        <input @if($content->layout == 'layout_'.$layout) checked--}}
-{{--                                               @endif onclick="checkSelectedLayout({{$layout}})" type="radio"--}}
-{{--                                               name="layout"--}}
-{{--                                               id="layout_{{$layout}}" class="d-none imgbgchk"--}}
-{{--                                               value="layout_{{$layout}}">--}}
-{{--                                        <label for="layout_{{$layout}}">--}}
-{{--                                            <img width="150px"--}}
-{{--                                                 src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"--}}
-{{--                                                 alt="layout_{{$layout}}">--}}
-{{--                                            <div class="tick_container">--}}
-{{--                                                <div class="tick"><i class="icon-check2"></i></div>--}}
-{{--                                            </div>--}}
-{{--                                        </label>--}}
-{{--                                    </div>--}}
-{{--                                @endforeach--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    @endif--}}
+                    @if($content->menu_level >= 2)
+                        <div class="col-md-12">
+                            <label>Choose Layout</label>
+                            <div class="row">
+                                @foreach($layouts as $layout)
+                                    <div class="col-md-2 text-center">
+                                        <input @if($content->layout == 'layout_'.$layout) checked
+                                               @endif onclick="checkSelectedLayout({{$layout}})" type="radio"
+                                               name="layout"
+                                               id="layout_{{$layout}}" class="d-none imgbgchk"
+                                               value="layout_{{$layout}}">
+                                        <label for="layout_{{$layout}}">
+                                            <img width="150px"
+                                                 src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"
+                                                 alt="layout_{{$layout}}">
+                                            <div class="tick_container">
+                                                <div class="tick"><i class="icon-check2"></i></div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
 
-                    <div id="content-title" class="col-md-12 mt-2">
+                    <div id="content-title" class="col-md-12 mt-2"
+                         @if($content->layout != 'layout_1') style="display: none" @endif>
                         <div class="form-group">
                             <label for="title">Title:</label>
                             <input name="title" id="title" class="form-control" type="text"
@@ -187,6 +188,27 @@
                             @enderror
                         </div>
                     </div>
+
+                    <div class="col-md-12" id="content-layout">
+                        <label>Choose Layout</label>
+                        <div class="row">
+                            @foreach($layouts as $layout)
+                                <div class="col-md-2 text-center">
+                                    <input @if($content->layout == $layout) checked @endif onclick="checkSelectedLayout({{$layout}})" type="radio" name="layout"
+                                           id="layout_{{$layout}}" class="d-none imgbgchk" value="layout_{{$layout}}">
+                                    <label for="layout_{{$layout}}">
+                                        <img width="150px"
+                                             src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"
+                                             alt="layout_{{$layout}}">
+                                        <div class="tick_container">
+                                            <div class="tick"><i class="icon-check2"></i></div>
+                                        </div>
+                                    </label>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
 
                     <div class="col-md-6">
                         <div class="form-group">
@@ -223,7 +245,7 @@
                         <div class="col-md-6">
                             <div class="image-area">
                                 <img src="{{asset('/storage/app/public/media/' . $content->text_bg_image)}}">
-                                <a class="remove-image" href="{{ route('videowall.image.remove.gallery', $content->id) }}"
+                                <a class="remove-image" href="{{ '/video-wall-screen/image/remove/' . $content->id }}"
                                    style="display: inline;">&#215;</a>
                             </div>
                         </div>
@@ -246,7 +268,7 @@
                                     <div class="image-area-">
                                         <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"
                                              class="w-100">
-                                        <a class="remove-image" href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image" href="{{ '/video-wall-screen/gallery/' . $item->id }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
@@ -254,7 +276,7 @@
                                     <div class="image-area-">
                                         <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls
                                                autoplay muted></video>
-                                        <a class="remove-image" href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image" href="{{ '/video-wall-screen/gallery/' . $item->id }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
@@ -282,6 +304,20 @@
 
 @section('footer_scripts')
     <script>
+        var listScreenMenu = []
+        $(document).ready(function () {
+            screen_id = '{{$content->screen_id}}'
+            var url = "/video-wall-screen/getscreensidemenu/" + screen_id
+            $.ajax({
+                url: url,
+                method: 'get',
+                dataType: 'json',
+                success: function (response) {
+                    listScreenMenu = response
+                    console.log(response)
+                }
+            })
+        });
         var list = $('#file-upload-list');
         var list2 = $('#file-upload-list2');
         console.log(list)
@@ -347,14 +383,14 @@
         $('#menu_id').change(function () {
             let menu = listScreenMenu.find(l => l.id === parseInt($('#menu_id').val()))
             $('#menu_level').val(menu.level)
-            // if (menu.level >= 2) {
-            //     $('#content-layout').show()
-            //     $('.level-3-menu').show()
-            // } else {
-            //     $('#content-layout').hide()
-            //     $('#content-title').hide()
-            //     $('.level-3-menu').hide()
-            // }
+            if (menu.level >= 2) {
+                $('#content-layout').show()
+                $('.level-3-menu').show()
+            } else {
+                $('#content-layout').hide()
+                $('#content-title').hide()
+                $('.level-3-menu').hide()
+            }
         });
 
         function checkSelectedLayout(layout) {
