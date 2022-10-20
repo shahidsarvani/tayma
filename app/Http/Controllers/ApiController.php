@@ -844,20 +844,21 @@ class ApiController extends Controller
     {
         $res = [];
         $menu = Menu::where('id', $id)->with('touch_screen_content', 'media')->first();
+        dd($menu);
         $menus = Menu::where('menu_id', $id)
 //            ->where('is_timeline', true)
             ->get();
         $contents = TouchScreenContent::whereIn('menu_id', $menus->pluck('id')->toArray())->with('media', 'menu')->get();
 //        dd($contents, $menus, $id);
         foreach ($contents as $content) {
-            $menu = $menus->first(function($item) use ($content) {
+            $menu_ = $menus->first(function($item) use ($content) {
                 return $item->id == $content->menu_id;
             });
 
             $res[$content->lang]['timeline'][] = [
                 'id' => $content->id,
-                'image' => $content->lang === 'ar' ? env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar : env('APP_URL') . '/storage/app/public/media/' . $menu->image_en,
-                'is_timeline' => $menu->is_timeline,
+                'image' => $content->lang === 'ar' ? env('APP_URL') . '/storage/app/public/media/' . $menu_->image_ar : env('APP_URL') . '/storage/app/public/media/' . $menu_->image_en,
+                'is_timeline' => $menu_->is_timeline,
                 'lang' => $content->lang,
                 'layout' => $content->layout,
                 'content' => $content->content,
