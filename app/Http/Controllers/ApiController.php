@@ -909,6 +909,9 @@ class ApiController extends Controller
                 }
             })->filter()->values(),
         ];
+        $logo = Setting::where('key', 'logo')->first();
+        $res['logo'] = $logo ? env('APP_URL') . '/storage/app/public/media/' . $logo->value : env('APP_URL') . '/assets/global_assets/images/placeholders/placeholder.jpg';
+
         return response()->json($res, 200);
     }
 
