@@ -133,6 +133,12 @@
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
+                            <label for="sub_title">Sub Title*</label>
+                            <input type="text" value="{{$content->sub_title}}" name="sub_title" id="sub_title" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
                             <label>Menu:</label>
                             <select name="menu_id" class="form-control">
                                 <option value="">Select Menu</option>

@@ -81,7 +81,13 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Title*</label>
-                            <input type="text" name="title" id="title_en" class="form-control" required>
+                            <input type="text" name="title" id="title" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="sub_title">Sub Title*</label>
+                            <input type="text" name="sub_title" id="sub_title" class="form-control" required>
                         </div>
                     </div>
                     <div class="col-md-6">
