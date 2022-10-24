@@ -775,6 +775,8 @@ class ApiController extends Controller
                         return [
                             'name' => $menu->name_ar,
                             'content' => $c->content,
+                            'background_color' => $c->background_color,
+                            'text_color' => $c->text_color,
                             'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->text_bg_image,
                             'media' => $c->media->map(function ($med) {
                                 if ($med->lang == 'en') {
@@ -793,6 +795,8 @@ class ApiController extends Controller
                         return [
                             'name' => $menu->name_en,
                             'content' => $c->content,
+                            'background_color' => $c->background_color,
+                            'text_color' => $c->text_color,
                             'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->text_bg_image,
                             'media' => $c->media->map(function ($med) {
                                 if ($med->lang == 'ar') {
