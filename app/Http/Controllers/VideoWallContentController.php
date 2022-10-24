@@ -33,7 +33,7 @@ class VideoWallContentController extends Controller
     public function create()
     {
         //
-        $layouts = [1, 2, 3, 4, 5];
+        $layouts = [1, 2, 3, 4, 5, 6];
         $screens = Screen::where('is_touch', 1)->where('screen_type', 'videowall')->get();
         return view('videowall_content.create', compact('screens', 'layouts'));
     }
@@ -135,7 +135,7 @@ class VideoWallContentController extends Controller
     public function edit($id)
     {
         //
-        $layouts = [1, 2, 3, 4, 5];
+        $layouts = [1, 2, 3, 4, 5, 6];
         $content = VideowallContent::find($id);
         $media = Media::where('lang', $content->lang)->where('menu_id', $content->menu_id)->get();
         // return $media;

@@ -31,7 +31,7 @@ class TouchScreenContentController extends Controller
     public function create()
     {
         //
-        $layouts = [1, 2, 3, 4, 5];
+        $layouts = [1, 2, 3, 4, 5, 6];
         $all_menus = Menu::where('screen_type', 'touchtable')->where('type', 'side')->get();
         $screens = Screen::where('screen_type', 'touchtable')->whereIsTouch(1)->get();
         $menus = array();
@@ -116,7 +116,7 @@ class TouchScreenContentController extends Controller
      */
     public function edit($id)
     {
-        $layouts = [1, 2, 3, 4, 5];
+        $layouts = [1, 2, 3, 4, 5, 6];
         $all_menus = Menu::where('screen_type', 'touchtable')->get();
         $menus = array();
         foreach ($all_menus as $value) {
