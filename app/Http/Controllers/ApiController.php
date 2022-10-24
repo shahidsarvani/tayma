@@ -777,8 +777,13 @@ class ApiController extends Controller
                             'content' => $c->content,
                             'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->text_bg_image,
                             'media' => $c->media->map(function ($med) {
-                                if ($med->lang == 'en')
-                                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                                if ($med->lang == 'en') {
+                                    return [
+                                        'link' => env('APP_URL') . '/storage/app/public/media/' . $med->name,
+                                        'id' => $med->id,
+                                        'type' => $med->type,
+                                    ];
+                                }
                             })->filter()->values(),
                         ];
                     }
@@ -790,8 +795,13 @@ class ApiController extends Controller
                             'content' => $c->content,
                             'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->text_bg_image,
                             'media' => $c->media->map(function ($med) {
-                                if ($med->lang == 'ar')
-                                    return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                                if ($med->lang == 'ar') {
+                                    return [
+                                        'link' => env('APP_URL') . '/storage/app/public/media/' . $med->name,
+                                        'id' => $med->id,
+                                        'type' => $med->type,
+                                    ];
+                                }
                             })->filter()->values(),
                         ];
                     }
@@ -800,7 +810,11 @@ class ApiController extends Controller
             'image_en' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_en,
             'image_ar' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar,
             'media' => $menu->media->map(function ($med) {
-                return env('APP_URL') . '/storage/app/public/media/' . $med->name;
+                return [
+                    'link' => env('APP_URL') . '/storage/app/public/media/' . $med->name,
+                    'id' => $med->id,
+                    'type' => $med->type,
+                ];
             }),
         ];
         return response()->json($response, 200);
@@ -850,7 +864,7 @@ class ApiController extends Controller
         $contents = TouchScreenContent::whereIn('menu_id', $menus->pluck('id')->toArray())->with('media', 'menu')->get();
 //        dd($contents, $menus, $id);
         foreach ($contents as $content) {
-            $menu_ = $menus->first(function($item) use ($content) {
+            $menu_ = $menus->first(function ($item) use ($content) {
                 return $item->id == $content->menu_id;
             });
 
