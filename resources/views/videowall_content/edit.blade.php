@@ -189,25 +189,6 @@
                         </div>
                     </div>
 
-                    <div class="col-md-12" id="content-layout">
-                        <label>Choose Layout</label>
-                        <div class="row">
-                            @foreach($layouts as $layout)
-                                <div class="col-md-2 text-center">
-                                    <input @if($content->layout == $layout) checked @endif onclick="checkSelectedLayout({{$layout}})" type="radio" name="layout"
-                                           id="layout_{{$layout}}" class="d-none imgbgchk" value="layout_{{$layout}}">
-                                    <label for="layout_{{$layout}}">
-                                        <img width="150px"
-                                             src="{{asset('public/assets/layouts/layout-'.$layout.'.png')}}"
-                                             alt="layout_{{$layout}}">
-                                        <div class="tick_container">
-                                            <div class="tick"><i class="icon-check2"></i></div>
-                                        </div>
-                                    </label>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
 
 
                     <div class="col-md-6">
