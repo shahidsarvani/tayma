@@ -864,7 +864,6 @@ class ApiController extends Controller
         $menu = Menu::where('id', $id)->with('touch_screen_content', 'media')->first();
         $menu_contents_ar = TouchScreenContent::where('menu_id', $id)->where('lang', 'ar')->first();
         $menu_contents_en = TouchScreenContent::where('menu_id', $id)->where('lang', 'en')->first();
-        dd($id, $menu_contents_ar, $menu_contents_en);
 
         $menus = Menu::where('menu_id', $id)
 //            ->where('is_timeline', true)
