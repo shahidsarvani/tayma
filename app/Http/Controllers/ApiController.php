@@ -862,6 +862,9 @@ class ApiController extends Controller
     {
         $res = [];
         $menu = Menu::where('id', $id)->with('touch_screen_content', 'media')->first();
+        $menu_contents_ar = TouchScreenContent::where('menu_id', $id)->where('lang', 'ar')->first();
+        $menu_contents_en = TouchScreenContent::where('menu_id', $id)->where('lang', 'en')->first();
+
         $menus = Menu::where('menu_id', $id)
 //            ->where('is_timeline', true)
             ->get();
@@ -901,9 +904,9 @@ class ApiController extends Controller
             'is_timeline' => $menu->is_timeline,
             'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
             'screen_type' => $menu->screen_type,
-            'content' => $menu->touch_screen_content->content ?? null,
-            'background_color' => $menu->touch_screen_content->background_color,
-            'text_color' => $menu->touch_screen_content->text_color,
+            'content' => $menu_contents_en->content ?? null,
+            'background_color' => $menu_contents_en->background_color,
+            'text_color' => $menu_contents_en->text_color,
             'media' => $menu->media->map(function ($med) {
                 if ($med->lang == 'en') {
                     return [
@@ -919,9 +922,9 @@ class ApiController extends Controller
             'is_timeline' => $menu->is_timeline,
             'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
             'screen_type' => $menu->screen_type,
-            'content' => $menu->touch_screen_content->content ?? null,
-            'background_color' => $menu->touch_screen_content->background_color,
-            'text_color' => $menu->touch_screen_content->text_color,
+            'content' => $menu_contents_ar->content ?? null,
+            'background_color' => $menu_contents_ar->background_color,
+            'text_color' => $menu_contents_ar->text_color,
             'media' => $menu->media->map(function ($med) {
                 if ($med->lang == 'ar') {
                     return [
