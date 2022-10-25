@@ -902,6 +902,8 @@ class ApiController extends Controller
             'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
             'screen_type' => $menu->screen_type,
             'content' => $menu->touch_screen_content->content ?? null,
+            'background_color' => $menu->touch_screen_content->background_color,
+            'text_color' => $menu->touch_screen_content->text_color,
             'media' => $menu->media->map(function ($med) {
                 if ($med->lang == 'en') {
                     return [
@@ -918,6 +920,8 @@ class ApiController extends Controller
             'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
             'screen_type' => $menu->screen_type,
             'content' => $menu->touch_screen_content->content ?? null,
+            'background_color' => $menu->touch_screen_content->background_color,
+            'text_color' => $menu->touch_screen_content->text_color,
             'media' => $menu->media->map(function ($med) {
                 if ($med->lang == 'ar') {
                     return [
