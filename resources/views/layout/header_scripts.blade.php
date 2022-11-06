@@ -12,6 +12,7 @@
     <link href="{{ asset('assets/global_assets/css/icons/icomoon/styles.min.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('assets/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
+    <script src="https://cdn.ckeditor.com/4.7.1/full/ckeditor.js"></script>
 
     <!-- Core JS files -->
     <script src="{{ asset('assets/global_assets/js/main/jquery.min.js') }}"></script>
