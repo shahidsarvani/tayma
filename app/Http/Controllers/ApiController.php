@@ -344,10 +344,13 @@ class ApiController extends Controller
         $side_menu = Menu::where('screen_type', 'videowall')->where('type', 'side')->where('level', 1)->whereHas('screen', function ($query) {
             $query->where('slug', \request()->screen);
         })->with('screen', 'videowall_content')->orderBy('order', 'ASC')->get();
-        $contents = VideowallContent::where('menu_id', 1)->with('media', 'screen')->whereHas('screen', function ($query) {
+        $contents = VideowallContent::with('media', 'screen')
+            ->whereHas('menu', function ($query) {
+                $query->where('level', 0);
+            })
+            ->whereHas('screen', function ($query) {
             $query->where('slug', \request()->screen);
         })->get();
-
 
         $res = [];
         foreach ($side_menu as $menu) {
