@@ -12,6 +12,7 @@
             width: 100px;
             height: 100px;
         }
+
         .image-area {
             position: absolute;
             width: 100px;
@@ -94,6 +95,7 @@
             top: -10px;
             /*right: -11px;*/
         }
+
         .image-area- img, .image-area- video, .image-area- {
             /*width: 100px;*/
         }
@@ -129,7 +131,8 @@
                             <select name="screen_id" class="form-control">
                                 <option value="">Select Screen</option>
                                 @foreach ($screens as $item)
-                                    <option value="{{ $item->id }}" @if($menu->screen_id === $item->id) selected @endif>{{ $item->name_en }}</option>
+                                    <option value="{{ $item->id }}"
+                                            @if($menu->screen_id === $item->id) selected @endif>{{ $item->name_en }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -140,7 +143,8 @@
                             <select name="menu_id" class="form-control">
                                 <option value="">Select Parent Menu</option>
                                 @foreach ($menus as $item)
-                                    <option value="{{ $item['id'] }}" @if($menu->menu_id === $item['id']) selected @endif>{{ $item['name'] }}</option>
+                                    <option value="{{ $item['id'] }}"
+                                            @if($menu->menu_id === $item['id']) selected @endif>{{ $item['name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -159,7 +163,8 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Level:</label>
-                            <input type="number" name="level" class="form-control" id="level" value="{{$menu->level}}" required>
+                            <input type="number" name="level" class="form-control" id="level" value="{{$menu->level}}"
+                                   required>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -175,7 +180,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Order:</label>
-                            <input type="number" name="order" class="form-control" value="{{$menu->order}}"required>
+                            <input type="number" name="order" class="form-control" value="{{$menu->order}}" required>
                         </div>
                     </div>
 
@@ -185,75 +190,64 @@
                             <input type="file" name="bg_image" class="form-control">
                         </div>
                     </div>
-                        <div class="col-md-6">
-                            <div class="image-area_">
-                                <div class="image-area">
-                                    @if($menu->bg_image != null)
+                    <div class="col-md-6">
+                        <div class="image-area_">
+                            <div class="image-area">
+                                @if($menu->bg_image != null)
                                     <img src="{{asset('/storage/app/public/media/' . $menu->bg_image)}}">
                                     <a class="remove-image" href="{{ route('videowall.menu.remove.bg', $menu->id) }}"
                                        style="display: inline;">&#215;</a>
-                                    @endif
-                                </div>
+                                @endif
                             </div>
                         </div>
-{{--                    <div class="col-md-6">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label>Introductory Video:</label>--}}
-{{--                            <input type="file" name="intro_video" class="form-control" accept="video/mp4,video/x-m4v,video/*">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                        <div class="col-md-6">--}}
-{{--                            <div class="image-area_">--}}
-{{--                            <div class="image-area">--}}
-{{--                                @if($menu->intro_video != null)--}}
-{{--                                <video style="width: 100px;'" src="{{ URL::asset('public/storage/media/' . $menu->intro_video) }}" muted controls></video>--}}
-{{--                                <a class="remove-image" href="{{ '/video-wall-screen/menu/intro/video/remove/' . $menu->id . '/intro_video' }}"--}}
-{{--                                   style="display: inline;">&#215;</a>--}}
-{{--                                @endif--}}
-{{--                            </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    <div class="col-md-6">--}}
-{{--                        <div class="form-group">--}}
-{{--                            <label>Introductory Video:</label>--}}
-{{--                            <input type="file" name="intro_video_ar" class="form-control" accept="video/mp4,video/x-m4v,video/*">--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                        <div class="col-md-6">--}}
-{{--                            <div class="image-area_">--}}
-{{--                                <div class="image-area">--}}
-{{--                                    @if($menu->intro_video_ar != null)--}}
-{{--                                    <video style="width: 100px;'" src="{{ URL::asset('public/storage/media/' . $menu->intro_video_ar) }}" muted controls></video>--}}
-{{--                                    <a class="remove-image" href="{{ '/video-wall-screen/menu/intro/video/remove/' . $menu->id . '/intro_video_ar' }}"--}}
-{{--                                       style="display: inline;">&#215;</a>--}}
-{{--                                    @endif--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
+                    </div>
+
                     <div class="col-md-12">
-                        <div class="hidden {{ (($menu->image_en && $menu->image_en != '') || ($menu->image_ar && $menu->image_ar != '')) ? 'show' : '' }}" id="image_partial">
+                        <div
+                            {{--                            class="hidden {{ (($menu->image_en && $menu->image_en != '') || ($menu->image_ar && $menu->image_ar != '')) ? 'show' : '' }}"--}}
+                            {{--                            id="image_partial">                 <div--}}
+                            class="hidden {{ ($menu->type === 'main') ? 'show' : '' }}"
+                            id="image_partial">
                             @include('videowallscreen_menus.image_partial')
                         </div>
-                        <div class="hidden {{ (($menu->icon_en && $menu->icon_en != '') || ($menu->icon_ar && $menu->icon_ar != '')) ? 'show' : '' }}" id="icon_partial">
+                        <div
+                            class="hidden {{ (($menu->icon_en && $menu->icon_en != '') || ($menu->icon_ar && $menu->icon_ar != '')) ? 'show' : '' }}"
+                            id="icon_partial">
                             @include('videowallscreen_menus.icon_partial')
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="image-area_">
+                            <div class="image-area">
+                                <img src="/storage/app/public/media/{{$menu->image_en}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="image-area_">
+                            <div class="image-area">
+                                <img src="/storage/app/public/media/{{$menu->image_ar}}" alt="">
+                            </div>
                         </div>
                     </div>
                     @if ($media)
                         @foreach ($media as $item)
                             <div class="col-md-3 my-2">
                                 @if ($item->type == 'image')
-                                    <div class="image-area-">
-                                        <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"
-                                             class="w-100">
-                                        <a class="remove-image" href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
-                                           style="display: inline;">&#215;</a>
-                                    </div>
+                                    {{--                                    <div class="image-area-">--}}
+                                    {{--                                        <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"--}}
+                                    {{--                                             class="w-100">--}}
+                                    {{--                                        <a class="remove-image"--}}
+                                    {{--                                           href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"--}}
+                                    {{--                                           style="display: inline;">&#215;</a>--}}
+                                    {{--                                    </div>--}}
 
                                 @else
                                     <div class="image-area-">
                                         <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls
                                                autoplay muted></video>
-                                        <a class="remove-image" href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image"
+                                           href="{{ route('videowall.gallery.delete', $item->id) }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
@@ -268,7 +262,8 @@
                                     <div class="image-area-">
                                         <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"
                                              class="w-100">
-                                        <a class="remove-image" href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image"
+                                           href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
@@ -276,7 +271,8 @@
                                     <div class="image-area-">
                                         <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls
                                                autoplay muted></video>
-                                        <a class="remove-image" href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image"
+                                           href="{{ env('APP_URL') . '/video-wall-screen/gallery/' . $item->id }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
@@ -332,8 +328,9 @@
                 iconPartial.classList.add('show')
             }
         }
-        $(document).ready(function() {
-            $('input[type="file"]').change(function(e) {
+
+        $(document).ready(function () {
+            $('input[type="file"]').change(function (e) {
                 var input = e.target;
                 var imageName = input.files[0]?.name
                 if (imageName !== "") {
