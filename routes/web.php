@@ -92,7 +92,7 @@ Route::middleware([
         Route::get('getscreensidemenu/{screen_id}', [VideoWallScreenController::class, 'getscreensidemenu'])->name('getscreensidemenu');
         Route::resource('content', VideoWallContentController::class);
         Route::resource('menus', VideoWallMenuController::class);
-        Route::get('menu/bg/remove/{id}', [VideoWallMenuController::class, 'removeBgImage']);
+        Route::get('menu/bg/remove/{id}', [VideoWallMenuController::class, 'removeBgImage'])->name('menu.remove.bg');
         Route::get('menu/intro/video/remove/{id}/{key}', [VideoWallMenuController::class, 'removeIntroVideo']);
         Route::get('media', [VideoWallMediaController::class, 'video_wall_video_index'])->name('media.index');
         Route::get('media/create', [VideoWallMediaController::class, 'video_wall_video_create'])->name('media.create');
@@ -127,6 +127,7 @@ Route::middleware([
     */
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::post('change_logo', [SettingController::class, 'change_logo'])->name('change_logo');
+        Route::get('remove/logo/{id}', [SettingController::class, 'destroy'])->name('remove.logo');
     });
     // Route::prefix('media')->name('media.')->controller(MediaController::class)->group(function () {
     //     Route::get('/', 'index')->name('index');

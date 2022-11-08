@@ -190,7 +190,7 @@
                                 <div class="image-area">
                                     @if($menu->bg_image != null)
                                     <img src="{{asset('/storage/app/public/media/' . $menu->bg_image)}}">
-                                    <a class="remove-image" href="{{ '/video-wall-screen/menu/bg/remove/' . $menu->id }}"
+                                    <a class="remove-image" href="{{ route('videowall.menu.remove.bg', $menu->id) }}"
                                        style="display: inline;">&#215;</a>
                                     @endif
                                 </div>

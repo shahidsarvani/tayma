@@ -31,7 +31,7 @@ class SettingController extends Controller
             return back()->with('error', 'Error: Something went wrong!');
         }
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -103,8 +103,14 @@ class SettingController extends Controller
      * @param  \App\Models\Setting  $setting
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Setting $setting)
+    public function destroy()
     {
-        //
+        $setting = Setting::where('key', 'logo')->first();
+        if(Storage::exists('/public/media/' . $setting->value)) {
+            Storage::delete('/public/media/' . $setting->value);
+            $setting->delete();
+        }
+        return redirect()->back();
+
     }
 }
