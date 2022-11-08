@@ -667,7 +667,7 @@ class ApiController extends Controller
                 'title' => $content->title,
                 'screen_id' => $content->screen_id,
                 'screen' => $content->screen['name_' . $content->lang],
-                'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
+                'text_bg_image' => env('APP_URL') . '/storage/app/public/' . $content->text_bg_image,
                 'media' => $content->media->map(function ($media) use ($content) {
                     if ($media->lang == $content->lang && !!$media->name) {
                         return [
