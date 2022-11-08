@@ -48,7 +48,7 @@
                         <div class="form-group">
                             <label>Title:</label>
                             <input type="text" name="title" id="title" class="form-control"
-                                value="{{ $timeline_item->title }}" required>
+                                value="{{ $timeline_item->title }}">
                         </div>
                     </div>
                     <div class="col-md-12">
