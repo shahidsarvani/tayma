@@ -1,3 +1,4 @@
+@dd('hello')
 @extends('layout.app')
 
 @section('title')
