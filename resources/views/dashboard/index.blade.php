@@ -76,7 +76,7 @@
                                 @if($logo)
                                 <img class="site_logo" width="100%"
                                      src="{{ $logo ? asset('/storage/app/public/media/' . $logo->value) : '' }}">
-                                <a class="remove-image" href="{{ '/settings/remove/logo/' . $logo->id }}"
+                                <a class="remove-image" href="{{ route('settings.remove.logo', $logo->id) }}"
                                    style="display: inline;">&#215;</a>
                                     @endif
                             </div>

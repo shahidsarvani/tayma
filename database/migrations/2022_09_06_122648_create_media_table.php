@@ -21,7 +21,7 @@ class CreateMediaTable extends Migration
             $table->integer('order')->nullable();
             $table->text('description')->nullable();
             $table->enum('lang', ['en', 'ar']);
-            $table->enum('screen_type', ['portrait', 'videowall', 'withrfid', 'touchtable']);
+            $table->enum('screen_type', ['portrait', 'videowall', 'withrfid', 'touchtable', 'map']);
             $table->foreignId('screen_id')->nullable();
             $table->timestamps();
         });

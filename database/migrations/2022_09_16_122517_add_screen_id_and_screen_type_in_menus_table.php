@@ -15,7 +15,7 @@ class AddScreenIdAndScreenTypeInMenusTable extends Migration
     {
         Schema::table('menus', function (Blueprint $table) {
             //
-            $table->enum('screen_type', ['portrait', 'videowall', 'withrfid', 'touchtable'])->nullable();
+            $table->enum('screen_type', ['portrait', 'videowall', 'withrfid', 'touchtable', 'map'])->nullable();
             $table->foreignId('screen_id')->nullable();
         });
     }

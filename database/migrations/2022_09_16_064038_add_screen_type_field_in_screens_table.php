@@ -15,7 +15,7 @@ class AddScreenTypeFieldInScreensTable extends Migration
     {
         Schema::table('screens', function (Blueprint $table) {
             //
-            $table->enum('screen_type', ['portrait', 'videowall', 'withrfid', 'touchtable']);
+            $table->enum('screen_type', ['portrait', 'videowall', 'withrfid', 'touchtable', 'map']);
         });
     }
 
