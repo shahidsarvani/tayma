@@ -1,4 +1,3 @@
-@dd('hello')
 @extends('layout.app')
 
 @section('title')
@@ -250,7 +249,7 @@
                                     <div class="image-area-">
                                         <img src="{{ asset('storage/app/public/media/' . $item->name) }}" alt="Content"
                                              class="w-100">
-                                        <a class="remove-image" href="{{ '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image" href="{{ route('videowall.gallery.delete', $item->id) }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
@@ -258,7 +257,7 @@
                                     <div class="image-area-">
                                         <video src="{{ asset('storage/app/public/media/' . $item->name) }}" controls
                                                autoplay muted></video>
-                                        <a class="remove-image" href="{{ '/video-wall-screen/gallery/' . $item->id }}"
+                                        <a class="remove-image" href="{{ route('videowall.gallery.delete', $item->id) }}"
                                            style="display: inline;">&#215;</a>
                                     </div>
 
