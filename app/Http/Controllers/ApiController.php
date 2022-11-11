@@ -948,4 +948,94 @@ class ApiController extends Controller
 
 
     //-- /API For Video Wall --//
+
+    // Map Screen
+
+    public function get_map_main_menu() {
+        $menus = Menu::where('screen_type', 'map')->get();
+        return response()->json($menus, 200);
+    }
+
+    public function get_menu_detail_(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        $res = [];
+        $menu = Menu::where('id', $id)->with('touch_screen_content', 'media')->first();
+        $menu_contents_ar = VideowallContent::where('menu_id', $id)->where('lang', 'ar')->first();
+        $menu_contents_en = VideowallContent::where('menu_id', $id)->where('lang', 'en')->first();
+
+        $menus = Menu::where('menu_id', $id)
+//            ->where('is_timeline', true)
+            ->get();
+        $contents = VideowallContent::whereIn('menu_id', $menus->pluck('id')->toArray())->with('media', 'menu')->get();
+        foreach ($contents as $content) {
+            $menu_ = $menus->first(function ($item) use ($content) {
+                return $item->id == $content->menu_id;
+            });
+
+            $res[$content->lang]['timeline'][] = [
+                'id' => $content->id,
+                'menu_id' => $content->menu_id,
+                'image' => $content->lang === 'ar' ? env('APP_URL') . '/storage/app/public/media/' . $menu_->image_ar : env('APP_URL') . '/storage/app/public/media/' . $menu_->image_en,
+                'is_timeline' => $menu_->is_timeline,
+                'lang' => $content->lang,
+                'layout' => $content->layout,
+                'content' => $content->content,
+                'background_color' => $content->background_color,
+                'text_color' => $content->text_color,
+                'title' => $content->lang === 'en' ? $content->menu->name_en : $content->menu->name_ar,
+                'screen_id' => $content->screen_id,
+                'text_bg_image' => env('APP_URL') . '/storage/app/public/media/' . $content->text_bg_image,
+                'media' => $content->media->map(function ($media) use ($content) {
+                    if ($media->lang == $content->lang && !!$media->name) {
+                        return [
+                            'link' => env('APP_URL') . '/storage/app/public/media/' . $media->name,
+                            'type' => $media->type,
+                            'lang' => $media->lang,
+                        ];
+                    }
+                })->filter()->values(),
+            ];
+        }
+        $res['en']['content'] = [
+            'name' => $menu->name_en,
+            'is_timeline' => $menu->is_timeline,
+            'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
+            'screen_type' => $menu->screen_type,
+            'content' => $menu_contents_en->content ?? null,
+            'background_color' => $menu_contents_en->background_color,
+            'text_color' => $menu_contents_en->text_color,
+            'media' => $menu->media->map(function ($med) {
+                if ($med->lang == 'en') {
+                    return [
+                        'link' => env('APP_URL') . '/storage/app/public/media/' . $med->name,
+                        'type' => $med->type,
+                        'lang' => $med->lang,
+                    ];
+                }
+            })->filter()->values(),
+        ];
+        $res['ar']['content'] = [
+            'name' => $menu->name_ar,
+            'is_timeline' => $menu->is_timeline,
+            'bg_image' => env('APP_URL') . '/storage/app/public/media/' . $menu->bg_image,
+            'screen_type' => $menu->screen_type,
+            'content' => $menu_contents_ar->content ?? null,
+            'background_color' => $menu_contents_ar->background_color,
+            'text_color' => $menu_contents_ar->text_color,
+            'media' => $menu->media->map(function ($med) {
+                if ($med->lang == 'ar') {
+                    return [
+                        'link' => env('APP_URL') . '/storage/app/public/media/' . $med->name,
+                        'type' => $med->type,
+                        'lang' => $med->lang,
+                    ];
+                }
+            })->filter()->values(),
+        ];
+        $logo = Setting::where('key', 'logo')->first();
+        $res['logo'] = $logo ? env('APP_URL') . '/storage/app/public/media/' . $logo->value : env('APP_URL') . '/assets/global_assets/images/placeholders/placeholder.jpg';
+
+        return response()->json($res, 200);
+    }
+    // End Map Screen
 }

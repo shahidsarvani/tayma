@@ -51,6 +51,12 @@ Route::prefix('videowall')->group(function() {
     Route::get('layout', [ApiController::class, 'getLayout']);
 });
 
+Route::prefix('map')->group(function() {
+    Route::get('main_menu', [ApiController::class, 'get_map_main_menu']);
+    Route::get('menu/{id}', [ApiController::class, 'get_menu_detail_']);
+
+});
+
 Route::get('portrait_screen_videos/{screen_id}/{lang}', [ApiController::class, 'get_portrait_screen_videos']);
 Route::get('video_wall_screen_videos/{lang}', [ApiController::class, 'get_video_wall_screen_videos']);
 Route::get('portrait/video/{slug}/{lang}', [ApiController::class, 'getVideoByPortraitScreenSlugLang']);

@@ -369,6 +369,110 @@
                     @endcan
                 @endcan
                 {{-- /Video Wall Screens --}}
+                {{-- Map Screens --}}
+                @can('map-screen')
+                    <li class="nav-item-header">
+                        <div class="text-uppercase font-size-xs line-height-xs mt-1">Map Screens</div>
+                        <i
+                                class="icon-menu" title="Map Screens"></i>
+                    </li>
+                    @can(['add-map-screen', 'edit-map-screen', 'delete-map-screen',
+                        'view-map-screen'])
+                        <li class="nav-item nav-item-submenu @if (Route::is('map.screens.*')) nav-item-open @endif">
+                            <a href="#" class="nav-link"><i class="icon-screen3"></i> <span>Screens</span></a>
+                            <ul class="nav nav-group-sub" data-submenu-title="Screens"
+                                @if (Route::is('map.screens.*')) style="display: block" @endif>
+                                @can('add-map-screen')
+                                    <li class="nav-item"><a href="{{ route('map.screens.create') }}"
+                                                            class="nav-link @if (Route::is('map.screens.create')) active @endif">Add
+                                            Screen</a></li>
+                                @endcan
+                                @can(['edit-map-screen', 'delete-map-screen', 'view-map-screen'])
+                                    <li class="nav-item"><a href="{{ route('map.screens.index') }}"
+                                                            class="nav-link @if (Route::is(['map.screens.index', 'map.screens.edit'])) active @endif">Screen
+                                            List</a></li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+                    @can(['add-map-screen-video', 'delete-map-screen-video', 'view-map-screen-video'])
+                        <li class="nav-item nav-item-submenu @if (Route::is('map.media.*')) nav-item-open @endif">
+                            <a href="#" class="nav-link"><i class="icon-film4"></i> <span>Media</span></a>
+                            <ul class="nav nav-group-sub" data-submenu-title="Media"
+                                @if (Route::is('map.media.*')) style="display: block" @endif>
+                                @can('add-map-screen-video')
+                                    <li class="nav-item"><a href="{{ route('map.media.create') }}"
+                                                            class="nav-link @if (Route::is('map.media.create')) active @endif">Add
+                                            Media</a></li>
+                                @endcan
+                                @can(['delete-map-screen-video', 'view-map-screen-video'])
+                                    <li class="nav-item"><a href="{{ route('map.media.index') }}"
+                                                            class="nav-link @if (Route::is('map.media.index')) active @endif">Media
+                                            List</a></li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+                    @can(['add-videowall-screen-menu', 'edit-videowall-screen-menu', 'delete-videowall-screen-menu',
+                        'view-videowall-screen-menu'])
+                        <li class="nav-item nav-item-submenu @if (Route::is('map.menus.*')) nav-item-open @endif">
+                            <a href="#" class="nav-link"><i class="icon-menu3"></i> <span>Menu</span></a>
+                            <ul class="nav nav-group-sub" data-submenu-title="Menu"
+                                @if (Route::is('map.menus.*')) style="display: block" @endif>
+                                @can('add-videowall-screen-menu')
+                                    <li class="nav-item"><a href="{{ route('map.menus.create') }}"
+                                                            class="nav-link @if (Route::is('map.menus.create')) active @endif">Add
+                                            Menu</a></li>
+                                @endcan
+                                @can(['edit-videowall-screen-menu', 'delete-videowall-screen-menu',
+                                    'view-videowall-screen-menu'])
+                                    <li class="nav-item"><a href="{{ route('map.menus.index') }}"
+                                                            class="nav-link @if (Route::is(['map.menus.index', 'map.menus.edit'])) active @endif">Menu
+                                            List</a></li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+                    {{--                    @can(['add-videowall-gallery', 'edit-videowall-gallery', 'delete-videowall-gallery',--}}
+                    {{--                        'view-videowall-gallery'])--}}
+                    {{--                        <li class="nav-item nav-item-submenu @if (Route::is('map.gallery.*')) nav-item-open @endif">--}}
+                    {{--                            <a href="#" class="nav-link"><i class="icon-camera"></i> <span>Gallery</span></a>--}}
+                    {{--                            <ul class="nav nav-group-sub" data-submenu-title="Videos"--}}
+                    {{--                                @if (Route::is('map.gallery.*')) style="display: block" @endif>--}}
+                    {{--                                @can('add-videowall-gallery')--}}
+                    {{--                                    <li class="nav-item"><a href="{{ route('map.gallery.create') }}"--}}
+                    {{--                                            class="nav-link @if (Route::is('map.gallery.create')) active @endif">Add Item(s)</a></li>--}}
+                    {{--                                @endcan--}}
+                    {{--                                @can(['edit-videowall-gallery', 'delete-videowall-gallery',--}}
+                    {{--                                    'view-videowall-gallery'])--}}
+                    {{--                                    <li class="nav-item"><a href="{{ route('map.gallery.index') }}"--}}
+                    {{--                                            class="nav-link @if (Route::is(['map.gallery.index', 'map.gallery.edit'])) active @endif">Gallery List</a></li>--}}
+                    {{--                                @endcan--}}
+                    {{--                            </ul>--}}
+                    {{--                        </li>--}}
+                    {{--                    @endcan--}}
+                    @can(['add-videowall-screen-content', 'edit-videowall-screen-content', 'delete-videowall-screen-content',
+                        'view-videowall-screen-content'])
+                        <li class="nav-item nav-item-submenu @if (Route::is('map.content.*')) nav-item-open @endif">
+                            <a href="#" class="nav-link"><i class="icon-camera"></i> <span>Content</span></a>
+                            <ul class="nav nav-group-sub" data-submenu-title="Videos"
+                                @if (Route::is('map.content.*')) style="display: block" @endif>
+                                @can('add-videowall-screen-content')
+                                    <li class="nav-item"><a href="{{ route('map.content.create') }}"
+                                                            class="nav-link @if (Route::is('map.content.create')) active @endif">Add
+                                            Content</a></li>
+                                @endcan
+                                @can(['edit-videowall-screen-content', 'delete-videowall-screen-content',
+                                    'view-videowall-screen-content'])
+                                    <li class="nav-item"><a href="{{ route('map.content.index') }}"
+                                                            class="nav-link @if (Route::is(['map.content.index', 'map.content.edit'])) active @endif">Content</a>
+                                    </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+                @endcan
+                {{-- /Map Screens --}}
 
                 {{--                <li class="nav-item-header">--}}
                 {{--                    <div class="text-uppercase font-size-xs line-height-xs mt-1">With RFID Screen</div> <i--}}
