@@ -10,6 +10,7 @@ use App\Models\TimelineItem;
 use App\Models\TouchScreenContent;
 use App\Models\TouchTableScreenContent;
 use App\Models\VideowallContent;
+use Illuminate\Filesystem\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
@@ -217,7 +218,7 @@ class ApiController extends Controller
         return response()->json($response, 200);
     }
 
-    public function get_videowall_main_menu(Request $request)
+    public function get_videowall_main_menu(Request $request): \Illuminate\Http\JsonResponse
     {
         $validator = Validator::make($request->all(), [
             'screen' => 'required',
@@ -229,10 +230,11 @@ class ApiController extends Controller
                 'status' => 422,
             ], 422);
         }
-
-        $menus = Menu::where('screen_type', 'videowall')->where('menu_id', 0)->whereHas('screen', function ($query) {
-            $query->where('slug', \request()->screen);
-        })->orderBy('order', 'ASC')->with('screen')->get();
+        $menus = Cache::remember('videowall-screen-data', 60, function () use ($request) {
+            return Menu::where('screen_type', 'videowall')->where('menu_id', 0)->whereHas('screen', function ($query) {
+                $query->where('slug', \request()->screen);
+            })->orderBy('order', 'ASC')->with('screen')->get();
+        });
         $res = [];
         foreach ($menus as $menu) {
             $res['en'][] = [
@@ -252,7 +254,6 @@ class ApiController extends Controller
                 'image' => env('APP_URL') . '/storage/app/public/media/' . $menu->image_ar,
             ];
         }
-
         return response()->json($res, 200);
     }
 
