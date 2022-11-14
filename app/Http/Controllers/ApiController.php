@@ -10,8 +10,9 @@ use App\Models\TimelineItem;
 use App\Models\TouchScreenContent;
 use App\Models\TouchTableScreenContent;
 use App\Models\VideowallContent;
-use Illuminate\Filesystem\Cache;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
