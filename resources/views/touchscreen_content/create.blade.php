@@ -78,18 +78,18 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label>Title*</label>
-                            <input type="text" name="title" id="title" class="form-control">
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="sub_title">Sub Title*</label>
-                            <input type="text" name="sub_title" id="sub_title" class="form-control">
-                        </div>
-                    </div>
+{{--                    <div class="col-md-6">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label>Title*</label>--}}
+{{--                            <input type="text" name="title" id="title" class="form-control">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="col-md-6">--}}
+{{--                        <div class="form-group">--}}
+{{--                            <label for="sub_title">Sub Title*</label>--}}
+{{--                            <input type="text" name="sub_title" id="sub_title" class="form-control">--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
                     <div class="col-md-6">
                         <div class="form-group">
                             <label>Screen:</label>
