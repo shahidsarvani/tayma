@@ -84,8 +84,8 @@ class ApiController extends Controller
                 'id' => $menu->id,
                 'name_en' => $menu->name_en,
                 'name_ar' => $menu->name_ar,
-                'icon_en' => asset('public/storage/media/' . $menu->icon_en),
-                'icon_ar' => asset('public/storage/media/' . $menu->icon_ar),
+                'icon_en' => asset('storage/app/public/media/' . $menu->icon_en),
+                'icon_ar' => asset('storage/app/public/media/' . $menu->icon_ar),
             ];
             array_push($response, $temp);
         }
@@ -186,7 +186,7 @@ class ApiController extends Controller
         foreach ($mediaItems as $key => $value) {
             $temp = [
                 'id' => $value->id,
-                'url' => asset('public/storage/media/' . $value->name),
+                'url' => asset('storage/app/public/media/' . $value->name),
                 'type' => $value->type,
                 'description' => $value->description
             ];
@@ -534,7 +534,7 @@ class ApiController extends Controller
         foreach ($mediaItems as $key => $value) {
             $temp = [
                 'id' => $value->id,
-                'url' => asset('public/storage/media/' . $value->name),
+                'url' => asset('storage/app/public/media/' . $value->name),
                 'type' => $value->type,
                 'description' => $value->description
             ];
@@ -563,7 +563,7 @@ class ApiController extends Controller
             foreach ($menu->media as $media) {
                 $temp = [
                     'id' => $media->id,
-                    'url' => asset('public/storage/media/' . $media->name),
+                    'url' => asset('storage/app/public/media/' . $media->name),
                     'type' => $media->type
                 ];
                 $response['menu_content']['media'][] = $temp;
@@ -581,7 +581,7 @@ class ApiController extends Controller
         foreach ($media as $key => $value) {
             $temp = [
                 'id' => $value->id,
-                'url' => asset('public/storage/media/' . $value->name),
+                'url' => asset('storage/app/public/media/' . $value->name),
             ];
             array_push($response, $temp);
         }

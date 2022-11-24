@@ -89,7 +89,7 @@ class Menu extends Model
                     foreach ($item->timeline_media as $media) {
                         $temp2 = [
                             'id' => $media->id,
-                            'url' => asset('public/storage/media/' . $media->name),
+                            'url' => asset('storage/app/public/media/' . $media->name),
                             'type' => $media->type
                         ];
                         $temp['item']['media'][] = $temp2;

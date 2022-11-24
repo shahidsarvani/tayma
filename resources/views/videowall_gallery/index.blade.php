@@ -50,11 +50,11 @@
                                     <div class="card-img-actions m-1">
                                         @if ($item->type == 'image')
                                             <div class="card-img embed-responsive">
-                                                <img src="{{ URL::asset('public/storage/media/' . $item->name) }}"
+                                                <img src="{{ URL::asset('storage/app/public/media/' . $item->name) }}"
                                                     alt="" width="100%">
                                             @else
                                                 <div class="card-img embed-responsive embed-responsive-16by9">
-                                                    <video src="{{ URL::asset('public/storage/media/' . $item->name) }}"
+                                                    <video src="{{ URL::asset('storage/app/public/media/' . $item->name) }}"
                                                         muted controls></video>
                                         @endif
                                         <div class="video-content">

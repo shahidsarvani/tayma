@@ -39,7 +39,7 @@
                     <div class="card">
                         <div class="card-img-actions m-1">
                             <div class="card-img embed-responsive embed-responsive-16by9">
-                                <video src="{{ URL::asset('public/storage/media/' . $item->name) }}" muted
+                                <video src="{{ URL::asset('storage/app/public/media/' . $item->name) }}" muted
                                     controls></video>
                                 <div class="video-content">
                                     <a href="{{ route('wallmedia.destroy', $item->id) }}"
