@@ -12,7 +12,7 @@
                 $logo = App\Models\Setting::where('key', 'logo')->first();
             @endphp
             @if ($logo)
-                <img src="{{ asset('storage/app/public/media/' . $logo->value) }}" class="d-sm-block" alt="">
+                <img src="{{ asset('storage/app/public/media/' . $logo->value) }}" class="d-sm-block" style="height: 2rem;" alt="">
             @else
                 <h3 class="app-logo">{{ Str::upper(env('APP_NAME')) }}</h3>
             @endif
