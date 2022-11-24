@@ -395,7 +395,7 @@
                             </ul>
                         </li>
                     @endcan
-                    @can(['add-map-screen-video', 'delete-map-screen-video', 'view-map-screen-video'])
+                    <!-- @can(['add-map-screen-video', 'delete-map-screen-video', 'view-map-screen-video'])
                         <li class="nav-item nav-item-submenu @if (Route::is('map.media.*')) nav-item-open @endif">
                             <a href="#" class="nav-link"><i class="icon-film4"></i> <span>Media</span></a>
                             <ul class="nav nav-group-sub" data-submenu-title="Media"
@@ -412,7 +412,7 @@
                                 @endcan
                             </ul>
                         </li>
-                    @endcan
+                    @endcan -->
                     @can(['add-videowall-screen-menu', 'edit-videowall-screen-menu', 'delete-videowall-screen-menu',
                         'view-videowall-screen-menu'])
                         <li class="nav-item nav-item-submenu @if (Route::is('map.menus.*')) nav-item-open @endif">
