@@ -33,7 +33,7 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->name_en }}</td>
                                 <td>{{ $item->name_ar }}</td>
-                                <td>{{ $item->screen->name_en }}</td>
+                                <td>{{ $item->screen }}</td>
                                 <td>
                                     @if ($item->parent)
                                         <span class="badge badge-info">{{ $item->parent->name_en }}</span>
