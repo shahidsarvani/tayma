@@ -83,12 +83,12 @@
             parallelUploads: 1,
             paramName: "media", // The name that will be used to transfer the file
             dictDefaultMessage: 'Drop files to upload <span>or CLICK</span>',
-            maxFilesize: 1024, // MB
+            maxFilesize: 204800, // MB
             addRemoveLinks: true,
             chunking: true,
             chunkSize: 2000000,
             // If true, the individual chunks of a file are being uploaded simultaneously.
-            parallelChunkUploads: true,
+            parallelChunkUploads: false,
             acceptedFiles: 'video/*',
             retryChunks: true,   // retry chunks on failure
             retryChunksLimit: 3, // retry maximum of 3 times (default is 3)

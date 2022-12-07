@@ -77,7 +77,7 @@
             chunking: true,
             chunkSize: 10000000,
             // If true, the individual chunks of a file are being uploaded simultaneously.
-            parallelChunkUploads: true,
+            parallelChunkUploads: false,
             acceptedFiles: 'video/*',
             init: function() {
                 this.on('addedfile', function() {

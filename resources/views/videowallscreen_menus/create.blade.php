@@ -219,12 +219,12 @@
         Dropzone.options.dropzoneMultiple = {
             paramName: "media", // The name that will be used to transfer the file
             dictDefaultMessage: 'Introductory Video <h1> English</h1>',
-            maxFilesize: 1024, // MB
+            maxFilesize: 204800, // MB
             addRemoveLinks: true,
             chunking: true,
             chunkSize: 2000000,
             // If true, the individual chunks of a file are being uploaded simultaneously.
-            parallelChunkUploads: true,
+            parallelChunkUploads: false,
             acceptedFiles: 'video/*',
             init: function () {
                 this.on('addedfile', function () {
@@ -261,12 +261,12 @@
         Dropzone.options.dropzoneMultipleAr = {
             paramName: "media", // The name that will be used to transfer the file
             dictDefaultMessage: 'Introductory Video <h1>Arabic </h1>',
-            maxFilesize: 1024, // MB
+            maxFilesize: 204800, // MB
             addRemoveLinks: true,
             chunking: true,
             chunkSize: 2000000,
             // If true, the individual chunks of a file are being uploaded simultaneously.
-            parallelChunkUploads: true,
+            parallelChunkUploads: false,
             acceptedFiles: 'video/*',
             init: function () {
                 this.on('addedfile', function () {
@@ -301,12 +301,12 @@
         Dropzone.options.dropzoneMultipleBg = {
             paramName: "media", // The name that will be used to transfer the file
             dictDefaultMessage: 'Background <h1> Video </h1>',
-            maxFilesize: 1024, // MB
+            maxFilesize: 204800, // MB
             addRemoveLinks: true,
             chunking: true,
             chunkSize: 2000000,
             // If true, the individual chunks of a file are being uploaded simultaneously.
-            parallelChunkUploads: true,
+            parallelChunkUploads: false,
             acceptedFiles: 'video/*',
             init: function () {
                 this.on('addedfile', function () {
