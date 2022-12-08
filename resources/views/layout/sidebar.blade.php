@@ -116,90 +116,90 @@
                     </li>
                 @endcan
 
-                @can('touchtable-screen')
-                    <li class="nav-item-header">
-                        <div class="text-uppercase font-size-xs line-height-xs mt-1">Touchtable Screen</div>
-                        <i
-                                class="icon-menu" title="Touchtable Screen"></i>
-                    </li>
+{{--                @can('touchtable-screen')--}}
+{{--                    <li class="nav-item-header">--}}
+{{--                        <div class="text-uppercase font-size-xs line-height-xs mt-1">Touchtable Screen</div>--}}
+{{--                        <i--}}
+{{--                                class="icon-menu" title="Touchtable Screen"></i>--}}
+{{--                    </li>--}}
 
-                    @can(['add-touchtable-screen', 'edit-touchtable-screen', 'delete-touchtable-screen','view-touchtable-screen'])
-                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.screens.*')) nav-item-open @endif">
-                            <a href="#" class="nav-link"><i class="icon-screen3"></i> <span>Screens</span></a>
-                            <ul class="nav nav-group-sub" data-submenu-title="Screens"
-                                @if (Route::is('touchtable.screens.*')) style="display: block" @endif>
-                                @can('add-video-wall-screen')
-                                    <li class="nav-item"><a href="{{ route('touchtable.screens.create') }}"
-                                                            class="nav-link @if (Route::is('touchtable.screens.create')) active @endif">Add
-                                            Screen</a></li>
-                                @endcan
-                                @can(['edit-video-wall-screen', 'delete-video-wall-screen', 'view-video-wall-screen'])
-                                    <li class="nav-item"><a href="{{ route('touchtable.screens.index') }}"
-                                                            class="nav-link @if (Route::is(['touchtable.screens.index', 'touchtable.screens.edit'])) active @endif">Screen
-                                            List</a></li>
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
-                    @can(['add-touchtable-screen-menu', 'edit-touchtable-screen-menu', 'delete-touchtable-screen-menu',
-                            'view-touchtable-screen-menu'])
-                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.menus.*')) nav-item-open @endif">
-                            <a href="#" class="nav-link"><i class="icon-menu3"></i> <span>Menu</span></a>
-                            <ul class="nav nav-group-sub" data-submenu-title="Menu"
-                                @if (Route::is('touchtable.menus.*')) style="display: block" @endif>
-                                @can('add-touchtable-screen-menu')
-                                    <li class="nav-item"><a href="{{ route('touchtable.menus.create') }}"
-                                                            class="nav-link @if (Route::is('touchtable.menus.create')) active @endif">Add
-                                            Menu</a></li>
-                                @endcan
-                                @can(['edit-touchtable-screen-menu', 'delete-touchtable-screen-menu',
-                                    'view-touchtable-screen-menu'])
-                                    <li class="nav-item"><a href="{{ route('touchtable.menus.index') }}"
-                                                            class="nav-link @if (Route::is(['touchtable.menus.index', 'touchtable.menus.edit'])) active @endif">Menu
-                                            List</a></li>
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
+{{--                    @can(['add-touchtable-screen', 'edit-touchtable-screen', 'delete-touchtable-screen','view-touchtable-screen'])--}}
+{{--                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.screens.*')) nav-item-open @endif">--}}
+{{--                            <a href="#" class="nav-link"><i class="icon-screen3"></i> <span>Screens</span></a>--}}
+{{--                            <ul class="nav nav-group-sub" data-submenu-title="Screens"--}}
+{{--                                @if (Route::is('touchtable.screens.*')) style="display: block" @endif>--}}
+{{--                                @can('add-video-wall-screen')--}}
+{{--                                    <li class="nav-item"><a href="{{ route('touchtable.screens.create') }}"--}}
+{{--                                                            class="nav-link @if (Route::is('touchtable.screens.create')) active @endif">Add--}}
+{{--                                            Screen</a></li>--}}
+{{--                                @endcan--}}
+{{--                                @can(['edit-video-wall-screen', 'delete-video-wall-screen', 'view-video-wall-screen'])--}}
+{{--                                    <li class="nav-item"><a href="{{ route('touchtable.screens.index') }}"--}}
+{{--                                                            class="nav-link @if (Route::is(['touchtable.screens.index', 'touchtable.screens.edit'])) active @endif">Screen--}}
+{{--                                            List</a></li>--}}
+{{--                                @endcan--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
+{{--                    @endcan--}}
+{{--                    @can(['add-touchtable-screen-menu', 'edit-touchtable-screen-menu', 'delete-touchtable-screen-menu',--}}
+{{--                            'view-touchtable-screen-menu'])--}}
+{{--                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.menus.*')) nav-item-open @endif">--}}
+{{--                            <a href="#" class="nav-link"><i class="icon-menu3"></i> <span>Menu</span></a>--}}
+{{--                            <ul class="nav nav-group-sub" data-submenu-title="Menu"--}}
+{{--                                @if (Route::is('touchtable.menus.*')) style="display: block" @endif>--}}
+{{--                                @can('add-touchtable-screen-menu')--}}
+{{--                                    <li class="nav-item"><a href="{{ route('touchtable.menus.create') }}"--}}
+{{--                                                            class="nav-link @if (Route::is('touchtable.menus.create')) active @endif">Add--}}
+{{--                                            Menu</a></li>--}}
+{{--                                @endcan--}}
+{{--                                @can(['edit-touchtable-screen-menu', 'delete-touchtable-screen-menu',--}}
+{{--                                    'view-touchtable-screen-menu'])--}}
+{{--                                    <li class="nav-item"><a href="{{ route('touchtable.menus.index') }}"--}}
+{{--                                                            class="nav-link @if (Route::is(['touchtable.menus.index', 'touchtable.menus.edit'])) active @endif">Menu--}}
+{{--                                            List</a></li>--}}
+{{--                                @endcan--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
+{{--                    @endcan--}}
 
-                    {{--                    @can(['add-touchtable-screen-media', 'edit-touchtable-screen-media', 'delete-touchtable-screen-media',--}}
-                    {{--                        'view-touchtable-screen-media'])--}}
-                    {{--                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.media.*')) nav-item-open @endif">--}}
-                    {{--                            <a href="#" class="nav-link"><i class="icon-camera"></i> <span>Gallery</span></a>--}}
-                    {{--                            <ul class="nav nav-group-sub" data-submenu-title="Videos"--}}
-                    {{--                                @if (Route::is('touchtable.media.*')) style="display: block" @endif>--}}
-                    {{--                                @can('add-touchtable-screen-media')--}}
-                    {{--                                    <li class="nav-item"><a href="{{ route('touchtable.media.create') }}"--}}
-                    {{--                                            class="nav-link @if (Route::is('touchtable.media.create')) active @endif">Add Item(s)</a></li>--}}
-                    {{--                                @endcan--}}
-                    {{--                                @can(['edit-touchtable-screen-media', 'delete-touchtable-screen-media',--}}
-                    {{--                                    'view-touchtable-screen-media'])--}}
-                    {{--                                    <li class="nav-item"><a href="{{ route('touchtable.media.index') }}"--}}
-                    {{--                                            class="nav-link @if (Route::is(['touchtable.media.index', 'touchtable.media.edit'])) active @endif">Gallery List</a></li>--}}
-                    {{--                                @endcan--}}
-                    {{--                            </ul>--}}
-                    {{--                        </li>--}}
-                    {{--                    @endcan--}}
-                    @can(['add-touchtable-screen-content', 'edit-touchtable-screen-content', 'delete-touchtable-screen-content',
-                        'view-touchtable-screen-content'])
-                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.content.*')) nav-item-open @endif">
-                            <a href="#" class="nav-link"><i class="icon-camera"></i> <span>Content</span></a>
-                            <ul class="nav nav-group-sub" data-submenu-title="Videos"
-                                @if (Route::is('touchtable.content.*')) style="display: block" @endif>
-                                @can('add-touchtable-screen-content')
-                                    <li class="nav-item"><a href="{{ route('touchtable.content.create') }}"
-                                                            class="nav-link @if (Route::is('touchtable.content.create')) active @endif">Add
-                                            Content</a></li>
-                                @endcan
-                                @can(['edit-touchtable-screen-content', 'delete-touchtable-screen-content',
-                                    'view-touchtable-screen-content'])
-                                    <li class="nav-item"><a href="{{ route('touchtable.content.index') }}"
-                                                            class="nav-link @if (Route::is(['touchtable.content.index', 'touchtable.content.edit'])) active @endif">Content</a>
-                                    </li>
-                                @endcan
-                            </ul>
-                        </li>
-                    @endcan
+{{--                    --}}{{--                    @can(['add-touchtable-screen-media', 'edit-touchtable-screen-media', 'delete-touchtable-screen-media',--}}
+{{--                    --}}{{--                        'view-touchtable-screen-media'])--}}
+{{--                    --}}{{--                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.media.*')) nav-item-open @endif">--}}
+{{--                    --}}{{--                            <a href="#" class="nav-link"><i class="icon-camera"></i> <span>Gallery</span></a>--}}
+{{--                    --}}{{--                            <ul class="nav nav-group-sub" data-submenu-title="Videos"--}}
+{{--                    --}}{{--                                @if (Route::is('touchtable.media.*')) style="display: block" @endif>--}}
+{{--                    --}}{{--                                @can('add-touchtable-screen-media')--}}
+{{--                    --}}{{--                                    <li class="nav-item"><a href="{{ route('touchtable.media.create') }}"--}}
+{{--                    --}}{{--                                            class="nav-link @if (Route::is('touchtable.media.create')) active @endif">Add Item(s)</a></li>--}}
+{{--                    --}}{{--                                @endcan--}}
+{{--                    --}}{{--                                @can(['edit-touchtable-screen-media', 'delete-touchtable-screen-media',--}}
+{{--                    --}}{{--                                    'view-touchtable-screen-media'])--}}
+{{--                    --}}{{--                                    <li class="nav-item"><a href="{{ route('touchtable.media.index') }}"--}}
+{{--                    --}}{{--                                            class="nav-link @if (Route::is(['touchtable.media.index', 'touchtable.media.edit'])) active @endif">Gallery List</a></li>--}}
+{{--                    --}}{{--                                @endcan--}}
+{{--                    --}}{{--                            </ul>--}}
+{{--                    --}}{{--                        </li>--}}
+{{--                    --}}{{--                    @endcan--}}
+{{--                    @can(['add-touchtable-screen-content', 'edit-touchtable-screen-content', 'delete-touchtable-screen-content',--}}
+{{--                        'view-touchtable-screen-content'])--}}
+{{--                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.content.*')) nav-item-open @endif">--}}
+{{--                            <a href="#" class="nav-link"><i class="icon-camera"></i> <span>Content</span></a>--}}
+{{--                            <ul class="nav nav-group-sub" data-submenu-title="Videos"--}}
+{{--                                @if (Route::is('touchtable.content.*')) style="display: block" @endif>--}}
+{{--                                @can('add-touchtable-screen-content')--}}
+{{--                                    <li class="nav-item"><a href="{{ route('touchtable.content.create') }}"--}}
+{{--                                                            class="nav-link @if (Route::is('touchtable.content.create')) active @endif">Add--}}
+{{--                                            Content</a></li>--}}
+{{--                                @endcan--}}
+{{--                                @can(['edit-touchtable-screen-content', 'delete-touchtable-screen-content',--}}
+{{--                                    'view-touchtable-screen-content'])--}}
+{{--                                    <li class="nav-item"><a href="{{ route('touchtable.content.index') }}"--}}
+{{--                                                            class="nav-link @if (Route::is(['touchtable.content.index', 'touchtable.content.edit'])) active @endif">Content</a>--}}
+{{--                                    </li>--}}
+{{--                                @endcan--}}
+{{--                            </ul>--}}
+{{--                        </li>--}}
+{{--                    @endcan--}}
 {{--                    @can(['add-touchtable-timeline-item', 'edit-touchtable-timeline-item', 'delete-touchtable-timeline-item',--}}
 {{--                        'view-touchtable-timeline-item'])--}}
 {{--                        <li class="nav-item nav-item-submenu @if (Route::is('touchtable.timeline.*')) nav-item-open @endif">--}}
@@ -220,7 +220,7 @@
 {{--                            </ul>--}}
 {{--                        </li>--}}
 {{--                    @endcan--}}
-                @endcan
+{{--                @endcan--}}
 
                 @can('portrait-screen')
                     <li class="nav-item-header">
