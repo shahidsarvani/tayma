@@ -20,7 +20,9 @@ class VideoWallContentController extends Controller
     public function index()
     {
         //
-        $content = VideowallContent::with('menu', 'screen')->get();
+        $content = VideowallContent::with('menu', 'screen')->whereHas('menu', function ($query) {
+            $query->where('screen_type', 'videowall');
+        })->get();
         // return $content;
         return view('videowall_content.index', compact('content'));
     }
