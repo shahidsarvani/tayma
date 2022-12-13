@@ -192,7 +192,7 @@ class MapMenuController extends Controller
         $screens = Screen::where('screen_type', 'map')->whereIsTouch(1)->get();
         $all_menus = Menu::with('parent')->where('screen_type', 'map')->where('is_active', 1)->get();
 
-        $media = Media::where('lang', 'en')->where('menu_id', $id)->get();
+        $media = Media::where('type', 'video')->where('lang', 'en')->where('menu_id', $id)->get();
         $media_ar = Media::where('lang', 'ar')->where('menu_id', $id)->get();
 
         $menus = array();
