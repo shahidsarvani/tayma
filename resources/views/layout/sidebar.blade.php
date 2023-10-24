@@ -588,6 +588,16 @@
                             class="icon-menu" title="With RFID Screen"></i>
                 </li>
                 @can(['add-permission', 'edit-permission', 'delete-permission', 'view-permission'])
+                    <li class="nav-item">
+                        <a href="{{ route('fonts') }}" class="nav-link @if (Route::is('fonts')) active @endif">
+                            <i class="icon-home4"></i>
+                            <span>
+                            Fonts
+                        </span>
+                        </a>
+                    </li>
+
+
                     <li class="nav-item nav-item-submenu @if (Route::is('permissions.*')) nav-item-open @endif">
                         <a href="#" class="nav-link"><i class="icon-user-lock"></i> <span>Permissions</span></a>
                         <ul class="nav nav-group-sub" data-submenu-title="Permissions"

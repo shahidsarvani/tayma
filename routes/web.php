@@ -34,6 +34,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/linkstorage', function () {
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+});
+
 Route::get('logs', [\Rap2hpoutre\LaravelLogViewer\LogViewerController::class, 'index']);
 Route::get('/', function () {
     // return view('welcome');
@@ -46,6 +50,7 @@ Route::middleware([
     'verified'
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/fonts', [SettingController::class, 'fonts'])->name('fonts');
     Route::delete('media/{id}', [PortraitScreenMediaController::class, 'portrait_video_delete'])->name('media.delete');
 
     Route::get('permissions/crud_create', [PermissionController::class, 'crud_create'])->name('permissions.crud_create');
@@ -153,6 +158,7 @@ Route::middleware([
     */
     Route::prefix('settings')->name('settings.')->group(function () {
         Route::post('change_logo', [SettingController::class, 'change_logo'])->name('change_logo');
+        Route::post('fonts', [SettingController::class, 'change_fonts'])->name('change_fonts');
         Route::get('remove/logo/{id}', [SettingController::class, 'destroy'])->name('remove.logo');
     });
     // Route::prefix('media')->name('media.')->controller(MediaController::class)->group(function () {
