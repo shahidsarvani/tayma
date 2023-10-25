@@ -29,8 +29,8 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{!! Str::limit($item->content, 200, $end='...') !!}</td>
                                 <td>{{ $item->lang === 'en' ? 'English' : 'Arabic' }}</td>
-                                <td>{{ $item->screen->name_en }}</td>
-                                <td>{{ $item->menu->name_en }}</td>
+                                <td>{{ $item->screen->name_en ?? '' }}</td>
+                                <td>{{ $item->menu->name_en ?? '' }}</td>
                                 <td>
                                     <div class="list-icons">
                                         @can('edit-map-screen-content')

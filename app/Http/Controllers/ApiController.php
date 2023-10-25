@@ -954,7 +954,7 @@ class ApiController extends Controller
     // Map Screen
 
     public function get_map_main_menu() {
-        $menus = Menu::where('screen_type', 'map')->with('touch_screen_content', 'media')->get();
+        $menus = Menu::where('screen_type', 'map')->with('touch_screen_content', 'media')->orderBy('order', 'ASC')->get();
         $res = [];
         foreach ($menus as $menu) {
             $menu_contents_ar = VideowallContent::where('menu_id', $menu->id)->where('lang', 'ar')->first();
